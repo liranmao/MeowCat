@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="image/logo.jpg" alt="MeowCat Logo" width="100"/>
+  <img src="image/logo.png" alt="MeowCat Logo" width="100"/>
 </p>
 
 
