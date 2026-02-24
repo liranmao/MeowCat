@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "meowcat"
+version = "0.1.0"
+description = "Multi-resolution Omics informed Whole-slide Cell Annotation Tool"
+requires-python = ">=3.9"
+dependencies = [
+    "pyyaml",
+]
+
+[project.scripts]
+meowcat = "meowcat.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["meowcat*"]

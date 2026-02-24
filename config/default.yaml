@@ -1,0 +1,95 @@
+# MeowCat default configuration
+# Copy this file and edit paths before running a new experiment.
+# Usage: meowcat <step> --config config/my_run.yaml
+
+project:
+  name: meowcat_run
+  # Root directory containing per-sample subfolders (e.g. GBM001/, P01/)
+  data_root: /path/to/data
+  # Where all output files (batches, models, predictions, figures) are written
+  out_root: /path/to/outputs
+  # Glob pattern to identify sample subfolders under data_root
+  sample_pattern: "GBM*"
+
+preprocess:
+  # Substring in the raw H&E image filename (e.g. file named "sample_he_raw.tif")
+  raw_flag: he_raw
+  # Target resolution for resampling (microns-per-pixel)
+  target_mpp: 0.5
+  # Padding size passed to RunPreprocess
+  pad: 224
+  # Absolute path to UNI ViT-Large weights (.bin file)
+  uni_weights: /path/to/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  # Directory where HistoSweep tissue masks are saved
+  histosweep_mask_dir: ./mask/
+  # Feature fusion mode: "single" (global only) or "multi" (global+local)
+  fusion_mode: single
+
+batches:
+  # Directory where batch_XXX_x/y/d.npy files are written
+  out_dir: /path/to/batches
+  # Fraction of spots to keep (coreset subsampling)
+  keep_frac: 0.25
+  # Coreset strategy: "stratified" or "kcenter"
+  strategy: stratified
+  seed: 0
+  # Sample folder names to include (null = include all)
+  include_only: null
+  # Sample folder names to exclude
+  exclude_set: []
+  # Optional TSV mapping sample names to domain strings (null = one domain per sample)
+  domain_map_tsv: null
+  # Fixed spot radius in pixels (null = derive from radius.txt / radius_multiplier)
+  fixed_radius: null
+  radius_multiplier: 2.0
+
+train:
+  n_states: 2
+  # Phase 0: reconstruction pretraining
+  two_stage: true
+  epochs1: 15
+  # Phase 1+2: sequential Visium → Xenium training
+  sequential_training: true
+  visium_epochs: 100
+  xenium_epochs: 100
+  # CDAN domain adversarial weight (0 = disabled)
+  adv_lambda: 0
+  # Freeze encoder for N epochs at start of each phase
+  freeze_encoder_n: 2
+  # Reconstruction loss weight and mask ratio
+  recon_weight: 0.1
+  recon_mask_ratio: 0.3
+  # Checkpoint interval
+  save_every_n_epochs: 10
+  # Relative weight of Xenium (single-cell) CE loss vs Visium MSE loss
+  xenium_weight: 0.01
+  # Metric for best-checkpoint selection
+  monitor_metric: val_weak_mse
+  # Out-of-sample monitoring (null = disabled)
+  oos_sample: null
+  oos_tmpdir: null
+  device: cuda
+
+predict:
+  n_states: 2
+  tokens_per_chunk: 70000
+  chunks_per_batch: 2
+  out_pkl_name: pred_fullgrid_outputs.pkl
+  device: cuda
+
+visualize:
+  n_clusters: 6
+  pca_comp: 100
+  random_seed: 0
+  # Percentile clipping for intensity maps
+  p_lo: 5
+  p_hi: 95
+  save_highlights: false
+
+slide:
+  # Output PowerPoint file path (relative to out_root or absolute)
+  pptx: results.pptx
+  intensity_cols: 3
+  intensity_rows: 2
+  highlight_cols: 4
+  highlight_rows: 3

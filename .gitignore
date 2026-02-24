@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Large generated files (outputs — do not commit)
+*.pkl
+*.pickle
+*.npy
+*.ckpt
+*.h5ad
+
+# Logs & cluster output
+*.log
+*.out
+*.err
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

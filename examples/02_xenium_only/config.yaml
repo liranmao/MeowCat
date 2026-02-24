@@ -1,0 +1,70 @@
+# Example 2: Train on a single Xenium sample (hard labels, cross-entropy loss)
+# Input:  /project/KidneyHE/01_meowcat_test/02_xenium_only/input/XEN_S1/
+# Output: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/
+
+project:
+  name: ex02_xenium_only
+  data_root: /project/KidneyHE/01_meowcat_test/02_xenium_only/input
+  out_root:  /project/KidneyHE/01_meowcat_test/02_xenium_only/output
+  sample_pattern: "XEN*"
+
+preprocess:
+  raw_flag: he_raw
+  target_mpp: 0.5
+  pad: 224
+  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  histosweep_mask_dir: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/mask/
+  fusion_mode: single
+
+batches:
+  out_dir: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+  keep_frac: 1.0      # keep all cells (single sample)
+  strategy: stratified
+  seed: 0
+  include_only: null
+  exclude_set: []
+  domain_map_tsv: null
+  fixed_radius: null
+  radius_multiplier: 2.0
+
+# Training paradigm: Recon (Phase 0) -> Xenium CE (Phase 1)
+# No Visium batches present; the model trains in sc_only mode.
+train:
+  n_states: 2
+  two_stage: true
+  epochs1: 15           # Phase 0: reconstruction pretraining
+  sequential_training: false
+  visium_epochs: 0      # no Visium data
+  xenium_epochs: 100    # Phase 1: Xenium CE training (passed as --epochs2)
+  adv_lambda: 0         # CDAN disabled (single sample)
+  freeze_encoder_n: 2
+  recon_weight: 0.1
+  recon_mask_ratio: 0.3
+  save_every_n_epochs: 10
+  xenium_weight: 1.0
+  monitor_metric: val_loss
+  oos_sample: null
+  oos_tmpdir: null
+  device: cuda
+
+predict:
+  n_states: 2
+  tokens_per_chunk: 70000
+  chunks_per_batch: 2
+  out_pkl_name: pred_fullgrid_outputs.pkl
+  device: cuda
+
+visualize:
+  n_clusters: 6
+  pca_comp: 100
+  random_seed: 0
+  p_lo: 5
+  p_hi: 95
+  save_highlights: false
+
+slide:
+  pptx: results_ex02.pptx
+  intensity_cols: 3
+  intensity_rows: 2
+  highlight_cols: 4
+  highlight_rows: 3
