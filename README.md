@@ -1,9 +1,7 @@
 # MeowCat
 
-<p align="center">
-  <img src="image/logo.jpg" alt="MeowCat Logo" width="80"/>
-</p>
 
+<img src="Image/logo.png" alt="MeowCat Logo" width="300">
 **M**ulti-resolution **O**mics informed **W**hole-slide **C**ell **A**nnotation **T**ool
 
 A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered transcriptomics data as training supervision.
