@@ -1,4 +1,3 @@
-# MeowCat
 <p align="center">
   <img src="image/logo_v2.png" alt="MeowCat Logo" width="500"/>
 </p>
