@@ -1,7 +1,7 @@
 # MeowCat
 
 
-<img src="image/logo.jpg" alt="MeowCat Logo" width="300">
+<img src="image/logo.jpg" alt="MeowCat Logo" width="100">
 
 
 **M**ulti-resolution **O**mics informed **W**hole-slide **C**ell **A**nnotation **T**ool
