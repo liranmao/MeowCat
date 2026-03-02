@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MeowCat Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #fff;
+    font-family: 'Inter', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .label {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 600;
+    fill: #2D2D2D;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .sub {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    fill: #888;
+    font-size: 8.5px;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .dim {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    fill: #aaa;
+    font-size: 7.5px;
+    text-anchor: middle;
+    dominant-baseline: central;
+    font-style: italic;
+  }
+  .white-text { fill: #fff; }
+  .w-sub { fill: rgba(255,255,255,0.75); }
+  .box { rx: 5; ry: 5; stroke-width: 1.1; }
+  .grl { font-size: 7px; fill: #C75050; font-weight: 600; text-anchor: middle; font-family: 'Inter', Arial, sans-serif; }
+  .model-title { font-weight: 700; font-size: 10px; fill: #555; font-family: 'Inter', Arial, sans-serif; }
+  .formula { font-weight: 500; font-size: 9px; fill: #444; text-anchor: middle; dominant-baseline: central; font-family: 'Inter', Arial, sans-serif; }
+  .phase-label { font-weight: 600; font-size: 8px; fill: #555; dominant-baseline: central; font-family: 'Inter', Arial, sans-serif; }
+  .phase-desc { font-weight: 400; font-size: 7px; fill: #999; dominant-baseline: central; font-family: 'Inter', Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<svg width="990" height="340" viewBox="0 0 990 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#999"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#4A90C4"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#D95F5F"/>
+    </marker>
+    <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#C75050"/>
+    </marker>
+    <marker id="an" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#5A9A5A"/>
+    </marker>
+  </defs>
+
+  <!-- Vertical centre line for main flow -->
+  <!-- Y midline = 155 -->
+
+  <!-- ═══════════════ COL 1: INPUT ═══════════════ -->
+  <rect class="box" x="16" y="135" width="100" height="40" fill="#F0E4D0" stroke="#C8B898"/>
+  <text class="label" x="66" y="150" font-size="10">H&amp;E Image</text>
+  <text class="dim" x="66" y="164">[H, W, 3]</text>
+
+  <line x1="116" y1="155" x2="134" y2="155" stroke="#999" stroke-width="1.1" marker-end="url(#ag)"/>
+
+  <!-- ═══════════════ COL 2: PREPROCESS ═══════════════ -->
+  <rect class="box" x="136" y="132" width="90" height="46" fill="#ECECEC" stroke="#C0C0C0"/>
+  <text class="label" x="181" y="148" font-size="8.5">Preprocessing</text>
+  <text class="sub" x="181" y="162">0.5 μm/px</text>
+  <text class="sub" x="181" y="172">Tissue mask</text>
+
+  <line x1="226" y1="155" x2="244" y2="155" stroke="#999" stroke-width="1.1" marker-end="url(#ag)"/>
+
+  <!-- ═══════════════ COL 3: UNI ═══════════════ -->
+  <rect class="box" x="246" y="112" width="108" height="86" fill="#C4DCF0" stroke="#90B8D8"/>
+  <text class="label" x="300" y="130" font-size="10">UNI Model</text>
+  <rect x="256" y="154" width="88" height="17" rx="3" fill="#D9EAF5" stroke="#A8C8E0" stroke-width="0.7"/>
+  <text class="sub" x="300" y="163" font-size="7">Global [1024-d]</text>
+  <rect x="256" y="175" width="88" height="17" rx="3" fill="#D9EAF5" stroke="#A8C8E0" stroke-width="0.7"/>
+  <text class="sub" x="300" y="184" font-size="7">Local [1024-d]</text>
+
+  <line x1="354" y1="155" x2="372" y2="155" stroke="#999" stroke-width="1.1" marker-end="url(#ag)"/>
+
+  <!-- ═══════════════ COL 4: FUSION ═══════════════ -->
+  <rect class="box" x="374" y="133" width="80" height="44" fill="#B8D8B4" stroke="#88B884"/>
+  <text class="label" x="414" y="149" font-size="9.5">Fusion</text>
+  <text class="sub" x="414" y="163">[H, W, 2048]</text>
+
+  <line x1="454" y1="155" x2="472" y2="155" stroke="#999" stroke-width="1.1" marker-end="url(#ag)"/>
+
+  <!-- ═══════════════ COL 5: TOKENISATION ═══════════════ -->
+  <rect class="box" x="474" y="128" width="82" height="54" fill="#ECECEC" stroke="#C0C0C0"/>
+  <text class="label" x="515" y="146" font-size="8.5">Tokenise</text>
+  <text class="sub" x="515" y="160">Disk mask</text>
+  <text class="sub" x="515" y="170">Coreset</text>
+
+  <!-- Visium input from top -->
+  <rect class="box" x="478" y="68" width="74" height="28" fill="#4A90C4" stroke="#3A78A8"/>
+  <text class="label white-text" x="515" y="78" font-size="8">Visium</text>
+  <text class="sub w-sub" x="515" y="90" font-size="6.5">Soft [N, K]</text>
+  <line x1="515" y1="96" x2="515" y2="126" stroke="#4A90C4" stroke-width="1" marker-end="url(#ab)"/>
+
+  <!-- Xenium input from bottom -->
+  <rect class="box" x="478" y="214" width="74" height="28" fill="#D95F5F" stroke="#B84A4A"/>
+  <text class="label white-text" x="515" y="224" font-size="8">Xenium</text>
+  <text class="sub w-sub" x="515" y="236" font-size="6.5">Hard [N, 1]</text>
+  <line x1="515" y1="214" x2="515" y2="184" stroke="#D95F5F" stroke-width="1" marker-end="url(#ar)"/>
+
+  <line x1="556" y1="155" x2="576" y2="155" stroke="#999" stroke-width="1.1" marker-end="url(#ag)"/>
+
+  <!-- ═══════════════ COL 6: MODEL BLOCK (horizontal) ═══════════════ -->
+  <rect x="578" y="30" width="390" height="280" rx="8" fill="#FAFAFA" stroke="#BBBBBB" stroke-width="1.3"/>
+  <text class="model-title" x="590" y="48">MultiResolutionModel</text>
+
+  <!-- ── Shared Encoder ── -->
+  <rect class="box" x="600" y="72" width="112" height="170" fill="#D4C4E8" stroke="#B0A0CC"/>
+  <text class="label" x="656" y="150" font-size="10">Shared</text>
+  <text class="label" x="656" y="164" font-size="10">Encoder</text>
+
+  <!-- Arrow encoder → heads -->
+  <line x1="712" y1="118" x2="740" y2="118" stroke="#999" stroke-width="1" marker-end="url(#ag)"/>
+  <line x1="712" y1="173" x2="740" y2="173" stroke="#999" stroke-width="1" marker-end="url(#ag)"/>
+  <line x1="712" y1="221" x2="740" y2="221" stroke="#999" stroke-width="1" marker-end="url(#ag)"/>
+
+  <!-- ── Cell-Type Head ── -->
+  <rect class="box" x="742" y="92" width="108" height="52" fill="#F2C88C" stroke="#D4A860"/>
+  <text class="label" x="796" y="110" font-size="9">Cell-Type Head</text>
+  <text class="sub" x="796" y="124">Linear → Softmax</text>
+  <text class="sub" x="796" y="135">mean → p [B, K]</text>
+
+  <!-- ── CDAN Head ── -->
+  <rect class="box" x="742" y="152" width="108" height="42" fill="#F0AAAA" stroke="#CC8080"/>
+<text class="label" x="796" y="167" font-size="9">CDAN Head</text>
+  <text class="sub" x="796" y="181">p⊗z → MLP</text>
+
+  <!-- ── Recon Head ── -->
+  <rect class="box" x="742" y="202" width="108" height="38" fill="#B8D8B8" stroke="#88B088"/>
+  <text class="label" x="796" y="216" font-size="9">Recon Head</text>
+  <text class="sub" x="796" y="230">MLP → masked MSE</text>
+
+  <!-- Arrows heads → losses -->
+  <line x1="850" y1="108" x2="878" y2="90" stroke="#4A90C4" stroke-width="0.9" marker-end="url(#ab)"/>
+  <line x1="850" y1="125" x2="878" y2="140" stroke="#D95F5F" stroke-width="0.9" marker-end="url(#ar)"/>
+  <line x1="850" y1="173" x2="878" y2="185" stroke="#C75050" stroke-width="0.9" marker-end="url(#ac)"/>
+  <line x1="850" y1="221" x2="878" y2="230" stroke="#5A9A5A" stroke-width="0.9" marker-end="url(#an)"/>
+
+  <!-- ── Loss boxes ── -->
+  <rect x="880" y="74" width="62" height="26" rx="4" fill="#4A90C4" stroke="#3A78A8" stroke-width="0.8"/>
+  <text class="label white-text" x="911" y="88" font-size="8">ℒ_vis</text>
+
+  <rect x="880" y="128" width="62" height="26" rx="4" fill="#D95F5F" stroke="#B84A4A" stroke-width="0.8"/>
+  <text class="label white-text" x="911" y="142" font-size="8">ℒ_xen</text>
+
+  <rect x="880" y="176" width="62" height="26" rx="4" fill="#F0C8C8" stroke="#CCA0A0" stroke-width="0.8"/>
+  <text class="label" x="911" y="190" font-size="8" style="fill:#8B3030">ℒ_dom</text>
+
+  <rect x="880" y="222" width="62" height="26" rx="4" fill="#C8E4C8" stroke="#98C098" stroke-width="0.8"/>
+  <text class="label" x="911" y="236" font-size="8" style="fill:#3A6B3A">ℒ_rec</text>
+
+
+
+</svg>
+</body>
+</html>

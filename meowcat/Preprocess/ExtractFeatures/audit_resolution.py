@@ -23,6 +23,9 @@ def get_args():
     parser.add_argument('--pattern', type=str, default="GBM*", help="Folder pattern to match (default: GBM*)")
     parser.add_argument('--raw_flag', type=str, default="he_raw", help="Raw flag for image filename")
     parser.add_argument('--target_mpp', type=float, default=0.5, help="Target microns per pixel (default: 0.5)")
+    parser.add_argument('--pixel_size_raw', type=float, default=None,
+                        help="Manual pixel size override (microns-per-pixel). "
+                             "If provided, all samples use this value instead of auto-detection.")
     args = parser.parse_args()
     return args
 
@@ -163,6 +166,8 @@ def main():
     print(f"Base directory: {args.base_dir}")
     print(f"Pattern: {args.pattern}")
     print(f"Target MPP: {args.target_mpp}")
+    if args.pixel_size_raw is not None:
+        print(f"Manual pixel size: {args.pixel_size_raw} (auto-detection skipped)")
     print(f"Found {len(sample_dirs)} sample folders")
     print("=" * 80)
     
@@ -175,7 +180,24 @@ def main():
     for sample_path in sample_dirs:
         sample = os.path.basename(sample_path.rstrip('/'))
         feature_dir = sample_path
-        
+
+        # If manual pixel size is provided, use it for all samples
+        if args.pixel_size_raw is not None:
+            mpp_x = args.pixel_size_raw
+            scale = mpp_x / args.target_mpp
+            result = {
+                'sample': sample,
+                'mpp': mpp_x,
+                'method': "manual override (config)",
+                'image_path': None,
+                'extension': 'N/A',
+                'scale': scale
+            }
+            successful.append(result)
+            if scale > 1.0:
+                needs_upscale.append(result)
+            continue
+
         # Get image path
         try:
             image_path = get_image_filename(os.path.join(feature_dir, args.raw_flag))
@@ -186,7 +208,7 @@ def main():
                 'image_path': None
             })
             continue
-        
+
         if not os.path.exists(image_path):
             failed.append({
                 'sample': sample,
@@ -194,12 +216,12 @@ def main():
                 'image_path': image_path
             })
             continue
-        
+
         # Get resolution
         mpp_x, method_or_error = get_microns_per_pixel_x(image_path)
-        
+
         ext = Path(image_path).suffix.lower()
-        
+
         if mpp_x is None:
             failed.append({
                 'sample': sample,
@@ -218,8 +240,8 @@ def main():
                 'scale': scale
             }
             successful.append(result)
-            
-            if scale < 1.0:
+
+            if scale > 1.0:
                 needs_upscale.append(result)
     
     # Print detailed results
@@ -235,7 +257,7 @@ def main():
             mpp_groups[mpp_rounded].append(r['sample'])
         
         for r in successful:
-            status = "⚠️ UPSCALE" if r['scale'] < 1.0 else "✓"
+            status = "⚠️ UPSCALE" if r['scale'] > 1.0 else "✓"
             print(f"{status} {r['sample']:<25} | MPP: {r['mpp']:.6f} | Scale: {r['scale']:.4f} | {r['extension']} | {r['method']}")
     else:
         print("No successful reads!")
@@ -275,7 +297,7 @@ def main():
             for mpp, samples in sorted(mpp_groups.items()):
                 print(f"  - {mpp} MPP: {len(samples)} samples")
     
-    print(f"\nNeeds upscaling (mpp < {args.target_mpp}): {len(needs_upscale)}")
+    print(f"\nNeeds upscaling (mpp > {args.target_mpp}): {len(needs_upscale)}")
     if needs_upscale:
         for r in needs_upscale:
             print(f"  - {r['sample']}: {r['mpp']:.6f} MPP (scale would be {r['scale']:.4f}x)")

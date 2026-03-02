@@ -12,12 +12,16 @@ project:
   # preprocess step can be run separately for each pattern using --samples.
   sample_pattern: "VIS*"
 
+rctd:
+  reference_rds: /path/to/single_cell_reference.rds
+  cell_type_column: MainType
+
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
+  pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
   pad: 224
   uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
-  histosweep_mask_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/mask/
   fusion_mode: single
 
 batches:
@@ -29,7 +33,24 @@ batches:
   exclude_set: []
   domain_map_tsv: null
   fixed_radius: null
-  radius_multiplier: 2.0
+
+xenium:
+  xenium_data_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/xenium_raw
+  cellbin_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/cellbin
+  processed_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
+  histology_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/histology
+  xenium_anno_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/annotations
+  sample_pattern: "XEN*"
+  include_only: null
+  exclude_set: []
+  # Xenium batches go to the SAME out_dir as Visium so training finds both
+  out_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
+  pixel_size_raw: 0.2125
+  fixed_radius: 75.20
+  anno_names_path: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_S1/anno-names.txt
+  cell_type_mapping_json: /path/to/cell_type_mapping.json
+  visium_batch_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
+  seed: 42
 
 # Training paradigm: Recon -> Visium MSE -> Xenium CE (3-phase sequential)
 # batch_vis_* and batch_xen_* are both present in batches.out_dir.

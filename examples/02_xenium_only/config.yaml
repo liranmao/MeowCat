@@ -11,9 +11,9 @@ project:
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
+  pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
   pad: 224
   uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
-  histosweep_mask_dir: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/mask/
   fusion_mode: single
 
 batches:
@@ -25,7 +25,23 @@ batches:
   exclude_set: []
   domain_map_tsv: null
   fixed_radius: null
-  radius_multiplier: 2.0
+
+xenium:
+  xenium_data_root: /project/KidneyHE/01_meowcat_test/02_xenium_only/xenium_raw
+  cellbin_root: /project/KidneyHE/01_meowcat_test/02_xenium_only/cellbin
+  processed_root: /project/KidneyHE/01_meowcat_test/02_xenium_only/input
+  histology_root: /project/KidneyHE/01_meowcat_test/02_xenium_only/histology
+  xenium_anno_dir: /project/KidneyHE/01_meowcat_test/02_xenium_only/annotations
+  sample_pattern: "XEN*"
+  include_only: null
+  exclude_set: []
+  out_dir: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+  pixel_size_raw: 0.2125
+  fixed_radius: 75.20
+  anno_names_path: /project/KidneyHE/01_meowcat_test/02_xenium_only/input/XEN_S1/anno-names.txt
+  cell_type_mapping_json: /path/to/cell_type_mapping.json
+  visium_batch_dir: null   # no Visium batches in xenium-only mode
+  seed: 42
 
 # Training paradigm: Recon (Phase 0) -> Xenium CE (Phase 1)
 # No Visium batches present; the model trains in sc_only mode.

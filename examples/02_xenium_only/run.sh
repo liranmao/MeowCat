@@ -29,7 +29,9 @@
 set -euo pipefail
 
 CFG="$(dirname "$0")/config.yaml"
-SAMPLE="XEN_S1"
+# NOTE: Do NOT hardcode sample names here.
+# The pipeline auto-discovers samples from project.sample_pattern in config.yaml.
+# Use --samples only to override (e.g. --samples XEN_P01).
 
 echo "============================================"
 echo " MeowCat Example 2: Xenium-only training"
@@ -52,16 +54,16 @@ meowcat check-resolution --config "$CFG"
 # Step 3: Preprocess the Xenium image
 # Activate: micromamba activate rapids_singlecell
 # ---------------------------------------------------------------------------
-echo "[Step 3] Image preprocessing for $SAMPLE"
-meowcat preprocess --config "$CFG" --samples "$SAMPLE"
+echo "[Step 3] Image preprocessing"
+meowcat preprocess --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 4: Build training batches (batch_xen_*_x/y/d.npy)
 # Activate: conda activate he_anno
 # Output: batches/batch_xen_000_y.npy  [N, K]  <- one-hot hard labels
 # ---------------------------------------------------------------------------
-echo "[Step 4] Batch preparation"
-meowcat prepare-batches --config "$CFG"
+echo "[Step 4] Xenium batch preparation"
+meowcat prepare-xenium-batches --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 5: Train the model
@@ -77,10 +79,10 @@ meowcat train --config "$CFG"
 # Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 6] Prediction"
-meowcat predict --config "$CFG" --samples "$SAMPLE"
+meowcat predict --config "$CFG"
 
 echo "[Step 6] Visualization"
-meowcat visualize --config "$CFG" --samples "$SAMPLE"
+meowcat visualize --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 7: Generate PowerPoint summary

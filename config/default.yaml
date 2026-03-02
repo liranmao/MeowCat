@@ -11,17 +11,34 @@ project:
   # Glob pattern to identify sample subfolders under data_root
   sample_pattern: "GBM*"
 
+rctd:
+  # Absolute path to single-cell reference RDS file (Seurat v5 object)
+  reference_rds: ""
+  # Metadata column in reference for cell-type labels
+  cell_type_column: MainType
+  # Metadata column for group-based reference subsetting
+  # ("" = use all cells as one reference for every sample)
+  group_column: ""
+  # Groups of interest; inferred from sample folder names
+  # ([] = use all cells, no group subsetting)
+  groups: []
+  max_cores: 5
+  doublet_mode: full
+  min_umi: 10
+
 preprocess:
   # Substring in the raw H&E image filename (e.g. file named "sample_he_raw.tif")
   raw_flag: he_raw
   # Target resolution for resampling (microns-per-pixel)
   target_mpp: 0.5
+  # Manual pixel size of the raw image (microns-per-pixel).
+  # null = auto-detect from image metadata (TIFF tags, OpenSlide, EXIF).
+  # Set a float value (e.g. 0.5) to skip auto-detection when metadata is missing.
+  pixel_size_raw: null
   # Padding size passed to RunPreprocess
   pad: 224
   # Absolute path to UNI ViT-Large weights (.bin file)
   uni_weights: /path/to/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
-  # Directory where HistoSweep tissue masks are saved
-  histosweep_mask_dir: ./mask/
   # Feature fusion mode: "single" (global only) or "multi" (global+local)
   fusion_mode: single
 
@@ -39,9 +56,39 @@ batches:
   exclude_set: []
   # Optional TSV mapping sample names to domain strings (null = one domain per sample)
   domain_map_tsv: null
-  # Fixed spot radius in pixels (null = derive from radius.txt / radius_multiplier)
+  # Fixed spot radius in pixels (null = derive from radius.txt)
   fixed_radius: null
-  radius_multiplier: 2.0
+
+xenium:
+  # Root for raw Xenium data (sample/sample/ substructure with cell_feature_matrix.h5, cells.parquet)
+  xenium_data_root: /path/to/xenium/raw
+  # Root for HistoSweep cellbin h5ad (sample/adata_cellbin_HistoSweep.h5ad)
+  cellbin_root: /path/to/xenium/cellbin
+  # Root for processed Xenium data (sample/ subfolders with output h5ad + embeddings)
+  processed_root: /path/to/xenium/processed
+  # Root for histology embeddings (sample/single_super_emb.h5ad)
+  histology_root: /path/to/xenium/histology
+  # Directory with per-sample cell type annotation CSVs (<sample>.csv)
+  xenium_anno_dir: /path/to/xenium_cell_type_anno
+  # Glob pattern for Xenium sample folders under processed_root
+  sample_pattern: "P*_Xenium"
+  # Samples to include (null = all matching pattern)
+  include_only: null
+  # Samples to exclude
+  exclude_set: []
+  # Output directory for batch_xen_*_{x,y,d}.npy files
+  out_dir: /path/to/xenium/batches
+  # Pixel size of raw Xenium images (microns per pixel; 0.2125 for standard Xenium)
+  pixel_size_raw: 0.2125
+  # Fixed radius in pixels for KDTree bin-to-cell mapping
+  fixed_radius: 75.20
+  # Path to shared anno-names.txt (defines cell type order for all Xenium samples)
+  anno_names_path: /path/to/anno-names.txt
+  # Path to cell type mapping JSON (fine -> coarse labels)
+  cell_type_mapping_json: null
+  # Visium batch directory (to determine domain ID offset; null = start from 0)
+  visium_batch_dir: null
+  seed: 42
 
 train:
   n_states: 2
