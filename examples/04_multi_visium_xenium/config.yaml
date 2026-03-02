@@ -11,12 +11,16 @@ project:
   out_root:  /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output
   sample_pattern: "VIS*"   # default; override with --samples for Xenium preprocessing
 
+rctd:
+  reference_rds: /path/to/single_cell_reference.rds
+  cell_type_column: MainType
+
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
+  pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
   pad: 224
   uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
-  histosweep_mask_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/mask/
   fusion_mode: single
 
 batches:
@@ -28,7 +32,25 @@ batches:
   exclude_set: []
   domain_map_tsv: null   # null = one domain per WSI folder (auto-assigned)
   fixed_radius: null
-  radius_multiplier: 2.0
+
+xenium:
+  xenium_data_root: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/xenium_raw
+  cellbin_root: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/cellbin
+  processed_root: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/input
+  histology_root: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/histology
+  xenium_anno_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/annotations
+  sample_pattern: "XEN*"
+  include_only: null
+  exclude_set: []
+  # Xenium batches go to the SAME out_dir as Visium so training finds both
+  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/batches
+  pixel_size_raw: 0.2125
+  fixed_radius: 75.20
+  anno_names_path: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/input/VIS_S1/anno-names.txt
+  cell_type_mapping_json: /path/to/cell_type_mapping.json
+  # Point to Visium batch dir so Xenium domain IDs continue after Visium's
+  visium_batch_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/batches
+  seed: 42
 
 # Training paradigm: Recon -> Visium MSE -> Xenium CE (3-phase sequential)
 # Multiple patients -> enable CDAN for cross-patient domain adaptation.

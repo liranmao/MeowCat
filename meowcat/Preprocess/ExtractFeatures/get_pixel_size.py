@@ -13,6 +13,9 @@ def get_args():
     parser.add_argument('--save_dir', type=str, required=True)
     parser.add_argument('--sample', type=str, default="AAAA")
     parser.add_argument('--raw_flag', type=str, default="he-raw")
+    parser.add_argument('--pixel_size_raw', type=float, default=None,
+                        help="Manual pixel size override (microns-per-pixel). "
+                             "If provided, skip auto-detection and use this value.")
     args = parser.parse_args()
     return args
 
@@ -123,29 +126,37 @@ def get_microns_per_pixel_x(path: str) -> float:
 def main():
     args = get_args()
     print(args)
-    
-    # Get image path using the predefined function
-    args.image_path = get_image_filename(args.read_dir + args.raw_flag)
-    print(f"Image path: {args.image_path}")
-    
-    if not os.path.exists(args.image_path):
-        print("Image file doesn't exist")
-        sys.exit(1)
-    
+
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
-    
-    # Extract microns per pixel
-    try:
-        mpp_x = get_microns_per_pixel_x(args.image_path)
-        print(f"Microns per pixel (X): {mpp_x:.10f}")
-        
-        # Save to file
-        output_path = os.path.join(args.save_dir, "pixel-size-raw.txt")
+
+    output_path = os.path.join(args.save_dir, "pixel-size-raw.txt")
+
+    # If manual pixel size is provided, skip auto-detection
+    if args.pixel_size_raw is not None:
+        mpp_x = args.pixel_size_raw
+        print(f"Using manual pixel size: {mpp_x:.10f} (auto-detection skipped)")
         with open(output_path, 'w') as f:
             f.write(f"{mpp_x:.10f}\n")
         print(f"Saved to: {output_path}")
-        
+        return
+
+    # Auto-detect from image metadata
+    args.image_path = get_image_filename(args.read_dir + args.raw_flag)
+    print(f"Image path: {args.image_path}")
+
+    if not os.path.exists(args.image_path):
+        print("Image file doesn't exist")
+        sys.exit(1)
+
+    try:
+        mpp_x = get_microns_per_pixel_x(args.image_path)
+        print(f"Microns per pixel (X): {mpp_x:.10f}")
+
+        with open(output_path, 'w') as f:
+            f.write(f"{mpp_x:.10f}\n")
+        print(f"Saved to: {output_path}")
+
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)

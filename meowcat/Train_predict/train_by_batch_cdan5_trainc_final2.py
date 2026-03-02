@@ -1722,14 +1722,14 @@ Examples:
     
     # Basic training
     parser.add_argument('--epochs', type=int, default=None)
-    parser.add_argument('--n-states', type=int, default=5)
+    parser.add_argument('--n-states', type=int, default=2)
     parser.add_argument('--device', type=str, default='cuda')
     parser.add_argument('--load-saved', action='store_true')
     parser.add_argument('--save-every-n-epochs', type=int, default=10)
     
     # Model architecture
     parser.add_argument('--token-dim', type=int, default=256)
-    parser.add_argument('--xenium-weight', type=float, default=1.0,
+    parser.add_argument('--xenium-weight', type=float, default=0.01,
                        help='Weight for Xenium CE loss relative to Visium MSE')
     
     # CDAN / Domain
@@ -1738,17 +1738,17 @@ Examples:
     parser.add_argument('--entropy-cond', action='store_true')
     
     # Reconstruction
-    parser.add_argument('--recon-weight', type=float, default=0.0)
+    parser.add_argument('--recon-weight', type=float, default=0.1)
     parser.add_argument('--recon-mask-ratio', type=float, default=0.3)
     
     # Two-stage training
     parser.add_argument('--two-stage', action='store_true',
                        help='Add reconstruction pretraining stage. Can combine with --sequential-training for 3-phase training.')
-    parser.add_argument('--epochs1', type=int, default=0,
+    parser.add_argument('--epochs1', type=int, default=15,
                        help='Epochs for recon pretraining (Stage 1). Used with --two-stage.')
     parser.add_argument('--epochs2', type=int, default=0,
                        help='Epochs for Stage 2 (only used if NOT using --sequential-training)')
-    parser.add_argument('--freeze-encoder-n', type=int, default=0)
+    parser.add_argument('--freeze-encoder-n', type=int, default=2)
     parser.add_argument('--stage2-lr', type=float, default=None)
     
     # NEW: Sequential training (Visium -> Xenium)
@@ -1757,7 +1757,7 @@ Examples:
                             'Can combine with --two-stage for 3-phase: Recon -> Visium -> Xenium')
     parser.add_argument('--visium-epochs', type=int, default=100,
                        help='Number of epochs for Visium phase (sequential mode)')
-    parser.add_argument('--xenium-epochs', type=int, default=50,
+    parser.add_argument('--xenium-epochs', type=int, default=100,
                        help='Number of epochs for Xenium phase (sequential mode)')
     parser.add_argument('--xenium-lr', type=float, default=None,
                        help='Learning rate for Xenium phase (default: lr/10)')
@@ -1772,7 +1772,7 @@ Examples:
     
     # Checkpointing
     parser.add_argument('--patience', type=int, default=0)
-    parser.add_argument('--monitor-metric', type=str, default='val_loss')
+    parser.add_argument('--monitor-metric', type=str, default='val_weak_mse')
     parser.add_argument('--resume-ckpt', type=str, default=None)
     
     # OOS monitoring

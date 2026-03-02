@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\begin{document}
+
+\section*{Coreset Subsampling}
+
+Given $N$ training samples with soft labels $Y \in \mathbb{R}^{N \times K}$ and domain assignments $D \in \mathbb{Z}^N$, we select a coreset of size $\lfloor \alpha N \rfloor$ (default $\alpha = 0.25$) using one of two strategies. Subsampling is performed independently per domain, with quota proportional to domain size.
+
+\subsection*{Strategy 1: Entropy-Stratified Sampling}
+
+\begin{enumerate}
+\item Compute prediction entropy per sample:
+\begin{equation}
+H_i = -\sum_{k=1}^{K} y_{ik} \log y_{ik}
+\end{equation}
+\item Assign each sample to a stratum $(c_i, b_i)$ where $c_i = \arg\max_k\, y_{ik}$ is the dominant cell type and $b_i$ is the entropy quantile bin ($B$ bins, default $B=3$).
+\item Allocate quota per stratum proportional to its size; sample uniformly within each stratum.
+\end{enumerate}
+
+\subsection*{Strategy 2: Greedy $k$-Center}
+
+\begin{enumerate}
+\item Pick a random seed point in label space $\mathbb{R}^K$.
+\item Greedily select the point farthest (in $\ell_2$) from all current centers.
+\item Repeat until $\lfloor \alpha N \rfloor$ points are selected.
+\end{enumerate}
+
+\noindent\textbf{Comparison.} Stratified sampling preserves the joint distribution of cell-type identity and label uncertainty. $k$-Center maximizes coverage in label space, ensuring rare cell-type compositions are represented.
+
+\end{document}

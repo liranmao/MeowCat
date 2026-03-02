@@ -31,27 +31,48 @@ def _samples(cfg: MeowCatConfig, override: Optional[List[str]]) -> List[str]:
 
 # ── Step 1 ─────────────────────────────────────────────────────────────────────
 def cmd_rctd(cfg: MeowCatConfig) -> List[str]:
-    return ["Rscript", _pkg("Preprocess/RCTD_deconvolution.R"), "--no-save"]
+    p = cfg.project
+    r = cfg.rctd
+    cmd = [
+        "Rscript", _pkg("Preprocess/RCTD_deconvolution.R"),
+        "--base_dir", p.data_root,
+        "--sample_pattern", p.sample_pattern,
+        "--reference_rds", r.reference_rds,
+        "--cell_type_column", r.cell_type_column,
+        "--max_cores", str(r.max_cores),
+        "--doublet_mode", r.doublet_mode,
+        "--min_umi", str(r.min_umi),
+    ]
+    if r.group_column:
+        cmd += ["--group_column", r.group_column]
+    if r.groups:
+        cmd += ["--groups", ",".join(r.groups)]
+    return cmd
 
 
 # ── Step 2 ─────────────────────────────────────────────────────────────────────
 def cmd_check_resolution(cfg: MeowCatConfig) -> List[str]:
     p = cfg.project
     pp = cfg.preprocess
-    return [
+    cmd = [
         "python", _pkg("Preprocess/ExtractFeatures/audit_resolution.py"),
         "--base_dir", p.data_root,
         "--pattern", p.sample_pattern,
         "--raw_flag", pp.raw_flag,
         "--target_mpp", str(pp.target_mpp),
     ]
+    if pp.pixel_size_raw is not None:
+        cmd += ["--pixel_size_raw", str(pp.pixel_size_raw)]
+    return cmd
 
 
 # ── Step 3 / 6a — per-sample preprocessing (train or predict images) ──────────
 def cmds_preprocess_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
     """Returns an ordered list of commands to preprocess one sample."""
     data_root = cfg.project.data_root
-    feature_dir = os.path.join(data_root, sample)
+    # Trailing separator so read_dir + raw_flag produces a valid path prefix
+    # (scripts use prefix = read_dir + raw_flag, e.g. "/path/sample/" + "he_raw")
+    feature_dir = os.path.join(data_root, sample, "")
     pp = cfg.preprocess
 
     get_pixel_size = [
@@ -61,6 +82,8 @@ def cmds_preprocess_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
         "--sample", sample,
         "--raw_flag", pp.raw_flag,
     ]
+    if pp.pixel_size_raw is not None:
+        get_pixel_size += ["--pixel_size_raw", str(pp.pixel_size_raw)]
 
     run_preprocess = [
         "python", _pkg("Preprocess/ExtractFeatures/RunPreprocess.py"),
@@ -74,10 +97,12 @@ def cmds_preprocess_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
         "--scale_value", "{scale}",  # placeholder resolved in cli.py
     ]
 
+    # RunHistoSweep saves masks to {read_dir}/mask/ — UNI_extract_features.py
+    # hardcodes the same {read_path}/mask/ lookup, so this must always be "mask".
     run_histosweep = [
         "python", _pkg("Preprocess/ExtractFeatures/RunHistoSweep.py"),
         "--read_dir", feature_dir,
-        "--save_dir", pp.histosweep_mask_dir,
+        "--save_dir", "mask",
     ]
 
     extract_features = [
@@ -97,20 +122,78 @@ def cmds_preprocess_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
         "--mode", pp.fusion_mode,
     ]
 
-    prepare_inference = [
+    # Convert single_super_emb.h5ad → embeddings-hist.pickle
+    # (reuses existing prepare_inference_new_sample.py)
+    prepare_embeddings = [
         "python", _pkg("Preprocess/prepare_inference_new_sample.py"),
-        data_root, sample,
+        data_root,
+        sample,
+    ]
+
+    prepare_visium = [
+        "python", _pkg("Preprocess/prepare_visium_inputs.py"),
+        "--sample_dir", feature_dir,
+        "--target_mpp", str(pp.target_mpp),
     ]
 
     return [get_pixel_size, run_preprocess, run_histosweep,
-            extract_features, fuse_features, prepare_inference]
+            extract_features, fuse_features, prepare_embeddings, prepare_visium]
 
 
-# ── Step 4 ─────────────────────────────────────────────────────────────────────
+# ── Step 1.5 — Visium-specific input preparation (per sample) ─────────────────
+def cmd_prepare_visium_sample(cfg: MeowCatConfig, sample: str) -> List[str]:
+    """
+    Prepare Visium metadata files for one sample.
+    Reads RCTD output + Visium spatial data; writes:
+      anno-names.txt, anno_matrix.tsv, locs.tsv,
+      radius-raw.txt, radius.txt, pixel-size.txt
+    Non-Visium samples are skipped gracefully by the script itself.
+    Requires pixel-size-raw.txt to already exist (written by get_pixel_size.py).
+    """
+    feature_dir = os.path.join(cfg.project.data_root, sample)
+    return [
+        "python", _pkg("Preprocess/prepare_visium_inputs.py"),
+        "--sample_dir", feature_dir,
+        "--target_mpp", str(cfg.preprocess.target_mpp),
+    ]
+
+
+# ── Step 1.6 — Visium QC visualization ────────────────────────────────────────
+def cmd_visualize_visium(
+    cfg: MeowCatConfig,
+    samples: Optional[List[str]] = None,
+) -> List[str]:
+    """
+    Overlay Visium spots (locs.tsv, radius.txt, anno_matrix.tsv) on the
+    processed H&E image to verify pixel-size scaling.
+    Outputs go to <out_root>/<sample>/visium_viz/.
+    """
+    cmd = [
+        "python", _pkg("Preprocess/visualize_visium_prep.py"),
+        "--data_root",      cfg.project.data_root,
+        "--out_root",       cfg.project.out_root,
+        "--sample_pattern", cfg.project.sample_pattern,
+    ]
+    if samples:
+        cmd += ["--samples", ",".join(samples)]
+    return cmd
+
+
+# ── Step 4 — Visium batch preparation ─────────────────────────────────────────
 def cmd_prepare_batches(cfg: MeowCatConfig, config_path: str) -> List[str]:
     return [
         "python", _pkg("Preprocess/batched_data_preparing.py"),
         "--config", config_path,
+        "--mode", "visium",
+    ]
+
+
+# ── Step 4x — Xenium batch preparation ───────────────────────────────────────
+def cmd_prepare_xenium_batches(cfg: MeowCatConfig, config_path: str) -> List[str]:
+    return [
+        "python", _pkg("Preprocess/batched_data_preparing.py"),
+        "--config", config_path,
+        "--mode", "xenium",
     ]
 
 
@@ -152,9 +235,10 @@ def cmd_predict_sample(cfg: MeowCatConfig, sample: str) -> List[str]:
     return [
         "python",
         _pkg("Train_predict/predict_cdan_multireso.py"),
-        cfg.project.data_root,
+        cfg.batches.out_dir,
         str(p.n_states),
         sample,
+        "--data-root", cfg.project.data_root,
         "--device", p.device,
         "--tokens-per-chunk", str(p.tokens_per_chunk),
         "--chunks-per-batch", str(p.chunks_per_batch),

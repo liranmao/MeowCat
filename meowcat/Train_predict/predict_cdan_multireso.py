@@ -41,7 +41,7 @@ import torch.nn.functional as F
 from typing import List, Tuple
 
 # --- import from your codebase ---
-from train_by_batch_cdan5_trainc import MultiResolutionModel
+from train_by_batch_cdan5_trainc_final2 import MultiResolutionModel
 from utils import read_lines, load_pickle, save_pickle
 
 
@@ -203,12 +203,14 @@ def main():
     ap = argparse.ArgumentParser(
         description="Predict on full image grid using MultiResolution model"
     )
-    ap.add_argument("prefix", type=str, 
+    ap.add_argument("prefix", type=str,
                     help="Top-level PREFIX used for training (contains states/*)")
-    ap.add_argument("n_states", type=int, 
+    ap.add_argument("n_states", type=int,
                     help="How many states to load (00..n-1)")
-    ap.add_argument("sample_name", type=str, 
+    ap.add_argument("sample_name", type=str,
                     help="Sample folder under PREFIX (e.g., NCBI_001)")
+    ap.add_argument("--data-root", type=str, default=None,
+                    help="Root directory containing sample data. Defaults to PREFIX.")
     ap.add_argument("--device", type=str, default="cuda", choices=["cuda", "cpu"])
     ap.add_argument("--tokens-per-chunk", type=int, default=16384,
                     help="How many pixels per sequence chunk (controls T). Larger uses more memory.")
@@ -219,10 +221,13 @@ def main():
                     help="Name of output PKL written in the sample folder.")
     args = ap.parse_args()
 
+    data_root = args.data_root if args.data_root else args.prefix
+
     print("=" * 60)
     print("MultiResolution Full-Grid Prediction")
     print("=" * 60)
     print(f"PREFIX: {args.prefix}")
+    print(f"DATA_ROOT: {data_root}")
     print(f"SAMPLE: {args.sample_name}")
     print(f"N_STATES: {args.n_states}")
     print(f"DEVICE: {args.device}")
@@ -235,7 +240,7 @@ def main():
     print(f"[Models] Loaded {len(models)} states, token_dim={token_dim}, n_ctypes={n_ctypes}")
 
     # 2) Load sample (full image features)
-    sample_dir, ctypes, embs, H, W, C = load_sample(args.prefix, args.sample_name)
+    sample_dir, ctypes, embs, H, W, C = load_sample(data_root, args.sample_name)
     print(f"[Sample] {args.sample_name}: embs {embs.shape} (H,W,C), K={len(ctypes)}, D={token_dim}")
 
     # 3) Predict over ALL pixels

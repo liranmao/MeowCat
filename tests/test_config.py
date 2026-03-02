@@ -121,7 +121,7 @@ class TestCLIDryRun:
     def test_subcommand_parsed(self):
         from meowcat.cli import _build_parser
         p = _build_parser()
-        args = p.parse_args(["--dry-run", "train"])
+        args = p.parse_args(["train", "--dry-run"])
         assert args.step == "train"
         assert args.dry_run is True
 
