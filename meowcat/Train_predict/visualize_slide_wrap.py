@@ -227,12 +227,19 @@ def build_deck(out_root: Path,
         add_title_slide(prs, title, subtitle=str(out_root))
 
     # Determine sample list
-    candidates = [p.name for p in out_root.iterdir() if p.is_dir()]
-    # Prefer those starting with P, but allow explicit --samples override
     if samples:
         sample_list = [s for s in samples if (out_root / s).is_dir()]
     else:
-        sample_list = sorted([s for s in candidates if s.startswith("S") or s.startswith("P")])
+        # Auto-discover: a subdirectory is a sample if it contains
+        # visualization outputs (argmax map or intensity folder)
+        sample_list = []
+        for p in sorted(out_root.iterdir()):
+            if not p.is_dir():
+                continue
+            has_argmax = any(p.glob("*_predicted_celltype_map.png"))
+            has_intensity = (p / "celltype_intensity_percentiles").is_dir()
+            if has_argmax or has_intensity:
+                sample_list.append(p.name)
 
     for sample in sample_list:
         sdir = out_root / sample

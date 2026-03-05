@@ -317,3 +317,5 @@ for (sample_dir in sample_dirs) {
   rm(puck, myRCTD, nw, cell_type_names)
   gc()
 }
+quit(status = 0)                      
+                 

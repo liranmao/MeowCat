@@ -1,0 +1,14 @@
+A (original): /project/KidneyHE/data_lung/P11_LUAD/embeddings-hist.pickle
+B (test):     /project/KidneyHE/01_meowcat_test/01_visium_only/input/VIS_P11_LUAD/embeddings-hist.pickle
+
+type   A: <class 'numpy.ndarray'>  B: <class 'numpy.ndarray'>
+shape  A: (1470, 1512, 2048)  B: (1470, 1512, 2048)
+dtype  A: float32  B: float32
+
+exactly equal:  False
+allclose:       False
+max abs diff:   0.015625
+
+NaN count  A: 0  B: 0
+Inf count  A: 0  B: 0
+min/max    A: [-13.039062, 14.289062]  B: [-13.039062, 14.289062]

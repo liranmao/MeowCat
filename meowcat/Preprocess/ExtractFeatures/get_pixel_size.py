@@ -132,6 +132,13 @@ def main():
 
     output_path = os.path.join(args.save_dir, "pixel-size-raw.txt")
 
+    # If pixel-size-raw.txt already exists (user-provided per-sample override), use it as-is
+    if os.path.exists(output_path):
+        with open(output_path) as f:
+            existing_val = float(f.read().strip())
+        print(f"Using existing pixel-size-raw.txt: {existing_val:.10f} (auto-detection skipped)")
+        return
+
     # If manual pixel size is provided, skip auto-detection
     if args.pixel_size_raw is not None:
         mpp_x = args.pixel_size_raw

@@ -1,0 +1,785 @@
+============================================
+ MeowCat Example 1b: Visium-only P15_LUAD
+ Config: ./config.yaml
+============================================
+[Step 1] RCTD deconvolution
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+Found 1 Visium sample(s): VIS_P15_LUAD
+Group-based subsetting enabled: column='Group_ID', groups=LUAD
+
+===== RCTD on sample: VIS_P15_LUAD =====
+Sample VIS_P15_LUAD assigned to group: LUAD
+Building reference for group: LUAD
+Reference for LUAD built with 179910 cells and 17874 genes across 8 cell types.
+'as(<dgTMatrix>, "dgCMatrix")' is deprecated.
+Use 'as(., "CsparseMatrix")' instead.
+See help("Deprecated") and help("Matrix-deprecated").
+Begin: process_cell_type_info
+process_cell_type_info: number of cells in reference: 66450
+process_cell_type_info: number of genes in reference: 17874
+
+NonTumor_Epi    Tumor_Epi            B       Plasma            T           NK 
+       10000        10000         4594         9394        10000         2462 
+     Myeloid      Stromal 
+       10000        10000 
+End: process_cell_type_info
+create.RCTD: getting regression differentially expressed genes: 
+get_de_genes: NonTumor_Epi found DE genes: 363
+get_de_genes: Tumor_Epi found DE genes: 305
+get_de_genes: B found DE genes: 317
+get_de_genes: Plasma found DE genes: 66
+get_de_genes: T found DE genes: 336
+get_de_genes: NK found DE genes: 389
+get_de_genes: Myeloid found DE genes: 359
+get_de_genes: Stromal found DE genes: 392
+get_de_genes: total DE genes: 1990
+create.RCTD: getting platform effect normalization differentially expressed genes: 
+get_de_genes: NonTumor_Epi found DE genes: 751
+get_de_genes: Tumor_Epi found DE genes: 789
+get_de_genes: B found DE genes: 735
+get_de_genes: Plasma found DE genes: 119
+get_de_genes: T found DE genes: 812
+get_de_genes: NK found DE genes: 819
+get_de_genes: Myeloid found DE genes: 721
+get_de_genes: Stromal found DE genes: 812
+get_de_genes: total DE genes: 3899
+fitBulk: decomposing bulk
+chooseSigma: using initial Q_mat with sigma =  1
+starting worker pid=1301663 on localhost:11472 at 11:45:57.771
+starting worker pid=1301773 on localhost:11472 at 11:45:58.035
+starting worker pid=1301883 on localhost:11472 at 11:45:58.311
+starting worker pid=1301993 on localhost:11472 at 11:45:58.566
+starting worker pid=1302103 on localhost:11472 at 11:45:58.815
+starting worker pid=1302213 on localhost:11472 at 11:45:59.083
+starting worker pid=1302323 on localhost:11472 at 11:45:59.350
+starting worker pid=1302433 on localhost:11472 at 11:45:59.626
+starting worker pid=1302543 on localhost:11472 at 11:45:59.892
+starting worker pid=1302653 on localhost:11472 at 11:46:00.158
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2399390.54054855
+Sigma value:  0.84
+starting worker pid=1302883 on localhost:11472 at 11:46:45.509
+starting worker pid=1302993 on localhost:11472 at 11:46:45.778
+starting worker pid=1303103 on localhost:11472 at 11:46:46.047
+starting worker pid=1303213 on localhost:11472 at 11:46:46.335
+starting worker pid=1303323 on localhost:11472 at 11:46:46.606
+starting worker pid=1303433 on localhost:11472 at 11:46:46.842
+starting worker pid=1303543 on localhost:11472 at 11:46:47.090
+starting worker pid=1303653 on localhost:11472 at 11:46:47.337
+starting worker pid=1303765 on localhost:11472 at 11:46:47.609
+starting worker pid=1303875 on localhost:11472 at 11:46:47.874
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2364515.03608068
+Sigma value:  0.69
+starting worker pid=1304162 on localhost:11472 at 11:47:47.346
+starting worker pid=1304274 on localhost:11472 at 11:47:47.616
+starting worker pid=1304385 on localhost:11472 at 11:47:47.898
+starting worker pid=1304508 on localhost:11472 at 11:47:48.157
+starting worker pid=1304618 on localhost:11472 at 11:47:48.426
+starting worker pid=1304728 on localhost:11472 at 11:47:48.711
+starting worker pid=1304838 on localhost:11472 at 11:47:48.987
+starting worker pid=1304948 on localhost:11472 at 11:47:49.267
+starting worker pid=1305058 on localhost:11472 at 11:47:49.516
+starting worker pid=1305168 on localhost:11472 at 11:47:49.780
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2341641.99528967
+Sigma value:  0.61
+starting worker pid=1305438 on localhost:11472 at 11:48:42.783
+starting worker pid=1305548 on localhost:11472 at 11:48:43.045
+starting worker pid=1305659 on localhost:11472 at 11:48:43.314
+starting worker pid=1305769 on localhost:11472 at 11:48:43.572
+starting worker pid=1305879 on localhost:11472 at 11:48:43.852
+starting worker pid=1305989 on localhost:11472 at 11:48:44.114
+starting worker pid=1306111 on localhost:11472 at 11:48:44.378
+starting worker pid=1306221 on localhost:11472 at 11:48:44.648
+starting worker pid=1306332 on localhost:11472 at 11:48:44.921
+starting worker pid=1306442 on localhost:11472 at 11:48:45.190
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2334911.23584691
+Sigma value:  0.56
+starting worker pid=1306729 on localhost:11472 at 11:49:43.801
+starting worker pid=1306839 on localhost:11472 at 11:49:44.061
+starting worker pid=1306949 on localhost:11472 at 11:49:44.318
+starting worker pid=1307059 on localhost:11472 at 11:49:44.589
+starting worker pid=1307169 on localhost:11472 at 11:49:44.863
+starting worker pid=1307279 on localhost:11472 at 11:49:45.120
+starting worker pid=1307389 on localhost:11472 at 11:49:45.383
+starting worker pid=1307500 on localhost:11472 at 11:49:45.655
+starting worker pid=1307610 on localhost:11472 at 11:49:45.907
+starting worker pid=1307720 on localhost:11472 at 11:49:46.176
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2333112.20108662
+Sigma value:  0.55
+starting worker pid=1308007 on localhost:11472 at 11:50:40.741
+starting worker pid=1308117 on localhost:11472 at 11:50:40.987
+starting worker pid=1308227 on localhost:11472 at 11:50:41.251
+starting worker pid=1308337 on localhost:11472 at 11:50:41.504
+starting worker pid=1308447 on localhost:11472 at 11:50:41.760
+starting worker pid=1308557 on localhost:11472 at 11:50:42.021
+starting worker pid=1308668 on localhost:11472 at 11:50:42.289
+starting worker pid=1308778 on localhost:11472 at 11:50:42.552
+starting worker pid=1308888 on localhost:11472 at 11:50:42.801
+starting worker pid=1308998 on localhost:11472 at 11:50:43.085
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2332997.99485167
+Sigma value:  0.54
+starting worker pid=1309276 on localhost:11472 at 11:51:36.570
+starting worker pid=1309386 on localhost:11472 at 11:51:36.807
+starting worker pid=1309496 on localhost:11472 at 11:51:37.071
+starting worker pid=1309606 on localhost:11472 at 11:51:37.330
+starting worker pid=1309716 on localhost:11472 at 11:51:37.599
+starting worker pid=1309826 on localhost:11472 at 11:51:37.841
+starting worker pid=1309936 on localhost:11472 at 11:51:38.094
+starting worker pid=1310046 on localhost:11472 at 11:51:38.357
+starting worker pid=1310156 on localhost:11472 at 11:51:38.605
+starting worker pid=1310266 on localhost:11472 at 11:51:38.875
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2332969.32090722
+Sigma value:  0.54
+starting worker pid=1310517 on localhost:11472 at 11:52:35.888
+starting worker pid=1310627 on localhost:11472 at 11:52:36.154
+starting worker pid=1310737 on localhost:11472 at 11:52:36.439
+starting worker pid=1310847 on localhost:11472 at 11:52:36.703
+starting worker pid=1310969 on localhost:11472 at 11:52:36.964
+starting worker pid=1311079 on localhost:11472 at 11:52:37.237
+starting worker pid=1311189 on localhost:11472 at 11:52:37.500
+starting worker pid=1311299 on localhost:11472 at 11:52:37.776
+starting worker pid=1311409 on localhost:11472 at 11:52:38.047
+starting worker pid=1311519 on localhost:11472 at 11:52:38.321
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Saved: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/deconvolution_rctd/major_prop.csv and /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/deconvolution_rctd/major_prop.pdf
+Warning messages:
+1: In Reference(counts_sc, labels, min_UMI = min_UMI) :
+  Reference: number of cells per cell type is 47416, larger than maximum allowable of 10000. Downsampling number of cells to: 10000
+2: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.9 GiB
+3: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+4: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+5: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+6: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+7: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+8: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+$ Rscript /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/RCTD_deconvolution.R --base_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input --sample_pattern VIS* --reference_rds /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds --cell_type_column MainType --max_cores 10 --doublet_mode full --min_umi 10 --group_column Group_ID --groups LUAD
+[Step 2] Resolution check
+================================================================================
+RESOLUTION AUDIT
+Base directory: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input
+Pattern: VIS*
+Target MPP: 0.5
+Manual pixel size: 0.2513 (auto-detection skipped)
+Found 1 sample folders
+================================================================================
+
+================================================================================
+SUCCESSFUL READS
+================================================================================
+✓ VIS_P15_LUAD              | MPP: 0.251300 | Scale: 0.5026 | N/A | manual override (config)
+
+================================================================================
+FAILED READS
+================================================================================
+All images read successfully!
+
+================================================================================
+SUMMARY
+================================================================================
+Total samples:        1
+Successful reads:     1
+Failed reads:         0
+
+Resolution range:     0.251300 - 0.251300 MPP
+Resolution consistency: ✓ All same (0.2513 MPP)
+
+Needs upscaling (mpp > 0.5): 0
+
+✓ All checks passed!
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/audit_resolution.py --base_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input --pattern VIS* --raw_flag he_raw --target_mpp 0.5 --pixel_size_raw 0.2513
+[Step 3] Image preprocessing
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', sample='VIS_P15_LUAD', raw_flag='he_raw', pixel_size_raw=0.2513)
+Using manual pixel size: 0.2513000000 (auto-detection skipped)
+Saved to: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/pixel-size-raw.txt
+Running done, cost 0.00s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', scale_value=0.5026, pad=224, sample='VIS_P15_LUAD', raw_flag='he_raw')
+prefix = /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he_raw
+/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he_raw.tif
+/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/
+Image loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he_raw.tif with shape (57113, 52046, 3)
+image_raw.shape =(57113, 52046, 3)
+Rescaling image (scale: 0.503)...
+2 sec
+(28704, 26158, 3)
+Image size: 28896x26208
+✅ Saved as JPG: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg
+running done,cost 29.581902980804443s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', save_dir='mask', pixel_size_raw=0.5, density_thresh=100, clean_background_flag=False, min_size=10, patch_size=16, pixel_size=0.5)
+prefix = /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg with shape (28896, 26208, 3)
+(28896, 26208, 3)
+[compute_metrics_memory_optimized] Current memory: 0.1102 GB; Peak memory: 2.3103 GB
+[compute_low_density_mask] Current memory: 0.0029 GB; Peak memory: 0.1761 GB
+Total selected for density filtering:  271257
+✅ Entropy map saved as 'glcm_entropy_map_colored.png'
+✅ Energy map saved as 'glcm_energy_map_colored.png'
+✅ Homogeneity map saved as 'glcm_homogeneity_map_colored.png'
+
+=== GLCM Metric Means ===
+   homogeneity    energy   entropy
+0     0.292526  0.071579  0.807035
+1     0.197878  0.031158  0.902035
+2     0.576970  0.237980  0.601513
+3     0.366745  0.140340  0.742795
+
+=== Cluster Scores ===
+Cluster 0: Score = -0.4429
+Cluster 1: Score = -0.6730
+Cluster 2: Score = 0.2134
+Cluster 3: Score = -0.2357
+
+=== Number of Observations per Cluster ===
+Cluster 0: 31968
+Cluster 1: 34906
+Cluster 2: 4827
+Cluster 3: 14793
+Total: 86494
+
+✅ Clustered texture map saved as 'cluster_labels_colored.png'
+[run_texture_analysis] Current memory: 0.0034 GB; Peak memory: 8.4636 GB
+[run_ratio_filtering] Current memory: 0.0028 GB; Peak memory: 0.0649 GB
+(2958228,)
+✅ Final masks saved in: mask
+[generate_final_mask] Current memory: 0.0000 GB; Peak memory: 0.7216 GB
+Running successfully!
+Running this file cost 117.00651550292969 s!!!
+Namespace(read_path='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', sample='VIS_P15_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', weight_dir='/project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, num_workers=8, clustering=False, use_cuML=False, output_format='h5ad')
+
+[INFO-START] Time: 2026-03-03 11:56:45
+[INFO-START] CPU usage: 4.9%
+[INFO-START] Memory usage: 39.2%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 1312944
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+prefix = /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he
+image_path = /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg
+Image loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg with shape (28896, 26208, 3)
+raw image.shape = (28896, 26208, 3)
+grid mask.shape =(1806, 1638)
+pixel mask.shape =(28896, 26208)
+read image file, mask file(generated from HistoSweep) and create save dir cost 8s!!!
+name of model： cuda:0
+
+
+Create and setup model cost 6s!!!
+✅✅✅✅✅✅✅✅✅✅✅ Running full pipeline..✅✅✅✅✅✅✅✅✅✅✅
+Generating from full image(W=26432,H=29120) sliding window coordinates with patch_size=224, stride=112...
+✅ Total selected patches covering mask region: 43297
+Total number of 224*224*3 image tiles: 43297
+Original image shape:(28896,26208)
+Original token shape:(1806,1638)
+Padded image shape:(29120,26432)
+Padded token size:(1820,1652)
+Sliding Window Inference:   0%|                                                                     | 0/339 [00:00<?, ?it/s]Sliding Window Inference:   0%|▏                                                            | 1/339 [00:03<17:02,  3.02s/it]Sliding Window Inference:   1%|▎                                                            | 2/339 [00:03<07:41,  1.37s/it]Sliding Window Inference:   1%|▌                                                            | 3/339 [00:03<04:40,  1.20it/s]Sliding Window Inference:   1%|▋                                                            | 4/339 [00:03<03:16,  1.70it/s]Sliding Window Inference:   1%|▉                                                            | 5/339 [00:03<02:29,  2.23it/s]Sliding Window Inference:   2%|█                                                            | 6/339 [00:04<02:01,  2.75it/s]Sliding Window Inference:   2%|█▎                                                           | 7/339 [00:04<01:43,  3.22it/s]Sliding Window Inference:   2%|█▍                                                           | 8/339 [00:04<01:31,  3.63it/s]Sliding Window Inference:   3%|█▌                                                           | 9/339 [00:04<01:23,  3.93it/s]Sliding Window Inference:   3%|█▊                                                          | 10/339 [00:04<01:18,  4.19it/s]Sliding Window Inference:   3%|█▉                                                          | 11/339 [00:05<01:15,  4.37it/s]Sliding Window Inference:   4%|██                                                          | 12/339 [00:05<01:12,  4.50it/s]Sliding Window Inference:   4%|██▎                                                         | 13/339 [00:05<01:10,  4.60it/s]Sliding Window Inference:   4%|██▍                                                         | 14/339 [00:05<01:09,  4.67it/s]Sliding Window Inference:   4%|██▋                                                         | 15/339 [00:05<01:08,  4.72it/s]Sliding Window Inference:   5%|██▊                                                         | 16/339 [00:06<01:07,  4.78it/s]Sliding Window Inference:   5%|███                                                         | 17/339 [00:06<01:06,  4.84it/s]Sliding Window Inference:   5%|███▏                                                        | 18/339 [00:06<01:06,  4.85it/s]Sliding Window Inference:   6%|███▎                                                        | 19/339 [00:06<01:06,  4.81it/s]Sliding Window Inference:   6%|███▌                                                        | 20/339 [00:06<01:05,  4.86it/s]Sliding Window Inference:   6%|███▋                                                        | 21/339 [00:07<01:05,  4.87it/s]Sliding Window Inference:   6%|███▉                                                        | 22/339 [00:07<01:04,  4.90it/s]Sliding Window Inference:   7%|████                                                        | 23/339 [00:07<01:04,  4.93it/s]Sliding Window Inference:   7%|████▏                                                       | 24/339 [00:07<01:03,  4.96it/s]Sliding Window Inference:   7%|████▍                                                       | 25/339 [00:07<01:02,  4.99it/s]Sliding Window Inference:   8%|████▌                                                       | 26/339 [00:08<01:02,  5.00it/s]Sliding Window Inference:   8%|████▊                                                       | 27/339 [00:08<01:02,  4.98it/s]Sliding Window Inference:   8%|████▉                                                       | 28/339 [00:08<01:02,  4.98it/s]Sliding Window Inference:   9%|█████▏                                                      | 29/339 [00:08<01:02,  4.98it/s]Sliding Window Inference:   9%|█████▎                                                      | 30/339 [00:08<01:01,  4.99it/s]Sliding Window Inference:   9%|█████▍                                                      | 31/339 [00:09<01:01,  4.98it/s]Sliding Window Inference:   9%|█████▋                                                      | 32/339 [00:09<01:01,  4.97it/s]Sliding Window Inference:  10%|█████▊                                                      | 33/339 [00:09<01:01,  4.98it/s]Sliding Window Inference:  10%|██████                                                      | 34/339 [00:09<01:01,  4.99it/s]Sliding Window Inference:  10%|██████▏                                                     | 35/339 [00:09<01:01,  4.93it/s]Sliding Window Inference:  11%|██████▎                                                     | 36/339 [00:10<01:01,  4.94it/s]Sliding Window Inference:  11%|██████▌                                                     | 37/339 [00:10<01:01,  4.94it/s]Sliding Window Inference:  11%|██████▋                                                     | 38/339 [00:10<01:01,  4.93it/s]Sliding Window Inference:  12%|██████▉                                                     | 39/339 [00:10<01:00,  4.94it/s]Sliding Window Inference:  12%|███████                                                     | 40/339 [00:10<01:00,  4.96it/s]Sliding Window Inference:  12%|███████▎                                                    | 41/339 [00:11<00:59,  4.99it/s]Sliding Window Inference:  12%|███████▍                                                    | 42/339 [00:11<00:59,  4.97it/s]Sliding Window Inference:  13%|███████▌                                                    | 43/339 [00:11<00:59,  4.98it/s]Sliding Window Inference:  13%|███████▊                                                    | 44/339 [00:11<00:59,  4.98it/s]Sliding Window Inference:  13%|███████▉                                                    | 45/339 [00:11<00:58,  4.98it/s]Sliding Window Inference:  14%|████████▏                                                   | 46/339 [00:12<00:58,  4.99it/s]Sliding Window Inference:  14%|████████▎                                                   | 47/339 [00:12<00:58,  4.99it/s]Sliding Window Inference:  14%|████████▍                                                   | 48/339 [00:12<00:58,  4.99it/s]Sliding Window Inference:  14%|████████▋                                                   | 49/339 [00:12<00:58,  4.99it/s]Sliding Window Inference:  15%|████████▊                                                   | 50/339 [00:12<00:58,  4.98it/s]Sliding Window Inference:  15%|█████████                                                   | 51/339 [00:13<00:58,  4.96it/s]Sliding Window Inference:  15%|█████████▏                                                  | 52/339 [00:13<00:57,  4.97it/s]Sliding Window Inference:  16%|█████████▍                                                  | 53/339 [00:13<00:57,  4.97it/s]Sliding Window Inference:  16%|█████████▌                                                  | 54/339 [00:13<00:57,  4.98it/s]Sliding Window Inference:  16%|█████████▋                                                  | 55/339 [00:13<00:57,  4.95it/s]Sliding Window Inference:  17%|█████████▉                                                  | 56/339 [00:14<00:57,  4.94it/s]Sliding Window Inference:  17%|██████████                                                  | 57/339 [00:14<00:56,  4.96it/s]Sliding Window Inference:  17%|██████████▎                                                 | 58/339 [00:14<00:56,  4.96it/s]Sliding Window Inference:  17%|██████████▍                                                 | 59/339 [00:14<00:56,  4.97it/s]Sliding Window Inference:  18%|██████████▌                                                 | 60/339 [00:14<00:56,  4.98it/s]Sliding Window Inference:  18%|██████████▊                                                 | 61/339 [00:15<00:55,  4.98it/s]Sliding Window Inference:  18%|██████████▉                                                 | 62/339 [00:15<00:55,  4.96it/s]Sliding Window Inference:  19%|███████████▏                                                | 63/339 [00:15<00:55,  4.95it/s]Sliding Window Inference:  19%|███████████▎                                                | 64/339 [00:15<00:55,  4.96it/s]Sliding Window Inference:  19%|███████████▌                                                | 65/339 [00:15<00:55,  4.95it/s]Sliding Window Inference:  19%|███████████▋                                                | 66/339 [00:16<00:55,  4.94it/s]Sliding Window Inference:  20%|███████████▊                                                | 67/339 [00:16<00:55,  4.92it/s]Sliding Window Inference:  20%|████████████                                                | 68/339 [00:16<00:54,  4.93it/s]Sliding Window Inference:  20%|████████████▏                                               | 69/339 [00:16<00:54,  4.93it/s]Sliding Window Inference:  21%|████████████▍                                               | 70/339 [00:16<00:54,  4.94it/s]Sliding Window Inference:  21%|████████████▌                                               | 71/339 [00:17<00:54,  4.95it/s]Sliding Window Inference:  21%|████████████▋                                               | 72/339 [00:17<00:53,  4.95it/s]Sliding Window Inference:  22%|████████████▉                                               | 73/339 [00:17<00:53,  4.99it/s]Sliding Window Inference:  22%|█████████████                                               | 74/339 [00:17<00:53,  4.99it/s]Sliding Window Inference:  22%|█████████████▎                                              | 75/339 [00:17<00:52,  5.00it/s]Sliding Window Inference:  22%|█████████████▍                                              | 76/339 [00:18<00:52,  4.98it/s]Sliding Window Inference:  23%|█████████████▋                                              | 77/339 [00:18<00:52,  4.99it/s]Sliding Window Inference:  23%|█████████████▊                                              | 78/339 [00:18<00:52,  4.97it/s]Sliding Window Inference:  23%|█████████████▉                                              | 79/339 [00:18<00:52,  4.96it/s]Sliding Window Inference:  24%|██████████████▏                                             | 80/339 [00:18<00:52,  4.98it/s]Sliding Window Inference:  24%|██████████████▎                                             | 81/339 [00:19<00:51,  4.98it/s]Sliding Window Inference:  24%|██████████████▌                                             | 82/339 [00:19<00:51,  4.99it/s]Sliding Window Inference:  24%|██████████████▋                                             | 83/339 [00:19<00:51,  4.94it/s]Sliding Window Inference:  25%|██████████████▊                                             | 84/339 [00:19<00:51,  4.94it/s]Sliding Window Inference:  25%|███████████████                                             | 85/339 [00:19<00:51,  4.94it/s]Sliding Window Inference:  25%|███████████████▏                                            | 86/339 [00:20<00:51,  4.91it/s]Sliding Window Inference:  26%|███████████████▍                                            | 87/339 [00:20<00:51,  4.92it/s]Sliding Window Inference:  26%|███████████████▌                                            | 88/339 [00:20<00:50,  4.94it/s]Sliding Window Inference:  26%|███████████████▊                                            | 89/339 [00:20<00:50,  4.91it/s]Sliding Window Inference:  27%|███████████████▉                                            | 90/339 [00:21<00:50,  4.91it/s]Sliding Window Inference:  27%|████████████████                                            | 91/339 [00:21<00:50,  4.94it/s]Sliding Window Inference:  27%|████████████████▎                                           | 92/339 [00:21<00:49,  4.96it/s]Sliding Window Inference:  27%|████████████████▍                                           | 93/339 [00:21<00:49,  4.95it/s]Sliding Window Inference:  28%|████████████████▋                                           | 94/339 [00:21<00:49,  4.97it/s]Sliding Window Inference:  28%|████████████████▊                                           | 95/339 [00:22<00:49,  4.96it/s]Sliding Window Inference:  28%|████████████████▉                                           | 96/339 [00:22<00:48,  4.97it/s]Sliding Window Inference:  29%|█████████████████▏                                          | 97/339 [00:22<00:48,  4.98it/s]Sliding Window Inference:  29%|█████████████████▎                                          | 98/339 [00:22<00:48,  4.96it/s]Sliding Window Inference:  29%|█████████████████▌                                          | 99/339 [00:22<00:48,  4.95it/s]Sliding Window Inference:  29%|█████████████████▍                                         | 100/339 [00:23<00:48,  4.96it/s]Sliding Window Inference:  30%|█████████████████▌                                         | 101/339 [00:23<00:48,  4.94it/s]Sliding Window Inference:  30%|█████████████████▊                                         | 102/339 [00:23<00:48,  4.93it/s]Sliding Window Inference:  30%|█████████████████▉                                         | 103/339 [00:23<00:47,  4.92it/s]Sliding Window Inference:  31%|██████████████████                                         | 104/339 [00:23<00:47,  4.94it/s]Sliding Window Inference:  31%|██████████████████▎                                        | 105/339 [00:24<00:47,  4.96it/s]Sliding Window Inference:  31%|██████████████████▍                                        | 106/339 [00:24<00:47,  4.91it/s]Sliding Window Inference:  32%|██████████████████▌                                        | 107/339 [00:24<00:47,  4.92it/s]Sliding Window Inference:  32%|██████████████████▊                                        | 108/339 [00:24<00:46,  4.95it/s]Sliding Window Inference:  32%|██████████████████▉                                        | 109/339 [00:24<00:46,  4.96it/s]Sliding Window Inference:  32%|███████████████████▏                                       | 110/339 [00:25<00:47,  4.86it/s]Sliding Window Inference:  33%|███████████████████▎                                       | 111/339 [00:25<00:46,  4.90it/s]Sliding Window Inference:  33%|███████████████████▍                                       | 112/339 [00:25<00:46,  4.93it/s]Sliding Window Inference:  33%|███████████████████▋                                       | 113/339 [00:25<00:45,  4.95it/s]Sliding Window Inference:  34%|███████████████████▊                                       | 114/339 [00:25<00:45,  4.92it/s]Sliding Window Inference:  34%|████████████████████                                       | 115/339 [00:26<00:45,  4.93it/s]Sliding Window Inference:  34%|████████████████████▏                                      | 116/339 [00:26<00:45,  4.93it/s]Sliding Window Inference:  35%|████████████████████▎                                      | 117/339 [00:26<00:44,  4.94it/s]Sliding Window Inference:  35%|████████████████████▌                                      | 118/339 [00:26<00:44,  4.94it/s]Sliding Window Inference:  35%|████████████████████▋                                      | 119/339 [00:26<00:44,  4.93it/s]Sliding Window Inference:  35%|████████████████████▉                                      | 120/339 [00:27<00:44,  4.95it/s]Sliding Window Inference:  36%|█████████████████████                                      | 121/339 [00:27<00:43,  4.97it/s]Sliding Window Inference:  36%|█████████████████████▏                                     | 122/339 [00:27<00:43,  4.97it/s]Sliding Window Inference:  36%|█████████████████████▍                                     | 123/339 [00:27<00:43,  4.94it/s]Sliding Window Inference:  37%|█████████████████████▌                                     | 124/339 [00:27<00:43,  4.95it/s]Sliding Window Inference:  37%|█████████████████████▊                                     | 125/339 [00:28<00:43,  4.96it/s]Sliding Window Inference:  37%|█████████████████████▉                                     | 126/339 [00:28<00:42,  4.98it/s]Sliding Window Inference:  37%|██████████████████████                                     | 127/339 [00:28<00:42,  4.95it/s]Sliding Window Inference:  38%|██████████████████████▎                                    | 128/339 [00:28<00:42,  4.98it/s]Sliding Window Inference:  38%|██████████████████████▍                                    | 129/339 [00:28<00:42,  4.98it/s]Sliding Window Inference:  38%|██████████████████████▋                                    | 130/339 [00:29<00:42,  4.93it/s]Sliding Window Inference:  39%|██████████████████████▊                                    | 131/339 [00:29<00:42,  4.94it/s]Sliding Window Inference:  39%|██████████████████████▉                                    | 132/339 [00:29<00:41,  4.93it/s]Sliding Window Inference:  39%|███████████████████████▏                                   | 133/339 [00:29<00:41,  4.95it/s]Sliding Window Inference:  40%|███████████████████████▎                                   | 134/339 [00:29<00:41,  4.94it/s]Sliding Window Inference:  40%|███████████████████████▍                                   | 135/339 [00:30<00:41,  4.93it/s]Sliding Window Inference:  40%|███████████████████████▋                                   | 136/339 [00:30<00:41,  4.95it/s]Sliding Window Inference:  40%|███████████████████████▊                                   | 137/339 [00:30<00:41,  4.92it/s]Sliding Window Inference:  41%|████████████████████████                                   | 138/339 [00:30<00:40,  4.92it/s]Sliding Window Inference:  41%|████████████████████████▏                                  | 139/339 [00:30<00:40,  4.94it/s]Sliding Window Inference:  41%|████████████████████████▎                                  | 140/339 [00:31<00:40,  4.90it/s]Sliding Window Inference:  42%|████████████████████████▌                                  | 141/339 [00:31<00:40,  4.92it/s]Sliding Window Inference:  42%|████████████████████████▋                                  | 142/339 [00:31<00:39,  4.95it/s]Sliding Window Inference:  42%|████████████████████████▉                                  | 143/339 [00:31<00:39,  4.97it/s]Sliding Window Inference:  42%|█████████████████████████                                  | 144/339 [00:31<00:39,  4.98it/s]Sliding Window Inference:  43%|█████████████████████████▏                                 | 145/339 [00:32<00:38,  5.00it/s]Sliding Window Inference:  43%|█████████████████████████▍                                 | 146/339 [00:32<00:38,  4.98it/s]Sliding Window Inference:  43%|█████████████████████████▌                                 | 147/339 [00:32<00:38,  4.98it/s]Sliding Window Inference:  44%|█████████████████████████▊                                 | 148/339 [00:32<00:38,  4.97it/s]Sliding Window Inference:  44%|█████████████████████████▉                                 | 149/339 [00:32<00:38,  4.96it/s]Sliding Window Inference:  44%|██████████████████████████                                 | 150/339 [00:33<00:38,  4.94it/s]Sliding Window Inference:  45%|██████████████████████████▎                                | 151/339 [00:33<00:38,  4.93it/s]Sliding Window Inference:  45%|██████████████████████████▍                                | 152/339 [00:33<00:37,  4.95it/s]Sliding Window Inference:  45%|██████████████████████████▋                                | 153/339 [00:33<00:37,  4.96it/s]Sliding Window Inference:  45%|██████████████████████████▊                                | 154/339 [00:33<00:37,  4.93it/s]Sliding Window Inference:  46%|██████████████████████████▉                                | 155/339 [00:34<00:37,  4.90it/s]Sliding Window Inference:  46%|███████████████████████████▏                               | 156/339 [00:34<00:37,  4.91it/s]Sliding Window Inference:  46%|███████████████████████████▎                               | 157/339 [00:34<00:37,  4.91it/s]Sliding Window Inference:  47%|███████████████████████████▍                               | 158/339 [00:34<00:36,  4.93it/s]Sliding Window Inference:  47%|███████████████████████████▋                               | 159/339 [00:34<00:36,  4.95it/s]Sliding Window Inference:  47%|███████████████████████████▊                               | 160/339 [00:35<00:35,  4.99it/s]Sliding Window Inference:  47%|████████████████████████████                               | 161/339 [00:35<00:35,  4.98it/s]Sliding Window Inference:  48%|████████████████████████████▏                              | 162/339 [00:35<00:35,  4.97it/s]Sliding Window Inference:  48%|████████████████████████████▎                              | 163/339 [00:35<00:35,  4.96it/s]Sliding Window Inference:  48%|████████████████████████████▌                              | 164/339 [00:35<00:35,  4.96it/s]Sliding Window Inference:  49%|████████████████████████████▋                              | 165/339 [00:36<00:35,  4.95it/s]Sliding Window Inference:  49%|████████████████████████████▉                              | 166/339 [00:36<00:34,  4.95it/s]Sliding Window Inference:  49%|█████████████████████████████                              | 167/339 [00:36<00:34,  4.96it/s]Sliding Window Inference:  50%|█████████████████████████████▏                             | 168/339 [00:36<00:34,  4.96it/s]Sliding Window Inference:  50%|█████████████████████████████▍                             | 169/339 [00:36<00:34,  4.93it/s]Sliding Window Inference:  50%|█████████████████████████████▌                             | 170/339 [00:37<00:34,  4.92it/s]Sliding Window Inference:  50%|█████████████████████████████▊                             | 171/339 [00:37<00:34,  4.92it/s]Sliding Window Inference:  51%|█████████████████████████████▉                             | 172/339 [00:37<00:33,  4.92it/s]Sliding Window Inference:  51%|██████████████████████████████                             | 173/339 [00:37<00:33,  4.92it/s]Sliding Window Inference:  51%|██████████████████████████████▎                            | 174/339 [00:38<00:33,  4.90it/s]Sliding Window Inference:  52%|██████████████████████████████▍                            | 175/339 [00:38<00:33,  4.93it/s]Sliding Window Inference:  52%|██████████████████████████████▋                            | 176/339 [00:38<00:32,  4.96it/s]Sliding Window Inference:  52%|██████████████████████████████▊                            | 177/339 [00:38<00:32,  4.99it/s]Sliding Window Inference:  53%|██████████████████████████████▉                            | 178/339 [00:38<00:32,  4.98it/s]Sliding Window Inference:  53%|███████████████████████████████▏                           | 179/339 [00:39<00:32,  4.97it/s]Sliding Window Inference:  53%|███████████████████████████████▎                           | 180/339 [00:39<00:32,  4.95it/s]Sliding Window Inference:  53%|███████████████████████████████▌                           | 181/339 [00:39<00:31,  4.96it/s]Sliding Window Inference:  54%|███████████████████████████████▋                           | 182/339 [00:39<00:31,  4.96it/s]Sliding Window Inference:  54%|███████████████████████████████▊                           | 183/339 [00:39<00:31,  4.95it/s]Sliding Window Inference:  54%|████████████████████████████████                           | 184/339 [00:40<00:31,  4.96it/s]Sliding Window Inference:  55%|████████████████████████████████▏                          | 185/339 [00:40<00:31,  4.96it/s]Sliding Window Inference:  55%|████████████████████████████████▎                          | 186/339 [00:40<00:30,  4.95it/s]Sliding Window Inference:  55%|████████████████████████████████▌                          | 187/339 [00:40<00:30,  4.94it/s]Sliding Window Inference:  55%|████████████████████████████████▋                          | 188/339 [00:40<00:30,  4.93it/s]Sliding Window Inference:  56%|████████████████████████████████▉                          | 189/339 [00:41<00:30,  4.92it/s]Sliding Window Inference:  56%|█████████████████████████████████                          | 190/339 [00:41<00:30,  4.91it/s]Sliding Window Inference:  56%|█████████████████████████████████▏                         | 191/339 [00:41<00:30,  4.91it/s]Sliding Window Inference:  57%|█████████████████████████████████▍                         | 192/339 [00:41<00:29,  4.92it/s]Sliding Window Inference:  57%|█████████████████████████████████▌                         | 193/339 [00:41<00:29,  4.96it/s]Sliding Window Inference:  57%|█████████████████████████████████▊                         | 194/339 [00:42<00:29,  4.97it/s]Sliding Window Inference:  58%|█████████████████████████████████▉                         | 195/339 [00:42<00:29,  4.96it/s]Sliding Window Inference:  58%|██████████████████████████████████                         | 196/339 [00:42<00:28,  4.97it/s]Sliding Window Inference:  58%|██████████████████████████████████▎                        | 197/339 [00:42<00:28,  4.97it/s]Sliding Window Inference:  58%|██████████████████████████████████▍                        | 198/339 [00:42<00:28,  4.97it/s]Sliding Window Inference:  59%|██████████████████████████████████▋                        | 199/339 [00:43<00:28,  4.96it/s]Sliding Window Inference:  59%|██████████████████████████████████▊                        | 200/339 [00:43<00:27,  4.98it/s]Sliding Window Inference:  59%|██████████████████████████████████▉                        | 201/339 [00:43<00:27,  4.98it/s]Sliding Window Inference:  60%|███████████████████████████████████▏                       | 202/339 [00:43<00:27,  4.97it/s]Sliding Window Inference:  60%|███████████████████████████████████▎                       | 203/339 [00:43<00:27,  4.95it/s]Sliding Window Inference:  60%|███████████████████████████████████▌                       | 204/339 [00:44<00:27,  4.94it/s]Sliding Window Inference:  60%|███████████████████████████████████▋                       | 205/339 [00:44<00:27,  4.95it/s]Sliding Window Inference:  61%|███████████████████████████████████▊                       | 206/339 [00:44<00:27,  4.92it/s]Sliding Window Inference:  61%|████████████████████████████████████                       | 207/339 [00:44<00:26,  4.93it/s]Sliding Window Inference:  61%|████████████████████████████████████▏                      | 208/339 [00:44<00:26,  4.94it/s]Sliding Window Inference:  62%|████████████████████████████████████▎                      | 209/339 [00:45<00:26,  4.97it/s]Sliding Window Inference:  62%|████████████████████████████████████▌                      | 210/339 [00:45<00:26,  4.95it/s]Sliding Window Inference:  62%|████████████████████████████████████▋                      | 211/339 [00:45<00:25,  4.96it/s]Sliding Window Inference:  63%|████████████████████████████████████▉                      | 212/339 [00:45<00:25,  4.95it/s]Sliding Window Inference:  63%|█████████████████████████████████████                      | 213/339 [00:45<00:25,  4.97it/s]Sliding Window Inference:  63%|█████████████████████████████████████▏                     | 214/339 [00:46<00:25,  4.97it/s]Sliding Window Inference:  63%|█████████████████████████████████████▍                     | 215/339 [00:46<00:24,  4.97it/s]Sliding Window Inference:  64%|█████████████████████████████████████▌                     | 216/339 [00:46<00:24,  4.98it/s]Sliding Window Inference:  64%|█████████████████████████████████████▊                     | 217/339 [00:46<00:24,  4.96it/s]Sliding Window Inference:  64%|█████████████████████████████████████▉                     | 218/339 [00:46<00:24,  4.91it/s]Sliding Window Inference:  65%|██████████████████████████████████████                     | 219/339 [00:47<00:24,  4.92it/s]Sliding Window Inference:  65%|██████████████████████████████████████▎                    | 220/339 [00:47<00:24,  4.93it/s]Sliding Window Inference:  65%|██████████████████████████████████████▍                    | 221/339 [00:47<00:23,  4.95it/s]Sliding Window Inference:  65%|██████████████████████████████████████▋                    | 222/339 [00:47<00:23,  4.94it/s]Sliding Window Inference:  66%|██████████████████████████████████████▊                    | 223/339 [00:47<00:23,  4.94it/s]Sliding Window Inference:  66%|██████████████████████████████████████▉                    | 224/339 [00:48<00:23,  4.97it/s]Sliding Window Inference:  66%|███████████████████████████████████████▏                   | 225/339 [00:48<00:23,  4.93it/s]Sliding Window Inference:  67%|███████████████████████████████████████▎                   | 226/339 [00:48<00:22,  4.95it/s]Sliding Window Inference:  67%|███████████████████████████████████████▌                   | 227/339 [00:48<00:22,  4.97it/s]Sliding Window Inference:  67%|███████████████████████████████████████▋                   | 228/339 [00:48<00:22,  4.96it/s]Sliding Window Inference:  68%|███████████████████████████████████████▊                   | 229/339 [00:49<00:22,  4.97it/s]Sliding Window Inference:  68%|████████████████████████████████████████                   | 230/339 [00:49<00:21,  4.98it/s]Sliding Window Inference:  68%|████████████████████████████████████████▏                  | 231/339 [00:49<00:21,  4.99it/s]Sliding Window Inference:  68%|████████████████████████████████████████▍                  | 232/339 [00:49<00:21,  4.99it/s]Sliding Window Inference:  69%|████████████████████████████████████████▌                  | 233/339 [00:49<00:21,  4.99it/s]Sliding Window Inference:  69%|████████████████████████████████████████▋                  | 234/339 [00:50<00:21,  4.94it/s]Sliding Window Inference:  69%|████████████████████████████████████████▉                  | 235/339 [00:50<00:21,  4.91it/s]Sliding Window Inference:  70%|█████████████████████████████████████████                  | 236/339 [00:50<00:20,  4.93it/s]Sliding Window Inference:  70%|█████████████████████████████████████████▏                 | 237/339 [00:50<00:20,  4.94it/s]Sliding Window Inference:  70%|█████████████████████████████████████████▍                 | 238/339 [00:50<00:20,  4.95it/s]Sliding Window Inference:  71%|█████████████████████████████████████████▌                 | 239/339 [00:51<00:20,  4.97it/s]Sliding Window Inference:  71%|█████████████████████████████████████████▊                 | 240/339 [00:51<00:19,  4.96it/s]Sliding Window Inference:  71%|█████████████████████████████████████████▉                 | 241/339 [00:51<00:19,  4.97it/s]Sliding Window Inference:  71%|██████████████████████████████████████████                 | 242/339 [00:51<00:19,  4.92it/s]Sliding Window Inference:  72%|██████████████████████████████████████████▎                | 243/339 [00:51<00:19,  4.94it/s]Sliding Window Inference:  72%|██████████████████████████████████████████▍                | 244/339 [00:52<00:19,  4.96it/s]Sliding Window Inference:  72%|██████████████████████████████████████████▋                | 245/339 [00:52<00:18,  4.98it/s]Sliding Window Inference:  73%|██████████████████████████████████████████▊                | 246/339 [00:52<00:18,  4.98it/s]Sliding Window Inference:  73%|██████████████████████████████████████████▉                | 247/339 [00:52<00:18,  4.99it/s]Sliding Window Inference:  73%|███████████████████████████████████████████▏               | 248/339 [00:52<00:18,  4.98it/s]Sliding Window Inference:  73%|███████████████████████████████████████████▎               | 249/339 [00:53<00:18,  4.99it/s]Sliding Window Inference:  74%|███████████████████████████████████████████▌               | 250/339 [00:53<00:17,  4.98it/s]Sliding Window Inference:  74%|███████████████████████████████████████████▋               | 251/339 [00:53<00:17,  4.96it/s]Sliding Window Inference:  74%|███████████████████████████████████████████▊               | 252/339 [00:53<00:17,  4.96it/s]Sliding Window Inference:  75%|████████████████████████████████████████████               | 253/339 [00:53<00:17,  4.97it/s]Sliding Window Inference:  75%|████████████████████████████████████████████▏              | 254/339 [00:54<00:17,  4.97it/s]Sliding Window Inference:  75%|████████████████████████████████████████████▍              | 255/339 [00:54<00:16,  4.97it/s]Sliding Window Inference:  76%|████████████████████████████████████████████▌              | 256/339 [00:54<00:16,  4.97it/s]Sliding Window Inference:  76%|████████████████████████████████████████████▋              | 257/339 [00:54<00:16,  4.93it/s]Sliding Window Inference:  76%|████████████████████████████████████████████▉              | 258/339 [00:54<00:16,  4.95it/s]Sliding Window Inference:  76%|█████████████████████████████████████████████              | 259/339 [00:55<00:16,  4.93it/s]Sliding Window Inference:  77%|█████████████████████████████████████████████▎             | 260/339 [00:55<00:15,  4.95it/s]Sliding Window Inference:  77%|█████████████████████████████████████████████▍             | 261/339 [00:55<00:15,  4.96it/s]Sliding Window Inference:  77%|█████████████████████████████████████████████▌             | 262/339 [00:55<00:15,  4.98it/s]Sliding Window Inference:  78%|█████████████████████████████████████████████▊             | 263/339 [00:55<00:15,  4.96it/s]Sliding Window Inference:  78%|█████████████████████████████████████████████▉             | 264/339 [00:56<00:15,  4.96it/s]Sliding Window Inference:  78%|██████████████████████████████████████████████             | 265/339 [00:56<00:14,  4.97it/s]Sliding Window Inference:  78%|██████████████████████████████████████████████▎            | 266/339 [00:56<00:14,  4.97it/s]Sliding Window Inference:  79%|██████████████████████████████████████████████▍            | 267/339 [00:56<00:14,  4.95it/s]Sliding Window Inference:  79%|██████████████████████████████████████████████▋            | 268/339 [00:56<00:14,  4.96it/s]Sliding Window Inference:  79%|██████████████████████████████████████████████▊            | 269/339 [00:57<00:14,  4.97it/s]Sliding Window Inference:  80%|██████████████████████████████████████████████▉            | 270/339 [00:57<00:13,  4.97it/s]Sliding Window Inference:  80%|███████████████████████████████████████████████▏           | 271/339 [00:57<00:13,  4.98it/s]Sliding Window Inference:  80%|███████████████████████████████████████████████▎           | 272/339 [00:57<00:13,  4.97it/s]Sliding Window Inference:  81%|███████████████████████████████████████████████▌           | 273/339 [00:57<00:13,  4.95it/s]Sliding Window Inference:  81%|███████████████████████████████████████████████▋           | 274/339 [00:58<00:13,  4.92it/s]Sliding Window Inference:  81%|███████████████████████████████████████████████▊           | 275/339 [00:58<00:12,  4.94it/s]Sliding Window Inference:  81%|████████████████████████████████████████████████           | 276/339 [00:58<00:12,  4.92it/s]Sliding Window Inference:  82%|████████████████████████████████████████████████▏          | 277/339 [00:58<00:12,  4.94it/s]Sliding Window Inference:  82%|████████████████████████████████████████████████▍          | 278/339 [00:58<00:12,  4.96it/s]Sliding Window Inference:  82%|████████████████████████████████████████████████▌          | 279/339 [00:59<00:12,  4.95it/s]Sliding Window Inference:  83%|████████████████████████████████████████████████▋          | 280/339 [00:59<00:11,  4.96it/s]Sliding Window Inference:  83%|████████████████████████████████████████████████▉          | 281/339 [00:59<00:11,  4.94it/s]Sliding Window Inference:  83%|█████████████████████████████████████████████████          | 282/339 [00:59<00:11,  4.94it/s]Sliding Window Inference:  83%|█████████████████████████████████████████████████▎         | 283/339 [01:00<00:11,  4.93it/s]Sliding Window Inference:  84%|█████████████████████████████████████████████████▍         | 284/339 [01:00<00:11,  4.94it/s]Sliding Window Inference:  84%|█████████████████████████████████████████████████▌         | 285/339 [01:00<00:10,  4.96it/s]Sliding Window Inference:  84%|█████████████████████████████████████████████████▊         | 286/339 [01:00<00:10,  4.97it/s]Sliding Window Inference:  85%|█████████████████████████████████████████████████▉         | 287/339 [01:00<00:10,  4.97it/s]Sliding Window Inference:  85%|██████████████████████████████████████████████████         | 288/339 [01:01<00:10,  4.97it/s]Sliding Window Inference:  85%|██████████████████████████████████████████████████▎        | 289/339 [01:01<00:10,  4.97it/s]Sliding Window Inference:  86%|██████████████████████████████████████████████████▍        | 290/339 [01:01<00:09,  4.92it/s]Sliding Window Inference:  86%|██████████████████████████████████████████████████▋        | 291/339 [01:01<00:09,  4.88it/s]Sliding Window Inference:  86%|██████████████████████████████████████████████████▊        | 292/339 [01:01<00:09,  4.91it/s]Sliding Window Inference:  86%|██████████████████████████████████████████████████▉        | 293/339 [01:02<00:09,  4.91it/s]Sliding Window Inference:  87%|███████████████████████████████████████████████████▏       | 294/339 [01:02<00:09,  4.93it/s]Sliding Window Inference:  87%|███████████████████████████████████████████████████▎       | 295/339 [01:02<00:08,  4.95it/s]Sliding Window Inference:  87%|███████████████████████████████████████████████████▌       | 296/339 [01:02<00:08,  4.94it/s]Sliding Window Inference:  88%|███████████████████████████████████████████████████▋       | 297/339 [01:02<00:08,  4.96it/s]Sliding Window Inference:  88%|███████████████████████████████████████████████████▊       | 298/339 [01:03<00:08,  4.97it/s]Sliding Window Inference:  88%|████████████████████████████████████████████████████       | 299/339 [01:03<00:08,  4.92it/s]Sliding Window Inference:  88%|████████████████████████████████████████████████████▏      | 300/339 [01:03<00:07,  4.93it/s]Sliding Window Inference:  89%|████████████████████████████████████████████████████▍      | 301/339 [01:03<00:07,  4.95it/s]Sliding Window Inference:  89%|████████████████████████████████████████████████████▌      | 302/339 [01:03<00:07,  4.96it/s]Sliding Window Inference:  89%|████████████████████████████████████████████████████▋      | 303/339 [01:04<00:07,  4.95it/s]Sliding Window Inference:  90%|████████████████████████████████████████████████████▉      | 304/339 [01:04<00:07,  4.96it/s]Sliding Window Inference:  90%|█████████████████████████████████████████████████████      | 305/339 [01:04<00:06,  4.96it/s]Sliding Window Inference:  90%|█████████████████████████████████████████████████████▎     | 306/339 [01:04<00:06,  4.96it/s]Sliding Window Inference:  91%|█████████████████████████████████████████████████████▍     | 307/339 [01:04<00:06,  4.89it/s]Sliding Window Inference:  91%|█████████████████████████████████████████████████████▌     | 308/339 [01:05<00:06,  4.90it/s]Sliding Window Inference:  91%|█████████████████████████████████████████████████████▊     | 309/339 [01:05<00:06,  4.93it/s]Sliding Window Inference:  91%|█████████████████████████████████████████████████████▉     | 310/339 [01:05<00:05,  4.92it/s]Sliding Window Inference:  92%|██████████████████████████████████████████████████████▏    | 311/339 [01:05<00:05,  4.91it/s]Sliding Window Inference:  92%|██████████████████████████████████████████████████████▎    | 312/339 [01:05<00:05,  4.93it/s]Sliding Window Inference:  92%|██████████████████████████████████████████████████████▍    | 313/339 [01:06<00:05,  4.95it/s]Sliding Window Inference:  93%|██████████████████████████████████████████████████████▋    | 314/339 [01:06<00:05,  4.95it/s]Sliding Window Inference:  93%|██████████████████████████████████████████████████████▊    | 315/339 [01:06<00:04,  4.96it/s]Sliding Window Inference:  93%|██████████████████████████████████████████████████████▉    | 316/339 [01:06<00:04,  4.97it/s]Sliding Window Inference:  94%|███████████████████████████████████████████████████████▏   | 317/339 [01:06<00:04,  4.97it/s]Sliding Window Inference:  94%|███████████████████████████████████████████████████████▎   | 318/339 [01:07<00:04,  4.97it/s]Sliding Window Inference:  94%|███████████████████████████████████████████████████████▌   | 319/339 [01:07<00:04,  4.97it/s]Sliding Window Inference:  94%|███████████████████████████████████████████████████████▋   | 320/339 [01:07<00:03,  4.95it/s]Sliding Window Inference:  95%|███████████████████████████████████████████████████████▊   | 321/339 [01:07<00:03,  4.94it/s]Sliding Window Inference:  95%|████████████████████████████████████████████████████████   | 322/339 [01:07<00:03,  4.95it/s]Sliding Window Inference:  95%|████████████████████████████████████████████████████████▏  | 323/339 [01:08<00:03,  4.79it/s]Sliding Window Inference:  96%|████████████████████████████████████████████████████████▍  | 324/339 [01:08<00:03,  4.84it/s]Sliding Window Inference:  96%|████████████████████████████████████████████████████████▌  | 325/339 [01:08<00:02,  4.83it/s]Sliding Window Inference:  96%|████████████████████████████████████████████████████████▋  | 326/339 [01:08<00:02,  4.89it/s]Sliding Window Inference:  96%|████████████████████████████████████████████████████████▉  | 327/339 [01:08<00:02,  4.87it/s]Sliding Window Inference:  97%|█████████████████████████████████████████████████████████  | 328/339 [01:09<00:02,  4.92it/s]Sliding Window Inference:  97%|█████████████████████████████████████████████████████████▎ | 329/339 [01:09<00:02,  4.95it/s]Sliding Window Inference:  97%|█████████████████████████████████████████████████████████▍ | 330/339 [01:09<00:01,  4.98it/s]Sliding Window Inference:  98%|█████████████████████████████████████████████████████████▌ | 331/339 [01:09<00:01,  4.99it/s]Sliding Window Inference:  98%|█████████████████████████████████████████████████████████▊ | 332/339 [01:09<00:01,  5.00it/s]Sliding Window Inference:  98%|█████████████████████████████████████████████████████████▉ | 333/339 [01:10<00:01,  5.01it/s]Sliding Window Inference:  99%|██████████████████████████████████████████████████████████▏| 334/339 [01:10<00:00,  5.01it/s]Sliding Window Inference:  99%|██████████████████████████████████████████████████████████▎| 335/339 [01:10<00:00,  4.98it/s]Sliding Window Inference:  99%|██████████████████████████████████████████████████████████▍| 336/339 [01:10<00:00,  4.97it/s]Sliding Window Inference:  99%|██████████████████████████████████████████████████████████▋| 337/339 [01:10<00:00,  4.94it/s]Sliding Window Inference: 100%|██████████████████████████████████████████████████████████▊| 338/339 [01:11<00:00,  4.97it/s]Sliding Window Inference: 100%|███████████████████████████████████████████████████████████| 339/339 [01:11<00:00,  4.75it/s]
+local_emb.shape = (43297, 14, 14, 1024)
+coord.shape = (43297, 2)
+grid_coords.shape = (43297, 2)
+global_emb.shape = (43297, 1024)
+AnnData object with n_obs × n_vars = 43297 × 1024
+    obs: 'sample'
+    obsm: 'spatial'
+Saved embedding to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/global_emb.h5ad with shape (43297, 1024) cost 2s
+extract 16_16_features cost 85s!!!
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 2.6395 GB
+[TIME] main() cost: 100.01 s
+All steps cost 100.39962816238403s!!!!
+
+[INFO-END] Time: 2026-03-03 11:58:26
+[INFO-END] CPU usage: 4.4%
+[INFO-END] Memory usage: 40.2%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 1312944
+[INFO-END] Total runtime: 100.40 seconds
+Maximum CPU Memory Usage：27.03 GB
+Maximum CPU Memory Usage：27.03 GB
+Namespace(read_global_path='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', read_local_path='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', sample='VIS_P15_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/', mode='single', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, clustering=False, use_cuML=False, input_format='h5ad')
+
+[INFO-START] Time: 2026-03-03 11:58:32
+[INFO-START] CPU usage: 5.7%
+[INFO-START] Memory usage: 39.1%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 1313398
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD//mask/mask-small.png
+grid mask.shape =(1806, 1638)
+mode =single ,global_emb.shape = (43297, 1024)
+mode =single ,local_emb.shape = (43297, 14, 14, 1024)
+mode =single ,coords.shape = (43297, 2)
+mode =single ,grid_coords.shape = (43297, 2)
+mode =single, W_pad =26432,H_pad = 29120
+mode =single, W_tokens =1652,H_tokens = 1820
+mode =single, W_ori =26208,H_ori = 28896
+mode =single, W_out =1638,H_out = 1806
+final_map.dtype = float16
+final_map.shape=(1806, 1638, 2048)
+extract fused features cost 19s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+AnnData object with n_obs × n_vars = 1174942 × 2048
+    obs: 'sample'
+    obsm: 'spatial'
+
+
+✅ 4. save embedding and coordinate to h5ad...
+Saved embedding to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/single_super_emb.h5ad with shape (1174942, 2048) cost 150s
+
+
+🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 Congratulations, Pipeline completed sucessfully!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 0.0000 GB
+[TIME] main() cost: 184.52 s
+All steps cost 184.89104223251343s!!!!
+
+[INFO-END] Time: 2026-03-03 12:01:37
+[INFO-END] CPU usage: 7.9%
+[INFO-END] Memory usage: 39.2%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 1313398
+[INFO-END] Total runtime: 184.89 seconds
+Maximum CPU Memory Usage：28.62 GB
+Maximum CPU Memory Usage：28.62 GB
+Preparing inference inputs for sample: VIS_P15_LUAD
+prefix = /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg with shape (28896, 26208, 3)
+height: 28896 width: 26208
+[prepare_visium_inputs] Processing: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/
+  pixel_size_raw = 0.251300 mpp
+  target_mpp     = 0.5
+  scale          = 0.502600  (processed / raw)
+  Wrote anno-names.txt  (8 cell types: ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Myeloid', 'Stromal'])
+  Wrote anno_matrix.tsv (14223 spots × 8 cell types)
+  Wrote locs-raw.tsv    (14231 in-tissue spots, raw fullres coords)
+  Wrote locs.tsv        (14231 in-tissue spots, processed-image coords)
+  Wrote radius-raw.txt  (119.3271 raw pixels)
+  Wrote radius.txt      (59 processed-image pixels, ÷16 → 3 feature-grid pixels)
+  Wrote pixel-size.txt  (0.5 mpp)
+
+[prepare_visium_inputs] Done.
+
+[meowcat] Preprocessing: VIS_P15_LUAD
+  [substep 1/7] get_pixel_size
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/get_pixel_size.py --read_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --sample VIS_P15_LUAD --raw_flag he_raw --pixel_size_raw 0.2513
+  [substep 2/7] run_preprocess
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunPreprocess.py --read_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --sample VIS_P15_LUAD --raw_flag he_raw --pad 224 --scale_value 0.5026
+  [substep 3/7] run_histosweep
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunHistoSweep.py --read_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --save_dir mask
+  [substep 4/7] extract_features
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_extract_features.py --read_path /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --weight_dir /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin --sample VIS_P15_LUAD
+  [substep 5/7] fuse_features
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_fuse_features.py --read_global_path /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --read_local_path /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --sample VIS_P15_LUAD --mode single
+  [substep 6/7] prepare_embeddings
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_inference_new_sample.py /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input VIS_P15_LUAD
+  [substep 7/7] prepare_visium
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_visium_inputs.py --sample_dir /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/ --target_mpp 0.5
+[Step 4] Batch preparation
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/anno_matrix.tsv
+Scanned 1 samples | N_total=14223, K=8, domains=1
+[coreset] kept 14223 / 14223 (100.0%)
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/anno_matrix.tsv
+Pickle loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/embeddings-hist.pickle
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/locs.tsv
+Image loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/he.jpg
+[save] VIS_P15_LUAD: +14223
+
+Saved: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/batch_000.pkl
+Shapes: X(14223, 29, 2048) Y(14223, 8) D(14223,) | T=29 C=2048 K=8
+[save] domain 0: 14223 spots
+
+Done. Saved 1 samples to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py --config ./config.yaml --mode visium
+[Step 5] Training (Recon -> Visium MSE)
+Using batch directory: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches
+MultiResolutionDataset: 14223 samples
+  T=29, C=2048, K=8
+  vis (resolution=0): 14223 samples
+  n_domains=1, has_domain=True
+Using batch_size=128
+
+============================================================
+Training model state 1/2
+============================================================
+Loading multi-resolution dataset from: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches
+MultiResolutionDataset: 14223 samples
+  T=29, C=2048, K=8
+  vis (resolution=0): 14223 samples
+  n_domains=1, has_domain=True
+Dataset: 14223 samples, T=29, C=2048, K=8
+Train: 12801, Val: 1422
+Using n_domains=1
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  721 K │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  524 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  592 K │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 1.3 M                                                                                                      
+Non-trainable params: 526 K                                                                                                  
+Total params: 1.8 M                                                                                                          
+Total estimated model params size (MB): 7                                                                                    
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=15` reached.
+Epoch 14/14 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101/101 0:00:01 • 0:00:00 70.30it/s v_num: 0 train_loss: 0.071            
+                                                                                       train_recon: 0.707 val_loss: 0.029    
+Training completed in 56 seconds
+[two-stage] Stage 1 saved to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/00/stage1/model_stage1.ckpt
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  721 K │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  524 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  592 K │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 1.3 M                                                                                                      
+Non-trainable params: 590 K                                                                                                  
+Total params: 1.8 M                                                                                                          
+Total estimated model params size (MB): 7                                                                                    
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=0` reached.
+Training completed in 0 seconds
+[two-stage] Final model saved to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/00/model.ckpt
+
+============================================================
+Training model state 2/2
+============================================================
+Loading multi-resolution dataset from: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches
+MultiResolutionDataset: 14223 samples
+  T=29, C=2048, K=8
+  vis (resolution=0): 14223 samples
+  n_domains=1, has_domain=True
+Dataset: 14223 samples, T=29, C=2048, K=8
+Train: 12801, Val: 1422
+Using n_domains=1
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  721 K │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  524 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  592 K │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 1.3 M                                                                                                      
+Non-trainable params: 526 K                                                                                                  
+Total params: 1.8 M                                                                                                          
+Total estimated model params size (MB): 7                                                                                    
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=15` reached.
+Epoch 14/14 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101/101 0:00:01 • 0:00:00 65.79it/s v_num: 0 train_loss: 0.007            
+                                                                                       train_recon: 0.074 val_loss: 0.028    
+Training completed in 29 seconds
+[two-stage] Stage 1 saved to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/01/stage1/model_stage1.ckpt
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  721 K │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  524 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  592 K │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 1.3 M                                                                                                      
+Non-trainable params: 590 K                                                                                                  
+Total params: 1.8 M                                                                                                          
+Total estimated model params size (MB): 7                                                                                    
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=0` reached.
+Training completed in 0 seconds
+[two-stage] Final model saved to /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/01/model.ckpt
+
+============================================================
+Starting prediction...
+============================================================
+MultiResolutionDataset: 14223 samples
+  T=29, C=2048, K=8
+  vis (resolution=0): 14223 samples
+  n_domains=1, has_domain=True
+Predicting latent features...
+  Batch 1/28
+  Batch 2/28
+  Batch 3/28
+  Batch 4/28
+  Batch 5/28
+  Batch 6/28
+  Batch 7/28
+  Batch 8/28
+  Batch 9/28
+  Batch 10/28
+  Batch 11/28
+  Batch 12/28
+  Batch 13/28
+  Batch 14/28
+  Batch 15/28
+  Batch 16/28
+  Batch 17/28
+  Batch 18/28
+  Batch 19/28
+  Batch 20/28
+  Batch 21/28
+  Batch 22/28
+  Batch 23/28
+  Batch 24/28
+  Batch 25/28
+  Batch 26/28
+  Batch 27/28
+  Batch 28/28
+/project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/embeddings-gene.pickle
+Saved: (14223, 29, 256) -> /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batchesembeddings-gene.pickle
+
+Training and prediction completed!
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/train_by_batch_cdan5_trainc_final2.py /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches --n-states 2 --adv-lambda 0 --freeze-encoder-n 2 --recon-weight 0.1 --recon-mask-ratio 0.3 --save-every-n-epochs 10 --xenium-weight 0.0 --monitor-metric val_weak_mse --device cuda --two-stage --epochs1 15
+[Step 6] Prediction
+============================================================
+MultiResolution Full-Grid Prediction
+============================================================
+PREFIX: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches
+DATA_ROOT: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input
+SAMPLE: VIS_P15_LUAD
+N_STATES: 2
+DEVICE: cuda
+============================================================
+[Loaded] /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/00/model.ckpt
+[Loaded] /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches/states/01/model.ckpt
+[Models] Loaded 2 states, token_dim=256, n_ctypes=8
+Pickle loaded from /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/embeddings-hist.pickle
+[Sample] VIS_P15_LUAD: embs (1806, 1638, 2048) (H,W,C), K=8, D=256
+[Predict] 2958228 pixels, 43 chunks of 70000, batch=2
+  Processed 10/43 chunks...
+  Processed 20/43 chunks...
+  Processed 30/43 chunks...
+  Processed 40/43 chunks...
+  Processed 43/43 chunks...
+/project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/pred_fullgrid_outputs.pkl
+[OK] Saved: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input/VIS_P15_LUAD/pred_fullgrid_outputs.pkl  (z_map (1806, 1638, 256), p_map (1806, 1638, 8))
+============================================================
+Done!
+============================================================
+
+[meowcat] Predicting: VIS_P15_LUAD
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/predict_cdan_multireso.py /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/batches 2 VIS_P15_LUAD --data-root /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input --device cuda --tokens-per-chunk 70000 --chunks-per-batch 2 --out-pkl-name pred_fullgrid_outputs.pkl
+[Step 6] Visualization
+
+[meowcat] Visualizing: VIS_P15_LUAD
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/visualize_prediction_results.py --data-root /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input --data-root-ori /project/KidneyHE/01_meowcat_test/01_visium_only_P15/input --sample VIS_P15_LUAD --pkl-name pred_fullgrid_outputs.pkl --out-root /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output --n-clusters 6 --pca-comp 100 --random-seed 0 --p-lo 5 --p-hi 95
+[Step 7] Slide wrap
+Saved deck: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/results_ex01_P15.pptx
+$ python /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/visualize_slide_wrap.py --out-root /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output --pptx /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/results_ex01_P15.pptx --intensity-cols 3 --intensity-rows 2 --highlight-cols 4 --highlight-rows 3
+============================================
+ Done. Outputs: /project/KidneyHE/01_meowcat_test/01_visium_only_P15/output/
+============================================

@@ -10,16 +10,16 @@ Process a single sample:
 
 All outputs are saved under: <out_root>/<SAMPLE>/...
 
-Author: you :)
 """
 
 import argparse
 import os
 import pickle
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 from matplotlib.colors import to_rgba
 from matplotlib.patches import Patch
 from matplotlib import colormaps as mcm
@@ -58,8 +58,41 @@ def ensure_dir(p: str) -> None:
     os.makedirs(p, exist_ok=True)
 
 # ------------------
-# Visualization utils
+# Color palette utils
 # ------------------
+def load_cmap_json(json_path: str) -> Dict:
+    """
+    Load a custom color map from JSON file.
+    Expected format:
+    {
+      "cmap_name": "self_design",
+      "ordered_cell_types": ["NonTumor_Epi", "Tumor_Epi", ...],
+      "type_to_color": {
+        "NonTumor_Epi": "#ff0000",
+        "Tumor_Epi": "#f97a00",
+        ...
+      }
+    }
+    """
+    with open(json_path, "r") as f:
+        return json.load(f)
+
+def get_color_for_celltype(
+    cell_type: str,
+    cmap_dict: Optional[Dict],
+    fallback_colors: List[Tuple[float, float, float, float]],
+    idx: int
+) -> Tuple[float, float, float, float]:
+    """
+    Get color for a cell type. First tries custom cmap_dict, then falls back to default palette.
+    """
+    if cmap_dict is not None and "type_to_color" in cmap_dict:
+        type_to_color = cmap_dict["type_to_color"]
+        if cell_type in type_to_color:
+            return to_rgba(type_to_color[cell_type])
+    # Fallback to default palette
+    return fallback_colors[idx % len(fallback_colors)]
+
 def build_categorical_colors(n: int, base_palette: str = "tab20") -> List[Tuple[float, float, float, float]]:
     cmap = mcm.get(base_palette)
     # use discrete .colors if present, else sample evenly
@@ -69,6 +102,28 @@ def build_categorical_colors(n: int, base_palette: str = "tab20") -> List[Tuple[
     base = [to_rgba(c) for c in base]
     return [base[i % len(base)] for i in range(n)]
 
+def build_celltype_colors(
+    cell_types: List[str],
+    cmap_dict: Optional[Dict] = None,
+    base_palette: str = "tab20"
+) -> List[Tuple[float, float, float, float]]:
+    """
+    Build a list of colors for cell types.
+    If cmap_dict is provided, use custom colors from JSON.
+    Otherwise, use default matplotlib palette.
+    """
+    fallback_colors = build_categorical_colors(len(cell_types), base_palette=base_palette)
+
+    colors = []
+    for i, ct in enumerate(cell_types):
+        color = get_color_for_celltype(ct, cmap_dict, fallback_colors, i)
+        colors.append(color)
+
+    return colors
+
+# ------------------
+# Visualization utils
+# ------------------
 def save_cluster_map(lab_map: np.ndarray,
                      n_clusters: int,
                      out_png: str,
@@ -165,7 +220,19 @@ def save_argmax_celltype_map(probs: np.ndarray,
                              cell_types: List[str],
                              mask: np.ndarray,
                              out_png: str,
+                             cmap_dict: Optional[Dict] = None,
                              base_palette: str = "tab20") -> None:
+    """
+    Save predicted cell type map with argmax coloring.
+
+    Args:
+        probs: (H, W, K) probability maps
+        cell_types: List of cell type names
+        mask: (H, W) boolean mask
+        out_png: Output path
+        cmap_dict: Optional custom color map dict loaded from JSON
+        base_palette: Fallback matplotlib palette name
+    """
     # probs: (H, W, K)
     H, W, K = probs.shape
     masked = np.where(mask[..., None], probs, np.nan)
@@ -175,7 +242,9 @@ def save_argmax_celltype_map(probs: np.ndarray,
     # fully masked -> -1
     max_indices[np.all(np.isnan(masked), axis=-1)] = -1
 
-    colors = build_categorical_colors(len(cell_types), base_palette=base_palette)
+    # Build colors (custom or default)
+    colors = build_celltype_colors(cell_types, cmap_dict=cmap_dict, base_palette=base_palette)
+
     rgba = np.full((H, W, 4), 1.0, dtype=np.float32)
     for i, col in enumerate(colors):
         rgba[max_indices == i] = col
@@ -209,11 +278,23 @@ def run_one_sample(
     save_highlights: bool = False,
     p_lo: float = 5.0,
     p_hi: float = 95.0,
+    cmap_json: Optional[str] = None,
 ) -> None:
     sample_dir = os.path.join(data_root, sample)
     if data_root_ori is None:
         data_root_ori = data_root
     sample_dir_ori = os.path.join(data_root_ori, sample)
+
+    # Load custom color map if provided
+    cmap_dict = None
+    if cmap_json is not None:
+        if os.path.isfile(cmap_json):
+            cmap_dict = load_cmap_json(cmap_json)
+            print(f"Loaded custom color map from: {cmap_json}")
+            print(f"  - cmap_name: {cmap_dict.get('cmap_name', 'N/A')}")
+            print(f"  - cell types: {list(cmap_dict.get('type_to_color', {}).keys())}")
+        else:
+            print(f"WARNING: cmap_json not found: {cmap_json}, using default palette")
 
     # Resolve prediction file
     if pkl_path is not None:
@@ -248,6 +329,8 @@ def run_one_sample(
         # be defensive
         ctypes = [f"{ctypes[i] if i < len(ctypes) else f'celltype_{i}'}" for i in range(K)]
 
+    print(f"Cell types in data: {ctypes}")
+
     # Mask
     mask_path = os.path.join(sample_dir_ori, "mask", "mask-small.png")
     if not os.path.isfile(mask_path):
@@ -271,38 +354,38 @@ def run_one_sample(
         ensure_dir(out_highlights)
     ensure_dir(out_intensity)
 
-    # -------- Clustering on z_map within mask --------
-    Z_full = z_map.reshape(-1, D)
-    m_flat = mask.reshape(-1)
-    idx = np.where(m_flat)[0]
-    Z = Z_full[idx]
+    # # -------- Clustering on z_map within mask --------
+    # Z_full = z_map.reshape(-1, D)
+    # m_flat = mask.reshape(-1)
+    # idx = np.where(m_flat)[0]
+    # Z = Z_full[idx]
 
-    scaler = StandardScaler(with_mean=True, with_std=True)
-    Zs = scaler.fit_transform(Z)
+    # scaler = StandardScaler(with_mean=True, with_std=True)
+    # Zs = scaler.fit_transform(Z)
 
-    pca = PCA(n_components=min(int(pca_comp), Zs.shape[1]), svd_solver="randomized", random_state=random_seed)
-    Zp = pca.fit_transform(Zs)
+    # pca = PCA(n_components=min(int(pca_comp), Zs.shape[1]), svd_solver="randomized", random_state=random_seed)
+    # Zp = pca.fit_transform(Zs)
 
-    try:
-        km = KMeans(n_clusters=int(n_clusters), n_init="auto", random_state=random_seed)
-    except TypeError:
-        # for older scikit-learn versions
-        km = KMeans(n_clusters=int(n_clusters), n_init=10, random_state=random_seed)
+    # try:
+    #     km = KMeans(n_clusters=int(n_clusters), n_init="auto", random_state=random_seed)
+    # except TypeError:
+    #     # for older scikit-learn versions
+    #     km = KMeans(n_clusters=int(n_clusters), n_init=10, random_state=random_seed)
 
-    labels_masked = km.fit_predict(Zp)
-    lab_flat = np.full(H * W, fill_value=-1, dtype=np.int32)
-    lab_flat[idx] = labels_masked
-    lab_map = lab_flat.reshape(H, W)
+    # labels_masked = km.fit_predict(Zp)
+    # lab_flat = np.full(H * W, fill_value=-1, dtype=np.int32)
+    # lab_flat[idx] = labels_masked
+    # lab_map = lab_flat.reshape(H, W)
 
-    # Save overall cluster map
-    cluster_map_png = os.path.join(out_clusters, f"{sample}_kmeans_k{n_clusters}.png")
-    save_cluster_map(
-        lab_map,
-        n_clusters=n_clusters,
-        out_png=cluster_map_png,
-        title=f"{sample} – KMeans clusters on z_map (k={n_clusters})",
-        base_palette="tab20",
-    )
+    # # Save overall cluster map
+    # cluster_map_png = os.path.join(out_clusters, f"{sample}_kmeans_k{n_clusters}.png")
+    # save_cluster_map(
+    #     lab_map,
+    #     n_clusters=n_clusters,
+    #     out_png=cluster_map_png,
+    #     title=f"{sample} – KMeans clusters on z_map (k={n_clusters})",
+    #     base_palette="tab20",
+    # )
 
     # Optional per-cluster highlight images
     if save_highlights:
@@ -326,7 +409,7 @@ def run_one_sample(
 
     # -------- Predicted cell-type argmax map --------
     argmax_png = os.path.join(out_sample, f"{sample}_predicted_celltype_map.png")
-    save_argmax_celltype_map(p_map, ctypes, mask, argmax_png, base_palette="tab20")
+    save_argmax_celltype_map(p_map, ctypes, mask, argmax_png, cmap_dict=cmap_dict, base_palette="tab20")
 
     # -------- Minimal text summary --------
     summary_txt = os.path.join(out_sample, "summary.txt")
@@ -335,8 +418,10 @@ def run_one_sample(
             f"Sample: {sample}\n"
             f"z_map: {z_map.shape}, p_map: {p_map.shape}, K={K}, D={D}\n"
             f"Mask: {mask.shape} (True = tissue)\n"
+            f"Cell types: {ctypes}\n"
+            f"Custom cmap: {cmap_json if cmap_json else 'None (using default)'}\n"
             f"Outputs:\n"
-            f" - Cluster map: {cluster_map_png}\n"
+            #f" - Cluster map: {cluster_map_png}\n"
             f" - Per-cluster highlights: {'enabled' if save_highlights else 'disabled'}\n"
             f" - Cell-type intensity dir: {out_intensity}\n"
             f" - Argmax cell-type map: {argmax_png}\n"
@@ -361,6 +446,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--save-highlights", action="store_true", help="Save per-cluster highlight PNGs.")
     p.add_argument("--p-lo", type=float, default=5.0, help="Lower percentile for intensity maps.")
     p.add_argument("--p-hi", type=float, default=95.0, help="Upper percentile for intensity maps.")
+
+    # Custom color map
+    p.add_argument("--cmap-json", default=None,
+                   help="Path to JSON file with custom cell type colors. "
+                        "Expected format: {\"type_to_color\": {\"CellType1\": \"#ff0000\", ...}}")
+
     return p.parse_args()
 
 def main():
@@ -378,6 +469,7 @@ def main():
         save_highlights=args.save_highlights,
         p_lo=args.p_lo,
         p_hi=args.p_hi,
+        cmap_json=args.cmap_json,
     )
 
 if __name__ == "__main__":

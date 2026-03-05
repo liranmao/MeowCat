@@ -62,6 +62,13 @@ import torch.multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 
+# Ensure sibling directories are importable (Train_predict/ and Preprocess/)
+_this_dir = os.path.dirname(os.path.abspath(__file__))
+_preprocess_dir = os.path.join(os.path.dirname(_this_dir), "Preprocess")
+for _d in (_this_dir, _preprocess_dir):
+    if _d not in sys.path:
+        sys.path.insert(0, _d)
+
 # Import from your existing code
 from train_by_batch_cdan5 import (
     FeedForward,
@@ -1908,18 +1915,18 @@ def main():
             if args.device == 'cuda':
                 torch.cuda.empty_cache()
     
-    # Prediction
-    print("\n" + "="*60)
-    print("Starting prediction...")
-    print("="*60)
-    predict_batched_multi_res(
-        model_states=model_states,
-        batch_dir=batch_dir,
-        prefix=args.prefix,
-        device=args.device,
-    )
+#     # Prediction
+#     print("\n" + "="*60)
+#     print("Starting prediction...")
+#     print("="*60)
+#     predict_batched_multi_res(
+#         model_states=model_states,
+#         batch_dir=batch_dir,
+#         prefix=args.prefix,
+#         device=args.device,
+#     )
     
-    print("\nTraining and prediction completed!")
+#     print("\nTraining and prediction completed!")
 
 
 if __name__ == '__main__':

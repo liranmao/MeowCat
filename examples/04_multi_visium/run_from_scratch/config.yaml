@@ -1,0 +1,84 @@
+# Example 4a: Train on multiple Visium samples (no Xenium)
+#             Multi-patient with CDAN cross-patient domain adaptation
+# Input:  /project/KidneyHE/01_meowcat_test/04_multi_visium/input/
+#           VIS_S1/  VIS_S2/   (2+ Visium samples)
+# Output: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/
+
+project:
+  name: ex04_multi_visium
+  data_root: /project/KidneyHE/01_meowcat_test/04_multi_visium/input
+  out_root:  /project/KidneyHE/01_meowcat_test/04_multi_visium/output
+  sample_pattern: "VIS*"
+
+rctd:
+  reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
+  cell_type_column: MainType
+  group_column: Group_ID
+  groups: [LUAD]
+  max_cores: 10
+  doublet_mode: full
+  min_umi: 10
+
+preprocess:
+  raw_flag: he_raw
+  target_mpp: 0.5
+  pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
+  pad: 224
+  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  fusion_mode: single
+
+batches:
+  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/batches
+  keep_frac: 0.25     # subsample to 25% per sample to keep training tractable
+  strategy: stratified
+  seed: 0
+  include_only: null
+  exclude_set: []
+  domain_map_tsv: null   # null = one domain per WSI folder (auto-assigned)
+  fixed_radius: null
+
+# No xenium section needed — defaults are fine since no Xenium steps run.
+
+# Training paradigm: Recon (Phase 0) -> Visium MSE (Phase 1) + CDAN
+# Multiple patients -> enable CDAN for cross-patient domain adaptation.
+train:
+  n_states: 2
+  two_stage: true
+  epochs1: 15            # Phase 0: reconstruction pretraining
+  sequential_training: false   # no Xenium phase
+  visium_epochs: 100     # Phase 1: Visium MSE training (passed as --epochs2)
+  xenium_epochs: 0
+  adv_lambda: 0.005      # CDAN: light domain adversarial penalty across patients
+  freeze_encoder_n: 2
+  recon_weight: 0.1
+  recon_mask_ratio: 0.3
+  save_every_n_epochs: 10
+  xenium_weight: 0.0     # no Xenium data
+  monitor_metric: val_weak_mse
+  # Out-of-sample monitoring: hold one sample out to watch generalisation
+  oos_sample: /project/KidneyHE/01_meowcat_test/04_multi_visium/input/VIS_S2
+  oos_tmpdir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/oos_batch
+  device: cuda
+
+predict:
+  n_states: 2
+  tokens_per_chunk: 70000
+  chunks_per_batch: 2
+  out_pkl_name: pred_fullgrid_outputs.pkl
+  device: cuda
+
+visualize:
+  n_clusters: 6
+  pca_comp: 100
+  random_seed: 0
+  p_lo: 5
+  p_hi: 95
+  save_highlights: true   # save per-cluster highlight images for multi-sample comparison
+  cmap_json: null    # null = use bundled default (config/visualization_cmap.json)
+
+slide:
+  pptx: results_ex04_multi_visium.pptx
+  intensity_cols: 3
+  intensity_rows: 2
+  highlight_cols: 4
+  highlight_rows: 3

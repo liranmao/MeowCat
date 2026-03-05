@@ -1,0 +1,52 @@
+# Example 6: Predict cell types on new H&E images using a trained model
+#
+# This config is for `meowcat infer`, which chains:
+#   preprocess -> prepare embeddings -> predict -> visualize -> slide
+#
+# Prerequisites:
+#   - A trained MeowCat model (states/*/model.ckpt under inference.model_dir)
+#   - anno-names.txt from training (lists the cell types the model predicts)
+#   - New H&E images under project.data_root/<SAMPLE>/he_raw.<ext>
+
+inference:
+  model_dir: /path/to/training/batches    # directory containing states/*/model.ckpt
+  anno_names: /path/to/anno-names.txt     # cell-type names from training
+
+project:
+  name: ex06_predict_new
+  data_root: /path/to/new_samples         # root with per-sample subfolders
+  out_root:  /path/to/output
+
+visium:
+  sample_pattern: "HE*"
+
+preprocess:
+  raw_flag: he_raw
+  target_mpp: 0.5
+  pixel_size_raw: null       # null = auto-detect; set a float if metadata missing
+  pad: 224
+  uni_weights: /path/to/uni_weights.bin
+  fusion_mode: single
+
+predict:
+  n_states: 2
+  tokens_per_chunk: 70000
+  chunks_per_batch: 2
+  out_pkl_name: pred_fullgrid_outputs.pkl
+  device: cuda
+
+visualize:
+  n_clusters: 6
+  pca_comp: 100
+  random_seed: 0
+  p_lo: 5
+  p_hi: 95
+  save_highlights: false
+  cmap_json: null              # null = bundled default; set path for custom colors
+
+slide:
+  pptx: results_ex06.pptx
+  intensity_cols: 3
+  intensity_rows: 2
+  highlight_cols: 4
+  highlight_rows: 3

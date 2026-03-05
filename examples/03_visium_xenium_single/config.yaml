@@ -1,54 +1,60 @@
 # Example 3: Train on one Visium + one Xenium sample (3-phase sequential training)
 # Input:  /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/
-#           VIS_S1/  (Visium)
-#           XEN_S1/  (Xenium)
+#           VIS_P11_LUAD/  (Visium — symlinked from ex01)
+#           XEN_P11_LUAD/  (Xenium — symlinked from ex02)
 # Output: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/
 
 project:
   name: ex03_visium_xenium_single
   data_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
   out_root:  /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output
-  # Both VIS* and XEN* samples live under the same data_root;
-  # preprocess step can be run separately for each pattern using --samples.
+
+# Both VIS* and XEN* samples live under the same data_root.
+# preprocess auto-discovers all samples (VIS* + XEN*).
+visium:
   sample_pattern: "VIS*"
 
 rctd:
-  reference_rds: /path/to/single_cell_reference.rds
+  reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
   cell_type_column: MainType
+  group_column: Group_ID
+  groups: [LUAD]
+  max_cores: 10
+  doublet_mode: full
+  min_umi: 10
 
+# Image preprocessing — data-agnostic, applies to ALL samples (Visium and Xenium).
+# pixel_size_raw here is the raw H&E image MPP (null = auto-detect from metadata).
+# For mixed Visium+Xenium configs, use null so each image's MPP is detected independently.
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
-  pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
+  pixel_size_raw: null      # auto-detect per image (use null for mixed Visium+Xenium)
   pad: 224
   uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
   fusion_mode: single
 
+# Visium batch preparation — only used by `meowcat prepare-visium-batches`.
 batches:
   out_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
   keep_frac: 1.0
   strategy: stratified
   seed: 0
-  include_only: null
-  exclude_set: []
-  domain_map_tsv: null
-  fixed_radius: null
 
+# Xenium batch preparation — only used by `meowcat prepare-xenium-batches`.
+# NOTE: This section does NOT control image preprocessing (that's the `preprocess` section).
+# It controls how Xenium cell coordinates and annotations are tokenized into training batches.
+# dapi_pixel_size_raw is the Xenium DAPI instrument's pixel size (for micron→pixel coordinate
+# conversion in cells.parquet), NOT the H&E image MPP.
+# Each XEN_* sample folder should contain: xenium_raw/, adata_cellbin_HistoSweep.h5ad, annotation.csv
 xenium:
-  xenium_data_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/xenium_raw
-  cellbin_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/cellbin
-  processed_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
-  histology_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/histology
-  xenium_anno_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/annotations
   sample_pattern: "XEN*"
-  include_only: null
-  exclude_set: []
   # Xenium batches go to the SAME out_dir as Visium so training finds both
   out_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
-  pixel_size_raw: 0.2125
+  dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_S1/anno-names.txt
-  cell_type_mapping_json: /path/to/cell_type_mapping.json
+  anno_names_path: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/anno-names.txt
+  cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
   visium_batch_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
   seed: 42
 
@@ -86,6 +92,7 @@ visualize:
   p_lo: 5
   p_hi: 95
   save_highlights: false
+  cmap_json: null    # null = use bundled default (config/visualization_cmap.json)
 
 slide:
   pptx: results_ex03.pptx

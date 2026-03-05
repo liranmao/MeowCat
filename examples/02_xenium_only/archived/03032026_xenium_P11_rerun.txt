@@ -1,0 +1,223 @@
+============================================
+ MeowCat Example 2: Xenium-only P11_LUAD
+ Config: ./config.yaml
+============================================
+[Step 1] Skipped — Xenium data uses hard cell-type labels, no RCTD needed
+[Step 4] Xenium batch preparation
+Found 1 Xenium samples: ['XEN_P11_LUAD']
+
+============================================================
+Part A: Xenium Preliminary Processing
+============================================================
+
+Processing XEN_P11_LUAD ...
+  [skip] h5ad files already exist for XEN_P11_LUAD
+
+============================================================
+Part B: Xenium Batch Creation
+============================================================
+
+Loading reference parameters...
+  Classes (8): ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Myeloid', 'Stromal']
+  Max tokens (T): 29
+  Feature dim (C): 2048
+
+Determining Xenium domain IDs...
+  Max Visium domain ID: 0
+  Xenium domain IDs will start from: 1
+
+Radius mode: FIXED = 75.2 px
+
+============================================================
+Processing: XEN_P11_LUAD (batch_xen_000, domain=1)
+============================================================
+Loading Xenium data...
+  Cells after QC: 577596
+Creating label matrix...
+  Valid labeled cells: 501530 / 577596
+Mapping bins to cells...
+  Using fixed radius: 75.20 px
+  Bin spacing: 37.60 px
+  Cells with bins: 576243 / 577596
+  Bins per cell: median=12, mean=11.7
+Selecting cells (target: 11793)...
+  Stratified sampling: 11793 cells selected.
+Extracting features...
+  Shape: (11793, 29, 5101) float16  (3.5 GB)
+  Done: 11793 cells extracted
+Saving batch_xen_000 with domain_id=1...
+
+============================================================
+SUMMARY
+============================================================
+  batch_xen_000: XEN_P11_LUAD (n=11793, domain=1)
+
+Saved mapping: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/batch_sample_mapping.json
+Processing complete!
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py --config ./config.yaml --mode xenium
+[Step 5] Training (Recon -> Xenium CE)
+Using batch directory: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+MultiResolutionDataset: 11793 samples
+  T=29, C=5101, K=8
+  xen (resolution=1): 11793 samples
+  n_domains=2, has_domain=True
+Using batch_size=128
+
+============================================================
+Training model state 1/2
+============================================================
+Loading multi-resolution dataset from: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+MultiResolutionDataset: 11793 samples
+  T=29, C=5101, K=8
+  xen (resolution=1): 11793 samples
+  n_domains=2, has_domain=True
+Dataset: 11793 samples, T=29, C=5101, K=8
+Train: 10614, Val: 1179
+Using n_domains=2
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  1.5 M │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  525 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  1.4 M │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 2.9 M                                                                                                      
+Non-trainable params: 527 K                                                                                                  
+Total params: 3.4 M                                                                                                          
+Total estimated model params size (MB): 13                                                                                   
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=15` reached.
+Epoch 14/14 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83/83 0:00:02 • 0:00:00 32.37it/s v_num: 0 train_loss: 0.008 train_recon: 
+                                                                                     0.079 val_loss: 0.008                   
+Training completed in 55 seconds
+[two-stage] Stage 1 saved to /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/00/stage1/model_stage1.ckpt
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  1.5 M │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  525 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  1.4 M │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 2.0 M                                                                                                      
+Non-trainable params: 1.4 M                                                                                                  
+Total params: 3.4 M                                                                                                          
+Total estimated model params size (MB): 13                                                                                   
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83/83 0:00:02 • 0:00:00 33.09it/s v_num: 0 train_loss: 0.962              
+                                                                                     train_weak_mse: 0.955 train_domain_cdan:
+                                                                                     0.722 train_recon: 0.069 val_loss: 1.066
+                                                                                     val_weak_mse: 1.059                     
+Training completed in 336 seconds
+[two-stage] Final model saved to /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/00/model.ckpt
+
+============================================================
+Training model state 2/2
+============================================================
+Loading multi-resolution dataset from: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+MultiResolutionDataset: 11793 samples
+  T=29, C=5101, K=8
+  xen (resolution=1): 11793 samples
+  n_domains=2, has_domain=True
+Dataset: 11793 samples, T=29, C=5101, K=8
+Train: 10614, Val: 1179
+Using n_domains=2
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  1.5 M │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  525 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  1.4 M │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 2.9 M                                                                                                      
+Non-trainable params: 527 K                                                                                                  
+Total params: 3.4 M                                                                                                          
+Total estimated model params size (MB): 13                                                                                   
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=15` reached.
+Epoch 14/14 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83/83 0:00:02 • 0:00:00 33.55it/s v_num: 0 train_loss: 0.009 train_recon: 
+                                                                                     0.087 val_loss: 0.008                   
+Training completed in 53 seconds
+[two-stage] Stage 1 saved to /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/01/stage1/model_stage1.ckpt
+Using bfloat16 Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃   ┃ Name             ┃ Type        ┃ Params ┃ Mode  ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 0 │ net_lat          │ Sequential  │  1.5 M │ train │
+│ 1 │ ct_head_tok      │ Linear      │  2.1 K │ train │
+│ 2 │ res_embed        │ Embedding   │  1.0 K │ train │
+│ 3 │ grl              │ GradReverse │      0 │ train │
+│ 4 │ domain_head_cdan │ Sequential  │  525 K │ train │
+│ 5 │ recon_head_tok   │ Sequential  │  1.4 M │ train │
+└───┴──────────────────┴─────────────┴────────┴───────┘
+Trainable params: 2.0 M                                                                                                      
+Non-trainable params: 1.4 M                                                                                                  
+Total params: 3.4 M                                                                                                          
+Total estimated model params size (MB): 13                                                                                   
+Modules in train mode: 24                                                                                                    
+Modules in eval mode: 0                                                                                                      
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83/83 0:00:02 • 0:00:00 31.38it/s v_num: 0 train_loss: 1.156              
+                                                                                     train_weak_mse: 1.150 train_domain_cdan:
+                                                                                     0.675 train_recon: 0.065 val_loss: 1.081
+                                                                                     val_weak_mse: 1.074                     
+Training completed in 404 seconds
+[two-stage] Final model saved to /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/01/model.ckpt
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/train_by_batch_cdan5_trainc_final2.py /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches --n-states 2 --adv-lambda 0 --freeze-encoder-n 2 --recon-weight 0.1 --recon-mask-ratio 0.3 --save-every-n-epochs 10 --xenium-weight 1.0 --monitor-metric val_loss --device cuda --two-stage --epochs1 15 --epochs2 100
+[Step 6] Prediction
+============================================================
+MultiResolution Full-Grid Prediction
+============================================================
+PREFIX: /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches
+DATA_ROOT: /project/KidneyHE/01_meowcat_test/02_xenium_only/input
+SAMPLE: XEN_P11_LUAD
+N_STATES: 2
+DEVICE: cuda
+============================================================
+[Loaded] /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/00/model.ckpt
+[Loaded] /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches/states/01/model.ckpt
+[Models] Loaded 2 states, token_dim=256, n_ctypes=8
+Traceback (most recent call last):
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/predict_cdan_multireso.py", line 272, in <module>
+    main()
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/predict_cdan_multireso.py", line 243, in main
+    sample_dir, ctypes, embs, H, W, C = load_sample(data_root, args.sample_name)
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/predict_cdan_multireso.py", line 68, in load_sample
+    ctypes = read_lines(os.path.join(sample_dir, 'anno-names.txt'))
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/utils.py", line 45, in read_lines
+    with open(filename, 'r') as file:
+FileNotFoundError: [Errno 2] No such file or directory: '/project/KidneyHE/01_meowcat_test/02_xenium_only/input/XEN_P11_LUAD/anno-names.txt'
+
+[meowcat] Predicting: XEN_P11_LUAD
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Train_predict/predict_cdan_multireso.py /project/KidneyHE/01_meowcat_test/02_xenium_only/output/batches 2 XEN_P11_LUAD --data-root /project/KidneyHE/01_meowcat_test/02_xenium_only/input --device cuda --tokens-per-chunk 70000 --chunks-per-batch 2 --out-pkl-name pred_fullgrid_outputs.pkl

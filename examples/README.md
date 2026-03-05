@@ -31,7 +31,7 @@ meowcat run-all --config examples/01_visium_only/config.yaml --dry-run
 | [01_visium_only](#01-visium-only) | 1 Visium | Recon → Visium MSE | off |
 | [02_xenium_only](#02-xenium-only) | 1 Xenium | Recon → Xenium CE | off |
 | [03_visium_xenium_single](#03-visium--xenium-single-pair) | 1 Visium + 1 Xenium | Recon → Visium → Xenium | off |
-| [04_multi_visium_xenium](#04-multiple-visium--xenium) | 2 Visium + 2 Xenium | Recon → Visium+CDAN → Xenium | on |
+| [05_multi_visium_xenium](#05-multiple-visium--xenium) | 2 Visium + 2 Xenium | Recon → Visium+CDAN → Xenium | on |
 
 ---
 
@@ -121,7 +121,7 @@ train:
 | 0 — Reconstruction | 15 | MSE on masked UNI features |
 | 1 — Xenium | 100 | Cross-entropy on hard labels |
 
-**Batch preparation:** Uses `meowcat prepare-xenium-batches` (not `prepare-batches`, which is Visium-only).
+**Batch preparation:** Uses `meowcat prepare-xenium-batches` (not `prepare-visium-batches`, which is Visium-only).
 
 **Key config settings:**
 ```yaml
@@ -185,7 +185,7 @@ train:
 | 1 — Visium | 100 | MSE on RCTD soft proportions | Only `batch_vis_*` |
 | 2 — Xenium | 50 | CE on hard labels | Only `batch_xen_*` |
 
-**Batch preparation:** Two separate steps — `meowcat prepare-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches/` directory. Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
+**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches/` directory. Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
 
 **Key config settings:**
 ```yaml
@@ -207,15 +207,15 @@ train:
 
 ---
 
-## 04 — Multiple Visium + Xenium
+## 05 — Multiple Visium + Xenium
 
-**Path:** `examples/04_multi_visium_xenium/`
+**Path:** `examples/05_multi_visium_xenium/`
 
 **Use case:** Multiple patients, both modalities. CDAN domain adaptation aligns cross-patient representations. One sample is held out as an out-of-sample (OOS) generalization monitor.
 
 **Input:**
 ```
-/project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/input/
+/project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/
   VIS_S1/   <- Visium patient 1 (training)
   VIS_S2/   <- Visium patient 2 (training + OOS monitor)
   XEN_S1/   <- Xenium patient 1
@@ -224,7 +224,7 @@ train:
 
 **Output:**
 ```
-/project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/
+/project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/
   batches/
     batch_vis_000_x/y/d.npy   <- VIS_S1 (domain 0)
     batch_vis_001_x/y/d.npy   <- VIS_S2 (domain 1)
@@ -236,7 +236,7 @@ train:
   VIS_S1/  VIS_S2/  XEN_S1/  XEN_S2/
     embeddings-hist.pickle
     pred_fullgrid_outputs.pkl
-  results_ex04.pptx
+  results_ex05.pptx
 ```
 
 **Training phases:**
@@ -258,14 +258,14 @@ train:
   visium_epochs: 100
   xenium_epochs: 100
   adv_lambda: 0.005      # CDAN cross-patient alignment
-  oos_sample: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/input/VIS_S2
-  oos_tmpdir: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/oos_batch
+  oos_sample: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/VIS_S2
+  oos_tmpdir: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/oos_batch
 
 visualize:
   save_highlights: true   # saves per-cluster highlight images
 ```
 
-**Batch preparation:** Two separate steps — `meowcat prepare-batches` for Visium (domains 0–1), then `meowcat prepare-xenium-batches` for Xenium (domains 2–3). Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
+**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium (domains 0–1), then `meowcat prepare-xenium-batches` for Xenium (domains 2–3). Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
 
 **Domain ID assignment (auto):** Visium domains are assigned alphabetically (VIS_S1=0, VIS_S2=1). Xenium domains continue from the max Visium domain + 1 (XEN_S1=2, XEN_S2=3). To override Visium domain assignment, create a TSV:
 ```

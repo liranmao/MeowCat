@@ -1,0 +1,362 @@
+============================================
+ MeowCat Example 3: Visium + Xenium (single pair)
+ Config: ./config.yaml
+============================================
+[Step 1] RCTD deconvolution (Visium only)
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+Found 1 Visium sample(s): VIS_P11_LUAD
+Group-based subsetting enabled: column='Group_ID', groups=LUAD
+
+===== RCTD on sample: VIS_P11_LUAD =====
+Sample VIS_P11_LUAD assigned to group: LUAD
+Building reference for group: LUAD
+Reference for LUAD built with 179910 cells and 17874 genes across 8 cell types.
+'as(<dgTMatrix>, "dgCMatrix")' is deprecated.
+Use 'as(., "CsparseMatrix")' instead.
+See help("Deprecated") and help("Matrix-deprecated").
+Begin: process_cell_type_info
+process_cell_type_info: number of cells in reference: 66450
+process_cell_type_info: number of genes in reference: 17874
+
+NonTumor_Epi    Tumor_Epi            B       Plasma            T           NK 
+       10000        10000         4594         9394        10000         2462 
+     Myeloid      Stromal 
+       10000        10000 
+End: process_cell_type_info
+create.RCTD: getting regression differentially expressed genes: 
+get_de_genes: NonTumor_Epi found DE genes: 363
+get_de_genes: Tumor_Epi found DE genes: 305
+get_de_genes: B found DE genes: 317
+get_de_genes: Plasma found DE genes: 66
+get_de_genes: T found DE genes: 336
+get_de_genes: NK found DE genes: 389
+get_de_genes: Myeloid found DE genes: 359
+get_de_genes: Stromal found DE genes: 392
+get_de_genes: total DE genes: 1990
+create.RCTD: getting platform effect normalization differentially expressed genes: 
+get_de_genes: NonTumor_Epi found DE genes: 751
+get_de_genes: Tumor_Epi found DE genes: 789
+get_de_genes: B found DE genes: 734
+get_de_genes: Plasma found DE genes: 119
+get_de_genes: T found DE genes: 811
+get_de_genes: NK found DE genes: 819
+get_de_genes: Myeloid found DE genes: 721
+get_de_genes: Stromal found DE genes: 812
+get_de_genes: total DE genes: 3898
+fitBulk: decomposing bulk
+chooseSigma: using initial Q_mat with sigma =  1
+starting worker pid=3519150 on localhost:11429 at 21:18:25.837
+starting worker pid=3519260 on localhost:11429 at 21:18:26.116
+starting worker pid=3519370 on localhost:11429 at 21:18:26.390
+starting worker pid=3519480 on localhost:11429 at 21:18:26.663
+starting worker pid=3519591 on localhost:11429 at 21:18:26.961
+starting worker pid=3519719 on localhost:11429 at 21:18:27.244
+starting worker pid=3519829 on localhost:11429 at 21:18:27.527
+starting worker pid=3519940 on localhost:11429 at 21:18:27.817
+starting worker pid=3520050 on localhost:11429 at 21:18:28.105
+starting worker pid=3520160 on localhost:11429 at 21:18:28.378
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2580141.88848192
+Sigma value:  0.84
+starting worker pid=3520478 on localhost:11429 at 21:19:40.167
+starting worker pid=3520588 on localhost:11429 at 21:19:40.440
+starting worker pid=3520713 on localhost:11429 at 21:19:40.689
+starting worker pid=3520825 on localhost:11429 at 21:19:40.978
+starting worker pid=3520935 on localhost:11429 at 21:19:41.231
+starting worker pid=3521046 on localhost:11429 at 21:19:41.495
+starting worker pid=3521156 on localhost:11429 at 21:19:41.769
+starting worker pid=3521266 on localhost:11429 at 21:19:42.041
+starting worker pid=3521376 on localhost:11429 at 21:19:42.297
+starting worker pid=3521486 on localhost:11429 at 21:19:42.564
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2532675.73087158
+Sigma value:  0.69
+starting worker pid=3521789 on localhost:11429 at 21:20:49.243
+starting worker pid=3521900 on localhost:11429 at 21:20:49.507
+starting worker pid=3522010 on localhost:11429 at 21:20:49.793
+starting worker pid=3522120 on localhost:11429 at 21:20:50.071
+starting worker pid=3522230 on localhost:11429 at 21:20:50.343
+starting worker pid=3522340 on localhost:11429 at 21:20:50.593
+starting worker pid=3522450 on localhost:11429 at 21:20:50.861
+starting worker pid=3522560 on localhost:11429 at 21:20:51.122
+starting worker pid=3522670 on localhost:11429 at 21:20:51.377
+starting worker pid=3522781 on localhost:11429 at 21:20:51.630
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2496921.86743607
+Sigma value:  0.61
+starting worker pid=3523108 on localhost:11429 at 21:21:59.346
+starting worker pid=3523265 on localhost:11429 at 21:21:59.608
+starting worker pid=3523375 on localhost:11429 at 21:21:59.864
+starting worker pid=3523485 on localhost:11429 at 21:22:00.117
+starting worker pid=3523595 on localhost:11429 at 21:22:00.364
+starting worker pid=3523705 on localhost:11429 at 21:22:00.632
+starting worker pid=3523815 on localhost:11429 at 21:22:00.905
+starting worker pid=3523926 on localhost:11429 at 21:22:01.168
+starting worker pid=3524036 on localhost:11429 at 21:22:01.427
+starting worker pid=3524146 on localhost:11429 at 21:22:01.681
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2482947.40368746
+Sigma value:  0.53
+starting worker pid=3524449 on localhost:11429 at 21:23:07.430
+starting worker pid=3524559 on localhost:11429 at 21:23:07.690
+starting worker pid=3524669 on localhost:11429 at 21:23:07.961
+starting worker pid=3524779 on localhost:11429 at 21:23:08.219
+starting worker pid=3524889 on localhost:11429 at 21:23:08.484
+starting worker pid=3524999 on localhost:11429 at 21:23:08.743
+starting worker pid=3525109 on localhost:11429 at 21:23:08.997
+starting worker pid=3525231 on localhost:11429 at 21:23:09.262
+starting worker pid=3525341 on localhost:11429 at 21:23:09.513
+starting worker pid=3525451 on localhost:11429 at 21:23:09.766
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2473662.69468493
+Sigma value:  0.46
+starting worker pid=3525759 on localhost:11429 at 21:24:19.096
+starting worker pid=3525869 on localhost:11429 at 21:24:19.362
+starting worker pid=3525979 on localhost:11429 at 21:24:19.613
+starting worker pid=3526089 on localhost:11429 at 21:24:19.879
+starting worker pid=3526200 on localhost:11429 at 21:24:20.134
+starting worker pid=3526310 on localhost:11429 at 21:24:20.388
+starting worker pid=3526420 on localhost:11429 at 21:24:20.658
+starting worker pid=3526530 on localhost:11429 at 21:24:20.933
+starting worker pid=3526640 on localhost:11429 at 21:24:21.201
+starting worker pid=3526762 on localhost:11429 at 21:24:21.461
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2470186.56299807
+Sigma value:  0.45
+starting worker pid=3527048 on localhost:11429 at 21:25:27.486
+starting worker pid=3527158 on localhost:11429 at 21:25:27.745
+starting worker pid=3527268 on localhost:11429 at 21:25:28.016
+starting worker pid=3527378 on localhost:11429 at 21:25:28.267
+starting worker pid=3527488 on localhost:11429 at 21:25:28.530
+starting worker pid=3527598 on localhost:11429 at 21:25:28.792
+starting worker pid=3527708 on localhost:11429 at 21:25:29.051
+starting worker pid=3527818 on localhost:11429 at 21:25:29.305
+starting worker pid=3527928 on localhost:11429 at 21:25:29.570
+starting worker pid=3528038 on localhost:11429 at 21:25:29.833
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Likelihood value: 2470087.7098086
+Sigma value:  0.45
+starting worker pid=3528396 on localhost:11429 at 21:26:57.235
+starting worker pid=3528517 on localhost:11429 at 21:26:57.673
+starting worker pid=3528627 on localhost:11429 at 21:26:58.060
+starting worker pid=3528738 on localhost:11429 at 21:26:58.363
+starting worker pid=3528848 on localhost:11429 at 21:26:58.649
+starting worker pid=3528958 on localhost:11429 at 21:26:58.959
+starting worker pid=3529068 on localhost:11429 at 21:26:59.313
+starting worker pid=3529178 on localhost:11429 at 21:26:59.587
+starting worker pid=3529288 on localhost:11429 at 21:26:59.854
+starting worker pid=3529398 on localhost:11429 at 21:27:00.133
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Loading required package: spacexr
+loaded spacexr and set parent environment
+Saved: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/deconvolution_rctd/major_prop.csv and /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/deconvolution_rctd/major_prop.pdf
+Warning messages:
+1: In Reference(counts_sc, labels, min_UMI = min_UMI) :
+  Reference: number of cells per cell type is 47416, larger than maximum allowable of 10000. Downsampling number of cells to: 10000
+2: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.6 GiB
+3: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+4: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+5: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+6: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+7: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+8: In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 1.3 GiB
+$ Rscript /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/RCTD_deconvolution.R --base_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input --sample_pattern VIS* --reference_rds /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds --cell_type_column MainType --max_cores 10 --doublet_mode full --min_umi 10 --group_column Group_ID --groups LUAD
+[Step 2] Resolution check
+================================================================================
+RESOLUTION AUDIT
+Base directory: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
+Pattern: VIS*
+Target MPP: 0.5
+Found 1 sample folders
+================================================================================
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he_raw
+
+================================================================================
+SUCCESSFUL READS
+================================================================================
+No successful reads!
+
+================================================================================
+FAILED READS
+================================================================================
+✗ VIS_P11_LUAD              | .tif | Error: TIFF missing XResolution or ResolutionUnit tags
+
+================================================================================
+SUMMARY
+================================================================================
+Total samples:        1
+Successful reads:     0
+Failed reads:         1
+
+Needs upscaling (mpp > 0.5): 0
+
+Failed by extension:
+  - .tif: 1 (VIS_P11_LUAD)
+
+⚠️ Issues detected - review before proceeding!
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/audit_resolution.py --base_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input --pattern VIS* --raw_flag he_raw --target_mpp 0.5
