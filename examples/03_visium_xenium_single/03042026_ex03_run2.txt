@@ -1,0 +1,452 @@
+============================================
+ MeowCat Example 3: Visium + Xenium (single pair)
+ Config: ./config.yaml
+============================================
+[Step 2] Resolution check
+================================================================================
+RESOLUTION AUDIT
+Base directory: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
+Pattern: VIS*
+Target MPP: 0.5
+Found 1 sample folders
+================================================================================
+
+================================================================================
+SUCCESSFUL READS
+================================================================================
+✓ VIS_P11_LUAD              | MPP: 0.251300 | Scale: 0.5026 | N/A | pixel-size-raw.txt (per-sample file)
+
+================================================================================
+FAILED READS
+================================================================================
+All images read successfully!
+
+================================================================================
+SUMMARY
+================================================================================
+Total samples:        1
+Successful reads:     1
+Failed reads:         0
+
+Resolution range:     0.251300 - 0.251300 MPP
+Resolution consistency: ✓ All same (0.2513 MPP)
+
+Needs upscaling (mpp > 0.5): 0
+
+✓ All checks passed!
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/audit_resolution.py --base_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input --pattern VIS* --raw_flag he_raw --target_mpp 0.5
+[Step 3] Image preprocessing — all samples (VIS* + XEN*)
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', sample='VIS_P11_LUAD', raw_flag='he_raw', pixel_size_raw=None)
+Using existing pixel-size-raw.txt: 0.2513000000 (auto-detection skipped)
+Running done, cost 0.00s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', scale_value=0.5026, pad=224, sample='VIS_P11_LUAD', raw_flag='he_raw')
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he_raw
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he_raw.tif
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he_raw.tif with shape (46601, 47981, 3)
+image_raw.shape =(46601, 47981, 3)
+Rescaling image (scale: 0.503)...
+4 sec
+(23421, 24115, 3)
+Image size: 23520x24192
+✅ Saved as JPG: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg
+running done,cost 52.56443452835083s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', save_dir='mask', pixel_size_raw=0.5, density_thresh=100, clean_background_flag=False, min_size=10, patch_size=16, pixel_size=0.5)
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg with shape (23520, 24192, 3)
+(23520, 24192, 3)
+[compute_metrics_memory_optimized] Current memory: 0.0828 GB; Peak memory: 1.7787 GB
+[compute_low_density_mask] Current memory: 0.0022 GB; Peak memory: 0.1341 GB
+Total selected for density filtering:  102588
+✅ Entropy map saved as 'glcm_entropy_map_colored.png'
+✅ Energy map saved as 'glcm_energy_map_colored.png'
+✅ Homogeneity map saved as 'glcm_homogeneity_map_colored.png'
+
+=== GLCM Metric Means ===
+   homogeneity    energy   entropy
+0     0.180914  0.034940  0.907327
+1     0.303469  0.083795  0.793733
+2     0.590308  0.299254  0.544211
+3     0.462859  0.158009  0.678797
+
+=== Cluster Scores ===
+Cluster 0: Score = -0.6915
+Cluster 1: Score = -0.4065
+Cluster 2: Score = 0.3454
+Cluster 3: Score = -0.0579
+
+=== Number of Observations per Cluster ===
+Cluster 0: 18322
+Cluster 1: 19866
+Cluster 2: 2672
+Cluster 3: 9208
+Total: 50068
+
+✅ Clustered texture map saved as 'cluster_labels_colored.png'
+[run_texture_analysis] Current memory: 0.0027 GB; Peak memory: 6.3590 GB
+[run_ratio_filtering] Current memory: 0.0021 GB; Peak memory: 0.0513 GB
+(2222640,)
+✅ Final masks saved in: mask
+[generate_final_mask] Current memory: 0.0000 GB; Peak memory: 0.5441 GB
+Running successfully!
+Running this file cost 107.22000646591187 s!!!
+Namespace(read_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', sample='VIS_P11_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', weight_dir='/project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, num_workers=8, clustering=False, use_cuML=False, output_format='h5ad')
+
+[INFO-START] Time: 2026-03-04 21:55:03
+[INFO-START] CPU usage: 86.8%
+[INFO-START] Memory usage: 55.5%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 3535172
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he
+image_path = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg with shape (23520, 24192, 3)
+raw image.shape = (23520, 24192, 3)
+grid mask.shape =(1470, 1512)
+pixel mask.shape =(23520, 24192)
+read image file, mask file(generated from HistoSweep) and create save dir cost 17s!!!
+name of model： cuda:0
+
+
+Create and setup model cost 15s!!!
+✅✅✅✅✅✅✅✅✅✅✅ Running full pipeline..✅✅✅✅✅✅✅✅✅✅✅
+Generating from full image(W=24416,H=23744) sliding window coordinates with patch_size=224, stride=112...
+✅ Total selected patches covering mask region: 35037
+Total number of 224*224*3 image tiles: 35037
+Original image shape:(23520,24192)
+Original token shape:(1470,1512)
+Padded image shape:(23744,24416)
+Padded token size:(1484,1526)
+Sliding Window Inference:   0%|                                              | 0/274 [00:00<?, ?it/s]Sliding Window Inference:   0%|▏                                     | 1/274 [00:04<19:40,  4.32s/it]Sliding Window Inference:   1%|▎                                     | 2/274 [00:04<08:57,  1.97s/it]Sliding Window Inference:   1%|▍                                     | 3/274 [00:04<05:28,  1.21s/it]Sliding Window Inference:   1%|▌                                     | 4/274 [00:05<03:49,  1.18it/s]Sliding Window Inference:   2%|▋                                     | 5/274 [00:05<02:55,  1.53it/s]Sliding Window Inference:   2%|▊                                     | 6/274 [00:05<02:20,  1.90it/s]Sliding Window Inference:   3%|▉                                     | 7/274 [00:06<01:57,  2.27it/s]Sliding Window Inference:   3%|█                                     | 8/274 [00:06<01:48,  2.45it/s]Sliding Window Inference:   3%|█▏                                    | 9/274 [00:06<01:37,  2.72it/s]Sliding Window Inference:   4%|█▎                                   | 10/274 [00:07<01:31,  2.88it/s]Sliding Window Inference:   4%|█▍                                   | 11/274 [00:07<01:33,  2.83it/s]Sliding Window Inference:   4%|█▌                                   | 12/274 [00:07<01:32,  2.85it/s]Sliding Window Inference:   5%|█▊                                   | 13/274 [00:08<01:30,  2.89it/s]Sliding Window Inference:   5%|█▉                                   | 14/274 [00:08<01:28,  2.94it/s]Sliding Window Inference:   5%|██                                   | 15/274 [00:08<01:29,  2.88it/s]Sliding Window Inference:   6%|██▏                                  | 16/274 [00:09<01:30,  2.86it/s]Sliding Window Inference:   6%|██▎                                  | 17/274 [00:09<01:30,  2.83it/s]Sliding Window Inference:   7%|██▍                                  | 18/274 [00:09<01:30,  2.83it/s]Sliding Window Inference:   7%|██▌                                  | 19/274 [00:10<01:26,  2.95it/s]Sliding Window Inference:   7%|██▋                                  | 20/274 [00:10<01:24,  2.99it/s]Sliding Window Inference:   8%|██▊                                  | 21/274 [00:10<01:24,  2.98it/s]Sliding Window Inference:   8%|██▉                                  | 22/274 [00:11<01:23,  3.04it/s]Sliding Window Inference:   8%|███                                  | 23/274 [00:11<01:22,  3.04it/s]Sliding Window Inference:   9%|███▏                                 | 24/274 [00:11<01:23,  2.99it/s]Sliding Window Inference:   9%|███▍                                 | 25/274 [00:12<01:24,  2.94it/s]Sliding Window Inference:   9%|███▌                                 | 26/274 [00:12<01:22,  2.99it/s]Sliding Window Inference:  10%|███▋                                 | 27/274 [00:12<01:20,  3.06it/s]Sliding Window Inference:  10%|███▊                                 | 28/274 [00:13<01:21,  3.03it/s]Sliding Window Inference:  11%|███▉                                 | 29/274 [00:13<01:20,  3.05it/s]Sliding Window Inference:  11%|████                                 | 30/274 [00:13<01:12,  3.34it/s]Sliding Window Inference:  11%|████▏                                | 31/274 [00:13<01:08,  3.57it/s]Sliding Window Inference:  12%|████▎                                | 32/274 [00:14<01:04,  3.75it/s]Sliding Window Inference:  12%|████▍                                | 33/274 [00:14<01:03,  3.80it/s]Sliding Window Inference:  12%|████▌                                | 34/274 [00:14<01:01,  3.91it/s]Sliding Window Inference:  13%|████▋                                | 35/274 [00:14<01:04,  3.71it/s]Sliding Window Inference:  13%|████▊                                | 36/274 [00:15<01:04,  3.69it/s]Sliding Window Inference:  14%|████▉                                | 37/274 [00:15<01:03,  3.73it/s]Sliding Window Inference:  14%|█████▏                               | 38/274 [00:15<01:01,  3.87it/s]Sliding Window Inference:  14%|█████▎                               | 39/274 [00:16<01:15,  3.13it/s]Sliding Window Inference:  15%|█████▍                               | 40/274 [00:16<01:10,  3.33it/s]Sliding Window Inference:  15%|█████▌                               | 41/274 [00:16<01:12,  3.21it/s]Sliding Window Inference:  15%|█████▋                               | 42/274 [00:17<01:07,  3.43it/s]Sliding Window Inference:  16%|█████▊                               | 43/274 [00:17<01:04,  3.60it/s]Sliding Window Inference:  16%|█████▉                               | 44/274 [00:17<01:02,  3.65it/s]Sliding Window Inference:  16%|██████                               | 45/274 [00:17<01:00,  3.79it/s]Sliding Window Inference:  17%|██████▏                              | 46/274 [00:17<00:58,  3.92it/s]Sliding Window Inference:  17%|██████▎                              | 47/274 [00:18<01:05,  3.46it/s]Sliding Window Inference:  18%|██████▍                              | 48/274 [00:18<01:12,  3.11it/s]Sliding Window Inference:  18%|██████▌                              | 49/274 [00:19<01:10,  3.20it/s]Sliding Window Inference:  18%|██████▊                              | 50/274 [00:19<01:09,  3.21it/s]Sliding Window Inference:  19%|██████▉                              | 51/274 [00:19<01:08,  3.26it/s]Sliding Window Inference:  19%|███████                              | 52/274 [00:19<01:07,  3.31it/s]Sliding Window Inference:  19%|███████▏                             | 53/274 [00:20<01:05,  3.36it/s]Sliding Window Inference:  20%|███████▎                             | 54/274 [00:20<01:05,  3.34it/s]Sliding Window Inference:  20%|███████▍                             | 55/274 [00:20<01:06,  3.29it/s]Sliding Window Inference:  20%|███████▌                             | 56/274 [00:21<01:09,  3.13it/s]Sliding Window Inference:  21%|███████▋                             | 57/274 [00:21<01:10,  3.08it/s]Sliding Window Inference:  21%|███████▊                             | 58/274 [00:21<01:04,  3.34it/s]Sliding Window Inference:  22%|███████▉                             | 59/274 [00:22<01:06,  3.24it/s]Sliding Window Inference:  22%|████████                             | 60/274 [00:22<01:07,  3.19it/s]Sliding Window Inference:  22%|████████▏                            | 61/274 [00:22<01:06,  3.21it/s]Sliding Window Inference:  23%|████████▎                            | 62/274 [00:22<01:01,  3.47it/s]Sliding Window Inference:  23%|████████▌                            | 63/274 [00:23<00:58,  3.63it/s]Sliding Window Inference:  23%|████████▋                            | 64/274 [00:23<00:59,  3.55it/s]Sliding Window Inference:  24%|████████▊                            | 65/274 [00:23<00:56,  3.69it/s]Sliding Window Inference:  24%|████████▉                            | 66/274 [00:23<00:53,  3.86it/s]Sliding Window Inference:  24%|█████████                            | 67/274 [00:24<00:51,  3.99it/s]Sliding Window Inference:  25%|█████████▏                           | 68/274 [00:24<00:51,  3.98it/s]Sliding Window Inference:  25%|█████████▎                           | 69/274 [00:24<00:51,  4.01it/s]Sliding Window Inference:  26%|█████████▍                           | 70/274 [00:25<00:55,  3.69it/s]Sliding Window Inference:  26%|█████████▌                           | 71/274 [00:25<00:57,  3.51it/s]Sliding Window Inference:  26%|█████████▋                           | 72/274 [00:25<01:00,  3.33it/s]Sliding Window Inference:  27%|█████████▊                           | 73/274 [00:26<01:01,  3.28it/s]Sliding Window Inference:  27%|█████████▉                           | 74/274 [00:26<00:58,  3.40it/s]Sliding Window Inference:  27%|██████████▏                          | 75/274 [00:26<00:59,  3.33it/s]Sliding Window Inference:  28%|██████████▎                          | 76/274 [00:26<00:59,  3.30it/s]Sliding Window Inference:  28%|██████████▍                          | 77/274 [00:27<01:00,  3.25it/s]Sliding Window Inference:  28%|██████████▌                          | 78/274 [00:27<01:00,  3.25it/s]Sliding Window Inference:  29%|██████████▋                          | 79/274 [00:27<00:59,  3.26it/s]Sliding Window Inference:  29%|██████████▊                          | 80/274 [00:28<01:02,  3.09it/s]Sliding Window Inference:  30%|██████████▉                          | 81/274 [00:28<00:57,  3.33it/s]Sliding Window Inference:  30%|███████████                          | 82/274 [00:28<00:58,  3.28it/s]Sliding Window Inference:  30%|███████████▏                         | 83/274 [00:29<00:59,  3.22it/s]Sliding Window Inference:  31%|███████████▎                         | 84/274 [00:29<01:00,  3.13it/s]Sliding Window Inference:  31%|███████████▍                         | 85/274 [00:29<00:56,  3.33it/s]Sliding Window Inference:  31%|███████████▌                         | 86/274 [00:29<00:56,  3.31it/s]Sliding Window Inference:  32%|███████████▋                         | 87/274 [00:30<00:56,  3.34it/s]Sliding Window Inference:  32%|███████████▉                         | 88/274 [00:30<00:55,  3.38it/s]Sliding Window Inference:  32%|████████████                         | 89/274 [00:30<00:54,  3.41it/s]Sliding Window Inference:  33%|████████████▏                        | 90/274 [00:31<00:54,  3.38it/s]Sliding Window Inference:  33%|████████████▎                        | 91/274 [00:31<00:55,  3.31it/s]Sliding Window Inference:  34%|████████████▍                        | 92/274 [00:31<00:56,  3.21it/s]Sliding Window Inference:  34%|████████████▌                        | 93/274 [00:32<00:54,  3.32it/s]Sliding Window Inference:  34%|████████████▋                        | 94/274 [00:32<00:54,  3.31it/s]Sliding Window Inference:  35%|████████████▊                        | 95/274 [00:32<00:54,  3.28it/s]Sliding Window Inference:  35%|████████████▉                        | 96/274 [00:33<00:54,  3.26it/s]Sliding Window Inference:  35%|█████████████                        | 97/274 [00:33<00:56,  3.13it/s]Sliding Window Inference:  36%|█████████████▏                       | 98/274 [00:33<00:56,  3.12it/s]Sliding Window Inference:  36%|█████████████▎                       | 99/274 [00:33<00:55,  3.17it/s]Sliding Window Inference:  36%|█████████████▏                      | 100/274 [00:34<00:54,  3.20it/s]Sliding Window Inference:  37%|█████████████▎                      | 101/274 [00:34<00:53,  3.24it/s]Sliding Window Inference:  37%|█████████████▍                      | 102/274 [00:34<00:52,  3.26it/s]Sliding Window Inference:  38%|█████████████▌                      | 103/274 [00:35<00:53,  3.22it/s]Sliding Window Inference:  38%|█████████████▋                      | 104/274 [00:35<00:54,  3.10it/s]Sliding Window Inference:  38%|█████████████▊                      | 105/274 [00:35<00:54,  3.09it/s]Sliding Window Inference:  39%|█████████████▉                      | 106/274 [00:36<00:54,  3.06it/s]Sliding Window Inference:  39%|██████████████                      | 107/274 [00:36<00:56,  2.98it/s]Sliding Window Inference:  39%|██████████████▏                     | 108/274 [00:36<00:53,  3.08it/s]Sliding Window Inference:  40%|██████████████▎                     | 109/274 [00:37<00:50,  3.26it/s]Sliding Window Inference:  40%|██████████████▍                     | 110/274 [00:37<00:51,  3.18it/s]Sliding Window Inference:  41%|██████████████▌                     | 111/274 [00:37<00:50,  3.23it/s]Sliding Window Inference:  41%|██████████████▋                     | 112/274 [00:38<00:49,  3.28it/s]Sliding Window Inference:  41%|██████████████▊                     | 113/274 [00:38<00:50,  3.17it/s]Sliding Window Inference:  42%|██████████████▉                     | 114/274 [00:38<00:50,  3.16it/s]Sliding Window Inference:  42%|███████████████                     | 115/274 [00:39<00:49,  3.21it/s]Sliding Window Inference:  42%|███████████████▏                    | 116/274 [00:39<00:48,  3.25it/s]Sliding Window Inference:  43%|███████████████▎                    | 117/274 [00:39<00:47,  3.30it/s]Sliding Window Inference:  43%|███████████████▌                    | 118/274 [00:39<00:49,  3.16it/s]Sliding Window Inference:  43%|███████████████▋                    | 119/274 [00:40<00:45,  3.38it/s]Sliding Window Inference:  44%|███████████████▊                    | 120/274 [00:40<00:42,  3.64it/s]Sliding Window Inference:  44%|███████████████▉                    | 121/274 [00:40<00:41,  3.67it/s]Sliding Window Inference:  45%|████████████████                    | 122/274 [00:40<00:40,  3.73it/s]Sliding Window Inference:  45%|████████████████▏                   | 123/274 [00:41<00:39,  3.83it/s]Sliding Window Inference:  45%|████████████████▎                   | 124/274 [00:41<00:41,  3.60it/s]Sliding Window Inference:  46%|████████████████▍                   | 125/274 [00:41<00:39,  3.75it/s]Sliding Window Inference:  46%|████████████████▌                   | 126/274 [00:41<00:37,  3.92it/s]Sliding Window Inference:  46%|████████████████▋                   | 127/274 [00:42<00:36,  4.06it/s]Sliding Window Inference:  47%|████████████████▊                   | 128/274 [00:42<00:35,  4.16it/s]Sliding Window Inference:  47%|████████████████▉                   | 129/274 [00:42<00:34,  4.23it/s]Sliding Window Inference:  47%|█████████████████                   | 130/274 [00:42<00:33,  4.31it/s]Sliding Window Inference:  48%|█████████████████▏                  | 131/274 [00:43<00:32,  4.35it/s]Sliding Window Inference:  48%|█████████████████▎                  | 132/274 [00:43<00:33,  4.18it/s]Sliding Window Inference:  49%|█████████████████▍                  | 133/274 [00:43<00:33,  4.24it/s]Sliding Window Inference:  49%|█████████████████▌                  | 134/274 [00:43<00:32,  4.27it/s]Sliding Window Inference:  49%|█████████████████▋                  | 135/274 [00:44<00:32,  4.27it/s]Sliding Window Inference:  50%|█████████████████▊                  | 136/274 [00:44<00:32,  4.30it/s]Sliding Window Inference:  50%|██████████████████                  | 137/274 [00:44<00:31,  4.31it/s]Sliding Window Inference:  50%|██████████████████▏                 | 138/274 [00:44<00:31,  4.36it/s]Sliding Window Inference:  51%|██████████████████▎                 | 139/274 [00:45<00:31,  4.28it/s]Sliding Window Inference:  51%|██████████████████▍                 | 140/274 [00:45<00:31,  4.25it/s]Sliding Window Inference:  51%|██████████████████▌                 | 141/274 [00:45<00:32,  4.08it/s]Sliding Window Inference:  52%|██████████████████▋                 | 142/274 [00:45<00:32,  4.09it/s]Sliding Window Inference:  52%|██████████████████▊                 | 143/274 [00:46<00:32,  4.07it/s]Sliding Window Inference:  53%|██████████████████▉                 | 144/274 [00:46<00:33,  3.83it/s]Sliding Window Inference:  53%|███████████████████                 | 145/274 [00:46<00:34,  3.69it/s]Sliding Window Inference:  53%|███████████████████▏                | 146/274 [00:46<00:35,  3.61it/s]Sliding Window Inference:  54%|███████████████████▎                | 147/274 [00:47<00:35,  3.56it/s]Sliding Window Inference:  54%|███████████████████▍                | 148/274 [00:47<00:38,  3.23it/s]Sliding Window Inference:  54%|███████████████████▌                | 149/274 [00:47<00:39,  3.18it/s]Sliding Window Inference:  55%|███████████████████▋                | 150/274 [00:48<00:36,  3.43it/s]Sliding Window Inference:  55%|███████████████████▊                | 151/274 [00:48<00:33,  3.68it/s]Sliding Window Inference:  55%|███████████████████▉                | 152/274 [00:48<00:31,  3.88it/s]Sliding Window Inference:  56%|████████████████████                | 153/274 [00:48<00:30,  4.02it/s]Sliding Window Inference:  56%|████████████████████▏               | 154/274 [00:49<00:29,  4.13it/s]Sliding Window Inference:  57%|████████████████████▎               | 155/274 [00:49<00:27,  4.26it/s]Sliding Window Inference:  57%|████████████████████▍               | 156/274 [00:49<00:27,  4.26it/s]Sliding Window Inference:  57%|████████████████████▋               | 157/274 [00:49<00:27,  4.26it/s]Sliding Window Inference:  58%|████████████████████▊               | 158/274 [00:49<00:27,  4.26it/s]Sliding Window Inference:  58%|████████████████████▉               | 159/274 [00:50<00:27,  4.18it/s]Sliding Window Inference:  58%|█████████████████████               | 160/274 [00:50<00:27,  4.19it/s]Sliding Window Inference:  59%|█████████████████████▏              | 161/274 [00:50<00:26,  4.20it/s]Sliding Window Inference:  59%|█████████████████████▎              | 162/274 [00:50<00:28,  3.89it/s]Sliding Window Inference:  59%|█████████████████████▍              | 163/274 [00:51<00:27,  3.99it/s]Sliding Window Inference:  60%|█████████████████████▌              | 164/274 [00:51<00:27,  4.04it/s]Sliding Window Inference:  60%|█████████████████████▋              | 165/274 [00:51<00:26,  4.12it/s]Sliding Window Inference:  61%|█████████████████████▊              | 166/274 [00:51<00:25,  4.20it/s]Sliding Window Inference:  61%|█████████████████████▉              | 167/274 [00:52<00:25,  4.18it/s]Sliding Window Inference:  61%|██████████████████████              | 168/274 [00:52<00:25,  4.23it/s]Sliding Window Inference:  62%|██████████████████████▏             | 169/274 [00:52<00:24,  4.28it/s]Sliding Window Inference:  62%|██████████████████████▎             | 170/274 [00:52<00:24,  4.27it/s]Sliding Window Inference:  62%|██████████████████████▍             | 171/274 [00:53<00:24,  4.29it/s]Sliding Window Inference:  63%|██████████████████████▌             | 172/274 [00:53<00:23,  4.28it/s]Sliding Window Inference:  63%|██████████████████████▋             | 173/274 [00:53<00:23,  4.31it/s]Sliding Window Inference:  64%|██████████████████████▊             | 174/274 [00:53<00:23,  4.19it/s]Sliding Window Inference:  64%|██████████████████████▉             | 175/274 [00:54<00:24,  4.02it/s]Sliding Window Inference:  64%|███████████████████████             | 176/274 [00:54<00:25,  3.84it/s]Sliding Window Inference:  65%|███████████████████████▎            | 177/274 [00:54<00:25,  3.78it/s]Sliding Window Inference:  65%|███████████████████████▍            | 178/274 [00:54<00:26,  3.69it/s]Sliding Window Inference:  65%|███████████████████████▌            | 179/274 [00:55<00:25,  3.74it/s]Sliding Window Inference:  66%|███████████████████████▋            | 180/274 [00:55<00:25,  3.71it/s]Sliding Window Inference:  66%|███████████████████████▊            | 181/274 [00:55<00:24,  3.75it/s]Sliding Window Inference:  66%|███████████████████████▉            | 182/274 [00:55<00:23,  3.86it/s]Sliding Window Inference:  67%|████████████████████████            | 183/274 [00:56<00:23,  3.87it/s]Sliding Window Inference:  67%|████████████████████████▏           | 184/274 [00:56<00:23,  3.85it/s]Sliding Window Inference:  68%|████████████████████████▎           | 185/274 [00:56<00:23,  3.86it/s]Sliding Window Inference:  68%|████████████████████████▍           | 186/274 [00:56<00:23,  3.81it/s]Sliding Window Inference:  68%|████████████████████████▌           | 187/274 [00:57<00:22,  3.86it/s]Sliding Window Inference:  69%|████████████████████████▋           | 188/274 [00:57<00:22,  3.80it/s]Sliding Window Inference:  69%|████████████████████████▊           | 189/274 [00:57<00:21,  3.92it/s]Sliding Window Inference:  69%|████████████████████████▉           | 190/274 [00:58<00:22,  3.65it/s]Sliding Window Inference:  70%|█████████████████████████           | 191/274 [00:58<00:21,  3.80it/s]Sliding Window Inference:  70%|█████████████████████████▏          | 192/274 [00:58<00:21,  3.78it/s]Sliding Window Inference:  70%|█████████████████████████▎          | 193/274 [00:58<00:21,  3.85it/s]Sliding Window Inference:  71%|█████████████████████████▍          | 194/274 [00:59<00:20,  3.82it/s]Sliding Window Inference:  71%|█████████████████████████▌          | 195/274 [00:59<00:21,  3.76it/s]Sliding Window Inference:  72%|█████████████████████████▊          | 196/274 [00:59<00:24,  3.21it/s]Sliding Window Inference:  72%|█████████████████████████▉          | 197/274 [01:00<00:24,  3.19it/s]Sliding Window Inference:  72%|██████████████████████████          | 198/274 [01:00<00:23,  3.18it/s]Sliding Window Inference:  73%|██████████████████████████▏         | 199/274 [01:00<00:22,  3.37it/s]Sliding Window Inference:  73%|██████████████████████████▎         | 200/274 [01:00<00:22,  3.30it/s]Sliding Window Inference:  73%|██████████████████████████▍         | 201/274 [01:01<00:21,  3.44it/s]Sliding Window Inference:  74%|██████████████████████████▌         | 202/274 [01:01<00:19,  3.62it/s]Sliding Window Inference:  74%|██████████████████████████▋         | 203/274 [01:01<00:19,  3.65it/s]Sliding Window Inference:  74%|██████████████████████████▊         | 204/274 [01:02<00:19,  3.63it/s]Sliding Window Inference:  75%|██████████████████████████▉         | 205/274 [01:02<00:18,  3.73it/s]Sliding Window Inference:  75%|███████████████████████████         | 206/274 [01:02<00:17,  3.82it/s]Sliding Window Inference:  76%|███████████████████████████▏        | 207/274 [01:02<00:17,  3.91it/s]Sliding Window Inference:  76%|███████████████████████████▎        | 208/274 [01:03<00:16,  3.90it/s]Sliding Window Inference:  76%|███████████████████████████▍        | 209/274 [01:03<00:17,  3.68it/s]Sliding Window Inference:  77%|███████████████████████████▌        | 210/274 [01:03<00:17,  3.72it/s]Sliding Window Inference:  77%|███████████████████████████▋        | 211/274 [01:03<00:17,  3.70it/s]Sliding Window Inference:  77%|███████████████████████████▊        | 212/274 [01:04<00:16,  3.76it/s]Sliding Window Inference:  78%|███████████████████████████▉        | 213/274 [01:04<00:16,  3.74it/s]Sliding Window Inference:  78%|████████████████████████████        | 214/274 [01:04<00:16,  3.67it/s]Sliding Window Inference:  78%|████████████████████████████▏       | 215/274 [01:04<00:15,  3.75it/s]Sliding Window Inference:  79%|████████████████████████████▍       | 216/274 [01:05<00:15,  3.76it/s]Sliding Window Inference:  79%|████████████████████████████▌       | 217/274 [01:05<00:14,  3.82it/s]Sliding Window Inference:  80%|████████████████████████████▋       | 218/274 [01:05<00:14,  3.89it/s]Sliding Window Inference:  80%|████████████████████████████▊       | 219/274 [01:05<00:14,  3.83it/s]Sliding Window Inference:  80%|████████████████████████████▉       | 220/274 [01:06<00:13,  3.90it/s]Sliding Window Inference:  81%|█████████████████████████████       | 221/274 [01:06<00:13,  3.82it/s]Sliding Window Inference:  81%|█████████████████████████████▏      | 222/274 [01:06<00:13,  3.91it/s]Sliding Window Inference:  81%|█████████████████████████████▎      | 223/274 [01:07<00:13,  3.87it/s]Sliding Window Inference:  82%|█████████████████████████████▍      | 224/274 [01:07<00:12,  3.85it/s]Sliding Window Inference:  82%|█████████████████████████████▌      | 225/274 [01:07<00:12,  3.91it/s]Sliding Window Inference:  82%|█████████████████████████████▋      | 226/274 [01:07<00:13,  3.66it/s]Sliding Window Inference:  83%|█████████████████████████████▊      | 227/274 [01:08<00:13,  3.51it/s]Sliding Window Inference:  83%|█████████████████████████████▉      | 228/274 [01:08<00:13,  3.41it/s]Sliding Window Inference:  84%|██████████████████████████████      | 229/274 [01:08<00:12,  3.51it/s]Sliding Window Inference:  84%|██████████████████████████████▏     | 230/274 [01:08<00:12,  3.57it/s]Sliding Window Inference:  84%|██████████████████████████████▎     | 231/274 [01:09<00:12,  3.54it/s]Sliding Window Inference:  85%|██████████████████████████████▍     | 232/274 [01:09<00:11,  3.64it/s]Sliding Window Inference:  85%|██████████████████████████████▌     | 233/274 [01:09<00:11,  3.63it/s]Sliding Window Inference:  85%|██████████████████████████████▋     | 234/274 [01:10<00:10,  3.73it/s]Sliding Window Inference:  86%|██████████████████████████████▉     | 235/274 [01:10<00:10,  3.75it/s]Sliding Window Inference:  86%|███████████████████████████████     | 236/274 [01:10<00:10,  3.64it/s]Sliding Window Inference:  86%|███████████████████████████████▏    | 237/274 [01:10<00:10,  3.63it/s]Sliding Window Inference:  87%|███████████████████████████████▎    | 238/274 [01:11<00:09,  3.68it/s]Sliding Window Inference:  87%|███████████████████████████████▍    | 239/274 [01:11<00:09,  3.75it/s]Sliding Window Inference:  88%|███████████████████████████████▌    | 240/274 [01:11<00:08,  3.83it/s]Sliding Window Inference:  88%|███████████████████████████████▋    | 241/274 [01:11<00:08,  3.82it/s]Sliding Window Inference:  88%|███████████████████████████████▊    | 242/274 [01:12<00:08,  3.88it/s]Sliding Window Inference:  89%|███████████████████████████████▉    | 243/274 [01:12<00:08,  3.84it/s]Sliding Window Inference:  89%|████████████████████████████████    | 244/274 [01:12<00:07,  3.76it/s]Sliding Window Inference:  89%|████████████████████████████████▏   | 245/274 [01:12<00:07,  3.77it/s]Sliding Window Inference:  90%|████████████████████████████████▎   | 246/274 [01:13<00:07,  3.74it/s]Sliding Window Inference:  90%|████████████████████████████████▍   | 247/274 [01:13<00:07,  3.73it/s]Sliding Window Inference:  91%|████████████████████████████████▌   | 248/274 [01:13<00:06,  3.77it/s]Sliding Window Inference:  91%|████████████████████████████████▋   | 249/274 [01:14<00:06,  3.73it/s]Sliding Window Inference:  91%|████████████████████████████████▊   | 250/274 [01:14<00:06,  3.84it/s]Sliding Window Inference:  92%|████████████████████████████████▉   | 251/274 [01:14<00:05,  3.89it/s]Sliding Window Inference:  92%|█████████████████████████████████   | 252/274 [01:14<00:05,  3.88it/s]Sliding Window Inference:  92%|█████████████████████████████████▏  | 253/274 [01:15<00:05,  3.94it/s]Sliding Window Inference:  93%|█████████████████████████████████▎  | 254/274 [01:15<00:05,  3.83it/s]Sliding Window Inference:  93%|█████████████████████████████████▌  | 255/274 [01:15<00:04,  3.83it/s]Sliding Window Inference:  93%|█████████████████████████████████▋  | 256/274 [01:15<00:04,  3.73it/s]Sliding Window Inference:  94%|█████████████████████████████████▊  | 257/274 [01:16<00:04,  3.80it/s]Sliding Window Inference:  94%|█████████████████████████████████▉  | 258/274 [01:16<00:04,  3.88it/s]Sliding Window Inference:  95%|██████████████████████████████████  | 259/274 [01:16<00:03,  3.91it/s]Sliding Window Inference:  95%|██████████████████████████████████▏ | 260/274 [01:16<00:03,  4.03it/s]Sliding Window Inference:  95%|██████████████████████████████████▎ | 261/274 [01:17<00:03,  3.96it/s]Sliding Window Inference:  96%|██████████████████████████████████▍ | 262/274 [01:17<00:02,  4.03it/s]Sliding Window Inference:  96%|██████████████████████████████████▌ | 263/274 [01:17<00:02,  3.86it/s]Sliding Window Inference:  96%|██████████████████████████████████▋ | 264/274 [01:17<00:02,  3.90it/s]Sliding Window Inference:  97%|██████████████████████████████████▊ | 265/274 [01:18<00:02,  4.00it/s]Sliding Window Inference:  97%|██████████████████████████████████▉ | 266/274 [01:18<00:02,  3.86it/s]Sliding Window Inference:  97%|███████████████████████████████████ | 267/274 [01:18<00:01,  3.72it/s]Sliding Window Inference:  98%|███████████████████████████████████▏| 268/274 [01:18<00:01,  3.76it/s]Sliding Window Inference:  98%|███████████████████████████████████▎| 269/274 [01:19<00:01,  3.79it/s]Sliding Window Inference:  99%|███████████████████████████████████▍| 270/274 [01:19<00:01,  3.83it/s]Sliding Window Inference:  99%|███████████████████████████████████▌| 271/274 [01:19<00:00,  3.93it/s]Sliding Window Inference:  99%|███████████████████████████████████▋| 272/274 [01:19<00:00,  3.97it/s]Sliding Window Inference: 100%|███████████████████████████████████▊| 273/274 [01:20<00:00,  4.03it/s]Sliding Window Inference: 100%|████████████████████████████████████| 274/274 [01:20<00:00,  4.42it/s]Sliding Window Inference: 100%|████████████████████████████████████| 274/274 [01:20<00:00,  3.39it/s]
+local_emb.shape = (35037, 14, 14, 1024)
+coord.shape = (35037, 2)
+grid_coords.shape = (35037, 2)
+global_emb.shape = (35037, 1024)
+AnnData object with n_obs × n_vars = 35037 × 1024
+    obs: 'sample'
+    obsm: 'spatial'
+Saved embedding to /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/global_emb.h5ad with shape (35037, 1024) cost 2s
+extract 16_16_features cost 108s!!!
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 2.6395 GB
+[TIME] main() cost: 141.33 s
+All steps cost 141.7454047203064s!!!!
+
+[INFO-END] Time: 2026-03-04 21:57:25
+[INFO-END] CPU usage: 34.0%
+[INFO-END] Memory usage: 57.0%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 3535172
+[INFO-END] Total runtime: 141.75 seconds
+Maximum CPU Memory Usage：22.11 GB
+Maximum CPU Memory Usage：22.11 GB
+Namespace(read_global_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', read_local_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', sample='VIS_P11_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/', mode='single', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, clustering=False, use_cuML=False, input_format='h5ad')
+
+[INFO-START] Time: 2026-03-04 21:57:36
+[INFO-START] CPU usage: 14.9%
+[INFO-START] Memory usage: 55.7%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 3535771
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD//mask/mask-small.png
+grid mask.shape =(1470, 1512)
+mode =single ,global_emb.shape = (35037, 1024)
+mode =single ,local_emb.shape = (35037, 14, 14, 1024)
+mode =single ,coords.shape = (35037, 2)
+mode =single ,grid_coords.shape = (35037, 2)
+mode =single, W_pad =24416,H_pad = 23744
+mode =single, W_tokens =1526,H_tokens = 1484
+mode =single, W_ori =24192,H_ori = 23520
+mode =single, W_out =1512,H_out = 1470
+final_map.dtype = float16
+final_map.shape=(1470, 1512, 2048)
+extract fused features cost 13s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+AnnData object with n_obs × n_vars = 987458 × 2048
+    obs: 'sample'
+    obsm: 'spatial'
+
+
+✅ 4. save embedding and coordinate to h5ad...
+Saved embedding to /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/single_super_emb.h5ad with shape (987458, 2048) cost 131s
+
+
+🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 Congratulations, Pipeline completed sucessfully!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 0.0000 GB
+[TIME] main() cost: 222.03 s
+All steps cost 222.32026290893555s!!!!
+
+[INFO-END] Time: 2026-03-04 22:01:19
+[INFO-END] CPU usage: 16.5%
+[INFO-END] Memory usage: 55.8%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 3535771
+[INFO-END] Total runtime: 222.32 seconds
+Maximum CPU Memory Usage：22.64 GB
+Maximum CPU Memory Usage：22.64 GB
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', sample='XEN_P11_LUAD', raw_flag='he_raw', pixel_size_raw=None)
+Using existing pixel-size-raw.txt: 0.5000000000 (auto-detection skipped)
+Running done, cost 0.00s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', scale_value=1.0, pad=224, sample='XEN_P11_LUAD', raw_flag='he_raw')
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he_raw
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he_raw.tif
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he_raw.tif with shape (24576, 25600, 3)
+image_raw.shape =(24576, 25600, 3)
+Rescaling image (scale: 1.000)...
+2 sec
+(24576, 25600, 3)
+Image size: 24640x25760
+✅ Saved as JPG: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he.jpg
+running done,cost 25.64429807662964s
+Namespace(read_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', save_dir='mask', pixel_size_raw=0.5, density_thresh=100, clean_background_flag=False, min_size=10, patch_size=16, pixel_size=0.5)
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he.jpg with shape (24640, 25760, 3)
+(24640, 25760, 3)
+[compute_metrics_memory_optimized] Current memory: 0.0924 GB; Peak memory: 1.9643 GB
+[compute_low_density_mask] Current memory: 0.0024 GB; Peak memory: 0.1495 GB
+Total selected for density filtering:  117634
+✅ Entropy map saved as 'glcm_entropy_map_colored.png'
+✅ Energy map saved as 'glcm_energy_map_colored.png'
+✅ Homogeneity map saved as 'glcm_homogeneity_map_colored.png'
+
+=== GLCM Metric Means ===
+   homogeneity    energy   entropy
+0     0.341826  0.088140  0.775428
+1     0.241363  0.040166  0.885003
+2     0.603160  0.321740  0.537198
+3     0.454211  0.172590  0.721798
+
+=== Cluster Scores ===
+Cluster 0: Score = -0.3455
+Cluster 1: Score = -0.6035
+Cluster 2: Score = 0.3877
+Cluster 3: Score = -0.0950
+
+=== Number of Observations per Cluster ===
+Cluster 0: 21907
+Cluster 1: 23757
+Cluster 2: 7795
+Cluster 3: 14037
+Total: 67496
+
+✅ Clustered texture map saved as 'cluster_labels_colored.png'
+[run_texture_analysis] Current memory: 0.0030 GB; Peak memory: 7.0936 GB
+[run_ratio_filtering] Current memory: 0.0023 GB; Peak memory: 0.0569 GB
+(2479400,)
+✅ Final masks saved in: mask
+[generate_final_mask] Current memory: 0.0000 GB; Peak memory: 0.6061 GB
+Running successfully!
+Running this file cost 98.81309247016907 s!!!
+Namespace(read_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', sample='XEN_P11_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', weight_dir='/project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, num_workers=8, clustering=False, use_cuML=False, output_format='h5ad')
+
+[INFO-START] Time: 2026-03-04 22:03:47
+[INFO-START] CPU usage: 16.4%
+[INFO-START] Memory usage: 55.1%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 3537296
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he
+image_path = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he.jpg
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he.jpg with shape (24640, 25760, 3)
+raw image.shape = (24640, 25760, 3)
+grid mask.shape =(1540, 1610)
+pixel mask.shape =(24640, 25760)
+read image file, mask file(generated from HistoSweep) and create save dir cost 9s!!!
+name of model： cuda:0
+
+
+Create and setup model cost 10s!!!
+✅✅✅✅✅✅✅✅✅✅✅ Running full pipeline..✅✅✅✅✅✅✅✅✅✅✅
+Generating from full image(W=25984,H=24864) sliding window coordinates with patch_size=224, stride=112...
+✅ Total selected patches covering mask region: 39089
+Total number of 224*224*3 image tiles: 39089
+Original image shape:(24640,25760)
+Original token shape:(1540,1610)
+Padded image shape:(24864,25984)
+Padded token size:(1554,1624)
+Sliding Window Inference:   0%|                                              | 0/306 [00:00<?, ?it/s]Sliding Window Inference:   0%|                                      | 1/306 [00:02<13:10,  2.59s/it]Sliding Window Inference:   1%|▏                                     | 2/306 [00:02<06:15,  1.24s/it]Sliding Window Inference:   1%|▎                                     | 3/306 [00:03<04:04,  1.24it/s]Sliding Window Inference:   1%|▍                                     | 4/306 [00:03<03:02,  1.65it/s]Sliding Window Inference:   2%|▌                                     | 5/306 [00:03<02:30,  1.99it/s]Sliding Window Inference:   2%|▋                                     | 6/306 [00:04<02:09,  2.31it/s]Sliding Window Inference:   2%|▊                                     | 7/306 [00:04<01:55,  2.59it/s]Sliding Window Inference:   3%|▉                                     | 8/306 [00:04<01:47,  2.78it/s]Sliding Window Inference:   3%|█                                     | 9/306 [00:04<01:39,  2.97it/s]Sliding Window Inference:   3%|█▏                                   | 10/306 [00:05<01:37,  3.02it/s]Sliding Window Inference:   4%|█▎                                   | 11/306 [00:05<01:33,  3.15it/s]Sliding Window Inference:   4%|█▍                                   | 12/306 [00:05<01:31,  3.22it/s]Sliding Window Inference:   4%|█▌                                   | 13/306 [00:06<01:28,  3.30it/s]Sliding Window Inference:   5%|█▋                                   | 14/306 [00:06<01:26,  3.37it/s]Sliding Window Inference:   5%|█▊                                   | 15/306 [00:06<01:28,  3.29it/s]Sliding Window Inference:   5%|█▉                                   | 16/306 [00:07<01:26,  3.35it/s]Sliding Window Inference:   6%|██                                   | 17/306 [00:07<01:32,  3.14it/s]Sliding Window Inference:   6%|██▏                                  | 18/306 [00:07<01:29,  3.21it/s]Sliding Window Inference:   6%|██▎                                  | 19/306 [00:08<01:28,  3.24it/s]Sliding Window Inference:   7%|██▍                                  | 20/306 [00:08<01:26,  3.29it/s]Sliding Window Inference:   7%|██▌                                  | 21/306 [00:08<01:26,  3.31it/s]Sliding Window Inference:   7%|██▋                                  | 22/306 [00:08<01:23,  3.40it/s]Sliding Window Inference:   8%|██▊                                  | 23/306 [00:09<01:22,  3.44it/s]Sliding Window Inference:   8%|██▉                                  | 24/306 [00:09<01:24,  3.32it/s]Sliding Window Inference:   8%|███                                  | 25/306 [00:09<01:23,  3.36it/s]Sliding Window Inference:   8%|███▏                                 | 26/306 [00:10<01:25,  3.27it/s]Sliding Window Inference:   9%|███▎                                 | 27/306 [00:10<01:28,  3.14it/s]Sliding Window Inference:   9%|███▍                                 | 28/306 [00:10<01:28,  3.14it/s]Sliding Window Inference:   9%|███▌                                 | 29/306 [00:11<01:22,  3.37it/s]Sliding Window Inference:  10%|███▋                                 | 30/306 [00:11<01:28,  3.10it/s]Sliding Window Inference:  10%|███▋                                 | 31/306 [00:11<01:31,  3.02it/s]Sliding Window Inference:  10%|███▊                                 | 32/306 [00:12<01:37,  2.80it/s]Sliding Window Inference:  11%|███▉                                 | 33/306 [00:12<01:37,  2.79it/s]Sliding Window Inference:  11%|████                                 | 34/306 [00:12<01:36,  2.80it/s]Sliding Window Inference:  11%|████▏                                | 35/306 [00:13<01:37,  2.77it/s]Sliding Window Inference:  12%|████▎                                | 36/306 [00:13<01:36,  2.79it/s]Sliding Window Inference:  12%|████▍                                | 37/306 [00:13<01:36,  2.79it/s]Sliding Window Inference:  12%|████▌                                | 38/306 [00:14<01:37,  2.76it/s]Sliding Window Inference:  13%|████▋                                | 39/306 [00:14<01:37,  2.74it/s]Sliding Window Inference:  13%|████▊                                | 40/306 [00:15<01:41,  2.62it/s]Sliding Window Inference:  13%|████▉                                | 41/306 [00:15<01:41,  2.60it/s]Sliding Window Inference:  14%|█████                                | 42/306 [00:15<01:44,  2.53it/s]Sliding Window Inference:  14%|█████▏                               | 43/306 [00:16<01:43,  2.55it/s]Sliding Window Inference:  14%|█████▎                               | 44/306 [00:16<01:45,  2.49it/s]Sliding Window Inference:  15%|█████▍                               | 45/306 [00:17<01:44,  2.51it/s]Sliding Window Inference:  15%|█████▌                               | 46/306 [00:17<01:35,  2.72it/s]Sliding Window Inference:  15%|█████▋                               | 47/306 [00:17<01:30,  2.87it/s]Sliding Window Inference:  16%|█████▊                               | 48/306 [00:18<01:26,  2.97it/s]Sliding Window Inference:  16%|█████▉                               | 49/306 [00:18<01:23,  3.07it/s]Sliding Window Inference:  16%|██████                               | 50/306 [00:18<01:22,  3.10it/s]Sliding Window Inference:  17%|██████▏                              | 51/306 [00:18<01:20,  3.15it/s]Sliding Window Inference:  17%|██████▎                              | 52/306 [00:19<01:21,  3.11it/s]Sliding Window Inference:  17%|██████▍                              | 53/306 [00:19<01:20,  3.12it/s]Sliding Window Inference:  18%|██████▌                              | 54/306 [00:19<01:21,  3.08it/s]Sliding Window Inference:  18%|██████▋                              | 55/306 [00:20<01:22,  3.04it/s]Sliding Window Inference:  18%|██████▊                              | 56/306 [00:20<01:21,  3.06it/s]Sliding Window Inference:  19%|██████▉                              | 57/306 [00:20<01:20,  3.09it/s]Sliding Window Inference:  19%|███████                              | 58/306 [00:21<01:21,  3.04it/s]Sliding Window Inference:  19%|███████▏                             | 59/306 [00:21<01:20,  3.08it/s]Sliding Window Inference:  20%|███████▎                             | 60/306 [00:21<01:23,  2.94it/s]Sliding Window Inference:  20%|███████▍                             | 61/306 [00:22<01:23,  2.93it/s]Sliding Window Inference:  20%|███████▍                             | 62/306 [00:22<01:28,  2.77it/s]Sliding Window Inference:  21%|███████▌                             | 63/306 [00:23<01:24,  2.86it/s]Sliding Window Inference:  21%|███████▋                             | 64/306 [00:23<01:23,  2.91it/s]Sliding Window Inference:  21%|███████▊                             | 65/306 [00:23<01:21,  2.96it/s]Sliding Window Inference:  22%|███████▉                             | 66/306 [00:24<01:20,  2.97it/s]Sliding Window Inference:  22%|████████                             | 67/306 [00:24<01:20,  2.97it/s]Sliding Window Inference:  22%|████████▏                            | 68/306 [00:24<01:21,  2.91it/s]Sliding Window Inference:  23%|████████▎                            | 69/306 [00:25<01:21,  2.92it/s]Sliding Window Inference:  23%|████████▍                            | 70/306 [00:25<01:20,  2.92it/s]Sliding Window Inference:  23%|████████▌                            | 71/306 [00:25<01:17,  3.04it/s]Sliding Window Inference:  24%|████████▋                            | 72/306 [00:26<01:17,  3.02it/s]Sliding Window Inference:  24%|████████▊                            | 73/306 [00:26<01:15,  3.09it/s]Sliding Window Inference:  24%|████████▉                            | 74/306 [00:26<01:14,  3.11it/s]Sliding Window Inference:  25%|█████████                            | 75/306 [00:26<01:13,  3.13it/s]Sliding Window Inference:  25%|█████████▏                           | 76/306 [00:27<01:14,  3.09it/s]Sliding Window Inference:  25%|█████████▎                           | 77/306 [00:27<01:13,  3.13it/s]Sliding Window Inference:  25%|█████████▍                           | 78/306 [00:27<01:12,  3.13it/s]Sliding Window Inference:  26%|█████████▌                           | 79/306 [00:28<01:12,  3.14it/s]Sliding Window Inference:  26%|█████████▋                           | 80/306 [00:28<01:16,  2.96it/s]Sliding Window Inference:  26%|█████████▊                           | 81/306 [00:28<01:16,  2.95it/s]Sliding Window Inference:  27%|█████████▉                           | 82/306 [00:29<01:15,  2.98it/s]Sliding Window Inference:  27%|██████████                           | 83/306 [00:29<01:13,  3.04it/s]Sliding Window Inference:  27%|██████████▏                          | 84/306 [00:29<01:12,  3.07it/s]Sliding Window Inference:  28%|██████████▎                          | 85/306 [00:30<01:12,  3.03it/s]Sliding Window Inference:  28%|██████████▍                          | 86/306 [00:30<01:11,  3.06it/s]Sliding Window Inference:  28%|██████████▌                          | 87/306 [00:30<01:11,  3.05it/s]Sliding Window Inference:  29%|██████████▋                          | 88/306 [00:31<01:11,  3.04it/s]Sliding Window Inference:  29%|██████████▊                          | 89/306 [00:31<01:10,  3.08it/s]Sliding Window Inference:  29%|██████████▉                          | 90/306 [00:31<01:09,  3.10it/s]Sliding Window Inference:  30%|███████████                          | 91/306 [00:32<01:07,  3.17it/s]Sliding Window Inference:  30%|███████████                          | 92/306 [00:32<01:08,  3.13it/s]Sliding Window Inference:  30%|███████████▏                         | 93/306 [00:32<01:07,  3.15it/s]Sliding Window Inference:  31%|███████████▎                         | 94/306 [00:33<01:05,  3.24it/s]Sliding Window Inference:  31%|███████████▍                         | 95/306 [00:33<01:04,  3.27it/s]Sliding Window Inference:  31%|███████████▌                         | 96/306 [00:33<01:04,  3.27it/s]Sliding Window Inference:  32%|███████████▋                         | 97/306 [00:34<01:03,  3.27it/s]Sliding Window Inference:  32%|███████████▊                         | 98/306 [00:34<01:03,  3.26it/s]Sliding Window Inference:  32%|███████████▉                         | 99/306 [00:34<01:04,  3.19it/s]Sliding Window Inference:  33%|███████████▊                        | 100/306 [00:34<01:05,  3.17it/s]Sliding Window Inference:  33%|███████████▉                        | 101/306 [00:35<01:04,  3.19it/s]Sliding Window Inference:  33%|████████████                        | 102/306 [00:35<01:07,  3.01it/s]Sliding Window Inference:  34%|████████████                        | 103/306 [00:35<01:05,  3.08it/s]Sliding Window Inference:  34%|████████████▏                       | 104/306 [00:36<01:05,  3.07it/s]Sliding Window Inference:  34%|████████████▎                       | 105/306 [00:36<01:04,  3.11it/s]Sliding Window Inference:  35%|████████████▍                       | 106/306 [00:36<01:04,  3.11it/s]Sliding Window Inference:  35%|████████████▌                       | 107/306 [00:37<01:02,  3.16it/s]Sliding Window Inference:  35%|████████████▋                       | 108/306 [00:37<01:02,  3.19it/s]Sliding Window Inference:  36%|████████████▊                       | 109/306 [00:37<01:01,  3.19it/s]Sliding Window Inference:  36%|████████████▉                       | 110/306 [00:38<01:02,  3.16it/s]Sliding Window Inference:  36%|█████████████                       | 111/306 [00:38<01:02,  3.12it/s]Sliding Window Inference:  37%|█████████████▏                      | 112/306 [00:38<01:00,  3.18it/s]Sliding Window Inference:  37%|█████████████▎                      | 113/306 [00:39<00:59,  3.22it/s]Sliding Window Inference:  37%|█████████████▍                      | 114/306 [00:39<00:58,  3.29it/s]Sliding Window Inference:  38%|█████████████▌                      | 115/306 [00:39<00:57,  3.32it/s]Sliding Window Inference:  38%|█████████████▋                      | 116/306 [00:39<00:57,  3.30it/s]Sliding Window Inference:  38%|█████████████▊                      | 117/306 [00:40<00:57,  3.28it/s]Sliding Window Inference:  39%|█████████████▉                      | 118/306 [00:40<00:56,  3.33it/s]Sliding Window Inference:  39%|██████████████                      | 119/306 [00:40<00:55,  3.39it/s]Sliding Window Inference:  39%|██████████████                      | 120/306 [00:41<00:55,  3.35it/s]Sliding Window Inference:  40%|██████████████▏                     | 121/306 [00:41<00:54,  3.42it/s]Sliding Window Inference:  40%|██████████████▎                     | 122/306 [00:41<00:52,  3.49it/s]Sliding Window Inference:  40%|██████████████▍                     | 123/306 [00:42<00:52,  3.47it/s]Sliding Window Inference:  41%|██████████████▌                     | 124/306 [00:42<00:54,  3.36it/s]Sliding Window Inference:  41%|██████████████▋                     | 125/306 [00:42<00:52,  3.42it/s]Sliding Window Inference:  41%|██████████████▊                     | 126/306 [00:42<00:52,  3.42it/s]Sliding Window Inference:  42%|██████████████▉                     | 127/306 [00:43<00:52,  3.39it/s]Sliding Window Inference:  42%|███████████████                     | 128/306 [00:43<00:51,  3.49it/s]Sliding Window Inference:  42%|███████████████▏                    | 129/306 [00:43<00:50,  3.54it/s]Sliding Window Inference:  42%|███████████████▎                    | 130/306 [00:44<00:51,  3.44it/s]Sliding Window Inference:  43%|███████████████▍                    | 131/306 [00:44<00:49,  3.50it/s]Sliding Window Inference:  43%|███████████████▌                    | 132/306 [00:44<00:48,  3.56it/s]Sliding Window Inference:  43%|███████████████▋                    | 133/306 [00:44<00:48,  3.56it/s]Sliding Window Inference:  44%|███████████████▊                    | 134/306 [00:45<00:50,  3.39it/s]Sliding Window Inference:  44%|███████████████▉                    | 135/306 [00:45<00:50,  3.37it/s]Sliding Window Inference:  44%|████████████████                    | 136/306 [00:45<00:51,  3.32it/s]Sliding Window Inference:  45%|████████████████                    | 137/306 [00:46<00:51,  3.27it/s]Sliding Window Inference:  45%|████████████████▏                   | 138/306 [00:46<00:52,  3.22it/s]Sliding Window Inference:  45%|████████████████▎                   | 139/306 [00:46<00:53,  3.14it/s]Sliding Window Inference:  46%|████████████████▍                   | 140/306 [00:47<00:53,  3.09it/s]Sliding Window Inference:  46%|████████████████▌                   | 141/306 [00:47<00:54,  3.05it/s]Sliding Window Inference:  46%|████████████████▋                   | 142/306 [00:47<00:53,  3.06it/s]Sliding Window Inference:  47%|████████████████▊                   | 143/306 [00:48<00:52,  3.10it/s]Sliding Window Inference:  47%|████████████████▉                   | 144/306 [00:48<00:53,  3.05it/s]Sliding Window Inference:  47%|█████████████████                   | 145/306 [00:48<00:51,  3.10it/s]Sliding Window Inference:  48%|█████████████████▏                  | 146/306 [00:49<00:51,  3.14it/s]Sliding Window Inference:  48%|█████████████████▎                  | 147/306 [00:49<00:57,  2.78it/s]Sliding Window Inference:  48%|█████████████████▍                  | 148/306 [00:49<00:58,  2.68it/s]Sliding Window Inference:  49%|█████████████████▌                  | 149/306 [00:50<01:04,  2.43it/s]Sliding Window Inference:  49%|█████████████████▋                  | 150/306 [00:50<01:04,  2.43it/s]Sliding Window Inference:  49%|█████████████████▊                  | 151/306 [00:51<01:06,  2.34it/s]Sliding Window Inference:  50%|█████████████████▉                  | 152/306 [00:51<01:09,  2.22it/s]Sliding Window Inference:  50%|██████████████████                  | 153/306 [00:52<01:06,  2.28it/s]Sliding Window Inference:  50%|██████████████████                  | 154/306 [00:52<01:06,  2.29it/s]Sliding Window Inference:  51%|██████████████████▏                 | 155/306 [00:53<01:05,  2.29it/s]Sliding Window Inference:  51%|██████████████████▎                 | 156/306 [00:53<01:05,  2.27it/s]Sliding Window Inference:  51%|██████████████████▍                 | 157/306 [00:53<01:02,  2.37it/s]Sliding Window Inference:  52%|██████████████████▌                 | 158/306 [00:54<01:04,  2.31it/s]Sliding Window Inference:  52%|██████████████████▋                 | 159/306 [00:54<01:03,  2.32it/s]Sliding Window Inference:  52%|██████████████████▊                 | 160/306 [00:55<01:05,  2.21it/s]Sliding Window Inference:  53%|██████████████████▉                 | 161/306 [00:55<01:07,  2.16it/s]Sliding Window Inference:  53%|███████████████████                 | 162/306 [00:56<01:03,  2.25it/s]Sliding Window Inference:  53%|███████████████████▏                | 163/306 [00:56<00:59,  2.40it/s]Sliding Window Inference:  54%|███████████████████▎                | 164/306 [00:56<00:54,  2.60it/s]Sliding Window Inference:  54%|███████████████████▍                | 165/306 [00:57<00:50,  2.78it/s]Sliding Window Inference:  54%|███████████████████▌                | 166/306 [00:57<00:48,  2.91it/s]Sliding Window Inference:  55%|███████████████████▋                | 167/306 [00:57<00:46,  3.01it/s]Sliding Window Inference:  55%|███████████████████▊                | 168/306 [00:58<00:45,  3.01it/s]Sliding Window Inference:  55%|███████████████████▉                | 169/306 [00:58<00:44,  3.09it/s]Sliding Window Inference:  56%|████████████████████                | 170/306 [00:58<00:44,  3.07it/s]Sliding Window Inference:  56%|████████████████████                | 171/306 [00:59<00:44,  3.04it/s]Sliding Window Inference:  56%|████████████████████▏               | 172/306 [00:59<00:43,  3.05it/s]Sliding Window Inference:  57%|████████████████████▎               | 173/306 [00:59<00:42,  3.10it/s]Sliding Window Inference:  57%|████████████████████▍               | 174/306 [01:00<00:42,  3.12it/s]Sliding Window Inference:  57%|████████████████████▌               | 175/306 [01:00<00:42,  3.10it/s]Sliding Window Inference:  58%|████████████████████▋               | 176/306 [01:00<00:41,  3.14it/s]Sliding Window Inference:  58%|████████████████████▊               | 177/306 [01:00<00:41,  3.14it/s]Sliding Window Inference:  58%|████████████████████▉               | 178/306 [01:01<00:40,  3.15it/s]Sliding Window Inference:  58%|█████████████████████               | 179/306 [01:01<00:40,  3.17it/s]Sliding Window Inference:  59%|█████████████████████▏              | 180/306 [01:01<00:39,  3.20it/s]Sliding Window Inference:  59%|█████████████████████▎              | 181/306 [01:02<00:38,  3.21it/s]Sliding Window Inference:  59%|█████████████████████▍              | 182/306 [01:02<00:42,  2.90it/s]Sliding Window Inference:  60%|█████████████████████▌              | 183/306 [01:02<00:41,  2.98it/s]Sliding Window Inference:  60%|█████████████████████▋              | 184/306 [01:03<00:40,  3.01it/s]Sliding Window Inference:  60%|█████████████████████▊              | 185/306 [01:03<00:39,  3.04it/s]Sliding Window Inference:  61%|█████████████████████▉              | 186/306 [01:03<00:38,  3.08it/s]Sliding Window Inference:  61%|██████████████████████              | 187/306 [01:04<00:39,  3.05it/s]Sliding Window Inference:  61%|██████████████████████              | 188/306 [01:04<00:38,  3.09it/s]Sliding Window Inference:  62%|██████████████████████▏             | 189/306 [01:04<00:38,  3.05it/s]Sliding Window Inference:  62%|██████████████████████▎             | 190/306 [01:05<00:37,  3.11it/s]Sliding Window Inference:  62%|██████████████████████▍             | 191/306 [01:05<00:37,  3.08it/s]Sliding Window Inference:  63%|██████████████████████▌             | 192/306 [01:05<00:36,  3.14it/s]Sliding Window Inference:  63%|██████████████████████▋             | 193/306 [01:06<00:35,  3.18it/s]Sliding Window Inference:  63%|██████████████████████▊             | 194/306 [01:06<00:35,  3.20it/s]Sliding Window Inference:  64%|██████████████████████▉             | 195/306 [01:06<00:34,  3.21it/s]Sliding Window Inference:  64%|███████████████████████             | 196/306 [01:07<00:34,  3.22it/s]Sliding Window Inference:  64%|███████████████████████▏            | 197/306 [01:07<00:34,  3.13it/s]Sliding Window Inference:  65%|███████████████████████▎            | 198/306 [01:07<00:34,  3.15it/s]Sliding Window Inference:  65%|███████████████████████▍            | 199/306 [01:08<00:33,  3.15it/s]Sliding Window Inference:  65%|███████████████████████▌            | 200/306 [01:08<00:34,  3.10it/s]Sliding Window Inference:  66%|███████████████████████▋            | 201/306 [01:08<00:33,  3.11it/s]Sliding Window Inference:  66%|███████████████████████▊            | 202/306 [01:09<00:33,  3.09it/s]Sliding Window Inference:  66%|███████████████████████▉            | 203/306 [01:09<00:32,  3.14it/s]Sliding Window Inference:  67%|████████████████████████            | 204/306 [01:09<00:32,  3.18it/s]Sliding Window Inference:  67%|████████████████████████            | 205/306 [01:09<00:31,  3.20it/s]Sliding Window Inference:  67%|████████████████████████▏           | 206/306 [01:10<00:31,  3.22it/s]Sliding Window Inference:  68%|████████████████████████▎           | 207/306 [01:10<00:30,  3.21it/s]Sliding Window Inference:  68%|████████████████████████▍           | 208/306 [01:10<00:30,  3.22it/s]Sliding Window Inference:  68%|████████████████████████▌           | 209/306 [01:11<00:29,  3.29it/s]Sliding Window Inference:  69%|████████████████████████▋           | 210/306 [01:11<00:30,  3.18it/s]Sliding Window Inference:  69%|████████████████████████▊           | 211/306 [01:11<00:29,  3.19it/s]Sliding Window Inference:  69%|████████████████████████▉           | 212/306 [01:12<00:30,  3.13it/s]Sliding Window Inference:  70%|█████████████████████████           | 213/306 [01:12<00:29,  3.14it/s]Sliding Window Inference:  70%|█████████████████████████▏          | 214/306 [01:12<00:29,  3.14it/s]Sliding Window Inference:  70%|█████████████████████████▎          | 215/306 [01:13<00:28,  3.14it/s]Sliding Window Inference:  71%|█████████████████████████▍          | 216/306 [01:13<00:28,  3.14it/s]Sliding Window Inference:  71%|█████████████████████████▌          | 217/306 [01:13<00:28,  3.09it/s]Sliding Window Inference:  71%|█████████████████████████▋          | 218/306 [01:14<00:28,  3.12it/s]Sliding Window Inference:  72%|█████████████████████████▊          | 219/306 [01:14<00:27,  3.15it/s]Sliding Window Inference:  72%|█████████████████████████▉          | 220/306 [01:14<00:27,  3.09it/s]Sliding Window Inference:  72%|██████████████████████████          | 221/306 [01:15<00:27,  3.14it/s]Sliding Window Inference:  73%|██████████████████████████          | 222/306 [01:15<00:26,  3.19it/s]Sliding Window Inference:  73%|██████████████████████████▏         | 223/306 [01:15<00:25,  3.20it/s]Sliding Window Inference:  73%|██████████████████████████▎         | 224/306 [01:15<00:25,  3.20it/s]Sliding Window Inference:  74%|██████████████████████████▍         | 225/306 [01:16<00:25,  3.16it/s]Sliding Window Inference:  74%|██████████████████████████▌         | 226/306 [01:16<00:25,  3.18it/s]Sliding Window Inference:  74%|██████████████████████████▋         | 227/306 [01:16<00:24,  3.18it/s]Sliding Window Inference:  75%|██████████████████████████▊         | 228/306 [01:17<00:25,  3.10it/s]Sliding Window Inference:  75%|██████████████████████████▉         | 229/306 [01:17<00:24,  3.12it/s]Sliding Window Inference:  75%|███████████████████████████         | 230/306 [01:17<00:24,  3.08it/s]Sliding Window Inference:  75%|███████████████████████████▏        | 231/306 [01:18<00:23,  3.14it/s]Sliding Window Inference:  76%|███████████████████████████▎        | 232/306 [01:18<00:23,  3.12it/s]Sliding Window Inference:  76%|███████████████████████████▍        | 233/306 [01:18<00:23,  3.14it/s]Sliding Window Inference:  76%|███████████████████████████▌        | 234/306 [01:19<00:22,  3.17it/s]Sliding Window Inference:  77%|███████████████████████████▋        | 235/306 [01:19<00:22,  3.13it/s]Sliding Window Inference:  77%|███████████████████████████▊        | 236/306 [01:19<00:22,  3.14it/s]Sliding Window Inference:  77%|███████████████████████████▉        | 237/306 [01:20<00:21,  3.17it/s]Sliding Window Inference:  78%|████████████████████████████        | 238/306 [01:20<00:21,  3.18it/s]Sliding Window Inference:  78%|████████████████████████████        | 239/306 [01:20<00:21,  3.13it/s]Sliding Window Inference:  78%|████████████████████████████▏       | 240/306 [01:21<00:21,  3.12it/s]Sliding Window Inference:  79%|████████████████████████████▎       | 241/306 [01:21<00:21,  3.07it/s]Sliding Window Inference:  79%|████████████████████████████▍       | 242/306 [01:21<00:20,  3.08it/s]Sliding Window Inference:  79%|████████████████████████████▌       | 243/306 [01:22<00:20,  3.05it/s]Sliding Window Inference:  80%|████████████████████████████▋       | 244/306 [01:22<00:20,  3.08it/s]Sliding Window Inference:  80%|████████████████████████████▊       | 245/306 [01:22<00:19,  3.10it/s]Sliding Window Inference:  80%|████████████████████████████▉       | 246/306 [01:23<00:19,  3.14it/s]Sliding Window Inference:  81%|█████████████████████████████       | 247/306 [01:23<00:19,  3.08it/s]Sliding Window Inference:  81%|█████████████████████████████▏      | 248/306 [01:23<00:18,  3.12it/s]Sliding Window Inference:  81%|█████████████████████████████▎      | 249/306 [01:23<00:17,  3.17it/s]Sliding Window Inference:  82%|█████████████████████████████▍      | 250/306 [01:24<00:17,  3.19it/s]Sliding Window Inference:  82%|█████████████████████████████▌      | 251/306 [01:24<00:17,  3.21it/s]Sliding Window Inference:  82%|█████████████████████████████▋      | 252/306 [01:24<00:16,  3.22it/s]Sliding Window Inference:  83%|█████████████████████████████▊      | 253/306 [01:25<00:16,  3.21it/s]Sliding Window Inference:  83%|█████████████████████████████▉      | 254/306 [01:25<00:16,  3.21it/s]Sliding Window Inference:  83%|██████████████████████████████      | 255/306 [01:25<00:16,  3.18it/s]Sliding Window Inference:  84%|██████████████████████████████      | 256/306 [01:26<00:15,  3.14it/s]Sliding Window Inference:  84%|██████████████████████████████▏     | 257/306 [01:26<00:15,  3.14it/s]Sliding Window Inference:  84%|██████████████████████████████▎     | 258/306 [01:26<00:15,  3.14it/s]Sliding Window Inference:  85%|██████████████████████████████▍     | 259/306 [01:27<00:15,  3.07it/s]Sliding Window Inference:  85%|██████████████████████████████▌     | 260/306 [01:27<00:14,  3.09it/s]Sliding Window Inference:  85%|██████████████████████████████▋     | 261/306 [01:27<00:14,  3.12it/s]Sliding Window Inference:  86%|██████████████████████████████▊     | 262/306 [01:28<00:14,  3.12it/s]Sliding Window Inference:  86%|██████████████████████████████▉     | 263/306 [01:28<00:14,  3.05it/s]Sliding Window Inference:  86%|███████████████████████████████     | 264/306 [01:28<00:14,  2.81it/s]Sliding Window Inference:  87%|███████████████████████████████▏    | 265/306 [01:29<00:15,  2.71it/s]Sliding Window Inference:  87%|███████████████████████████████▎    | 266/306 [01:29<00:15,  2.53it/s]Sliding Window Inference:  87%|███████████████████████████████▍    | 267/306 [01:30<00:15,  2.48it/s]Sliding Window Inference:  88%|███████████████████████████████▌    | 268/306 [01:30<00:16,  2.35it/s]Sliding Window Inference:  88%|███████████████████████████████▋    | 269/306 [01:31<00:15,  2.42it/s]Sliding Window Inference:  88%|███████████████████████████████▊    | 270/306 [01:31<00:15,  2.39it/s]Sliding Window Inference:  89%|███████████████████████████████▉    | 271/306 [01:31<00:14,  2.46it/s]Sliding Window Inference:  89%|████████████████████████████████    | 272/306 [01:32<00:14,  2.36it/s]Sliding Window Inference:  89%|████████████████████████████████    | 273/306 [01:32<00:14,  2.31it/s]Sliding Window Inference:  90%|████████████████████████████████▏   | 274/306 [01:33<00:13,  2.34it/s]Sliding Window Inference:  90%|████████████████████████████████▎   | 275/306 [01:33<00:12,  2.47it/s]Sliding Window Inference:  90%|████████████████████████████████▍   | 276/306 [01:33<00:12,  2.44it/s]Sliding Window Inference:  91%|████████████████████████████████▌   | 277/306 [01:34<00:12,  2.34it/s]Sliding Window Inference:  91%|████████████████████████████████▋   | 278/306 [01:34<00:12,  2.27it/s]Sliding Window Inference:  91%|████████████████████████████████▊   | 279/306 [01:35<00:11,  2.30it/s]Sliding Window Inference:  92%|████████████████████████████████▉   | 280/306 [01:35<00:09,  2.69it/s]Sliding Window Inference:  92%|█████████████████████████████████   | 281/306 [01:35<00:08,  2.87it/s]Sliding Window Inference:  92%|█████████████████████████████████▏  | 282/306 [01:36<00:08,  2.67it/s]Sliding Window Inference:  92%|█████████████████████████████████▎  | 283/306 [01:36<00:08,  2.74it/s]Sliding Window Inference:  93%|█████████████████████████████████▍  | 284/306 [01:36<00:08,  2.65it/s]Sliding Window Inference:  93%|█████████████████████████████████▌  | 285/306 [01:37<00:08,  2.46it/s]Sliding Window Inference:  93%|█████████████████████████████████▋  | 286/306 [01:37<00:08,  2.43it/s]Sliding Window Inference:  94%|█████████████████████████████████▊  | 287/306 [01:38<00:07,  2.40it/s]Sliding Window Inference:  94%|█████████████████████████████████▉  | 288/306 [01:38<00:07,  2.34it/s]Sliding Window Inference:  94%|██████████████████████████████████  | 289/306 [01:39<00:06,  2.44it/s]Sliding Window Inference:  95%|██████████████████████████████████  | 290/306 [01:39<00:06,  2.38it/s]Sliding Window Inference:  95%|██████████████████████████████████▏ | 291/306 [01:40<00:06,  2.36it/s]Sliding Window Inference:  95%|██████████████████████████████████▎ | 292/306 [01:40<00:06,  2.31it/s]Sliding Window Inference:  96%|██████████████████████████████████▍ | 293/306 [01:40<00:05,  2.54it/s]Sliding Window Inference:  96%|██████████████████████████████████▌ | 294/306 [01:41<00:04,  2.55it/s]Sliding Window Inference:  96%|██████████████████████████████████▋ | 295/306 [01:41<00:04,  2.45it/s]Sliding Window Inference:  97%|██████████████████████████████████▊ | 296/306 [01:42<00:04,  2.34it/s]Sliding Window Inference:  97%|██████████████████████████████████▉ | 297/306 [01:42<00:03,  2.33it/s]Sliding Window Inference:  97%|███████████████████████████████████ | 298/306 [01:42<00:03,  2.54it/s]Sliding Window Inference:  98%|███████████████████████████████████▏| 299/306 [01:43<00:02,  2.72it/s]Sliding Window Inference:  98%|███████████████████████████████████▎| 300/306 [01:43<00:02,  2.56it/s]Sliding Window Inference:  98%|███████████████████████████████████▍| 301/306 [01:43<00:01,  2.56it/s]Sliding Window Inference:  99%|███████████████████████████████████▌| 302/306 [01:44<00:01,  2.48it/s]Sliding Window Inference:  99%|███████████████████████████████████▋| 303/306 [01:44<00:01,  2.46it/s]Sliding Window Inference:  99%|███████████████████████████████████▊| 304/306 [01:45<00:00,  2.38it/s]Sliding Window Inference: 100%|███████████████████████████████████▉| 305/306 [01:45<00:00,  2.38it/s]Sliding Window Inference: 100%|████████████████████████████████████| 306/306 [01:45<00:00,  2.71it/s]Sliding Window Inference: 100%|████████████████████████████████████| 306/306 [01:46<00:00,  2.88it/s]
+local_emb.shape = (39089, 14, 14, 1024)
+coord.shape = (39089, 2)
+grid_coords.shape = (39089, 2)
+global_emb.shape = (39089, 1024)
+AnnData object with n_obs × n_vars = 39089 × 1024
+    obs: 'sample'
+    obsm: 'spatial'
+Saved embedding to /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/global_emb.h5ad with shape (39089, 1024) cost 2s
+extract 16_16_features cost 138s!!!
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 2.6395 GB
+[TIME] main() cost: 159.28 s
+All steps cost 159.63854098320007s!!!!
+
+[INFO-END] Time: 2026-03-04 22:06:27
+[INFO-END] CPU usage: 13.9%
+[INFO-END] Memory usage: 56.0%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 3537296
+[INFO-END] Total runtime: 159.64 seconds
+Maximum CPU Memory Usage：24.32 GB
+Maximum CPU Memory Usage：24.32 GB
+Namespace(read_global_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', read_local_path='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', sample='XEN_P11_LUAD', save_dir='/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/', mode='single', device='cuda:0', batch_size=128, patch_size=224, token_size=16, stride=112, clustering=False, use_cuML=False, input_format='h5ad')
+
+[INFO-START] Time: 2026-03-04 22:06:33
+[INFO-START] CPU usage: 17.1%
+[INFO-START] Memory usage: 55.1%
+[INFO-START] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-START] Process ID: 3537951
+[Debug] Using device: cuda:0
+✅ CUDA is available： True
+✅ Count of GPUs： 1
+✅ Current device： 0
+✅ Name of device： NVIDIA A100-SXM4-80GB
+✅ Count of cpus: 96
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD//mask/mask-small.png
+grid mask.shape =(1540, 1610)
+mode =single ,global_emb.shape = (39089, 1024)
+mode =single ,local_emb.shape = (39089, 14, 14, 1024)
+mode =single ,coords.shape = (39089, 2)
+mode =single ,grid_coords.shape = (39089, 2)
+mode =single, W_pad =25984,H_pad = 24864
+mode =single, W_tokens =1624,H_tokens = 1554
+mode =single, W_ori =25760,H_ori = 24640
+mode =single, W_out =1610,H_out = 1540
+final_map.dtype = float16
+final_map.shape=(1540, 1610, 2048)
+extract fused features cost 18s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+filter 16*16 super pixel embedding costs 1s!!!
+AnnData object with n_obs × n_vars = 1139622 × 2048
+    obs: 'sample'
+    obsm: 'spatial'
+
+
+✅ 4. save embedding and coordinate to h5ad...
+Saved embedding to /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/single_super_emb.h5ad with shape (1139622, 2048) cost 151s
+
+
+🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 Congratulations, Pipeline completed sucessfully!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉
+
+[CUDA:cuda:0] Maximum CUDA Memory Usage: 0.0000 GB
+[TIME] main() cost: 257.56 s
+All steps cost 257.8498582839966s!!!!
+
+[INFO-END] Time: 2026-03-04 22:10:51
+[INFO-END] CPU usage: 16.9%
+[INFO-END] Memory usage: 55.6%
+[INFO-END] Platform: Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34
+[INFO-END] Process ID: 3537951
+[INFO-END] Total runtime: 257.85 seconds
+Maximum CPU Memory Usage：25.15 GB
+Maximum CPU Memory Usage：25.15 GB
+
+[meowcat] Preprocessing: VIS_P11_LUAD
+  [substep 1/5] get_pixel_size
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/get_pixel_size.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --sample VIS_P11_LUAD --raw_flag he_raw
+  [substep 2/5] run_preprocess
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunPreprocess.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --sample VIS_P11_LUAD --raw_flag he_raw --pad 224 --scale_value 0.5026
+  [substep 3/5] run_histosweep
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunHistoSweep.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --save_dir mask
+  [substep 4/5] extract_features
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_extract_features.py --read_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --weight_dir /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin --sample VIS_P11_LUAD
+  [substep 5/5] fuse_features
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_fuse_features.py --read_global_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --read_local_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/ --sample VIS_P11_LUAD --mode single
+
+[meowcat] Preprocessing: XEN_P11_LUAD
+  [substep 1/5] get_pixel_size
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/get_pixel_size.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --sample XEN_P11_LUAD --raw_flag he_raw
+  [substep 2/5] run_preprocess
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunPreprocess.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --sample XEN_P11_LUAD --raw_flag he_raw --pad 224 --scale_value 1.0
+  [substep 3/5] run_histosweep
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/RunHistoSweep.py --read_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --save_dir mask
+  [substep 4/5] extract_features
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_extract_features.py --read_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --weight_dir /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin --sample XEN_P11_LUAD
+  [substep 5/5] fuse_features
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/ExtractFeatures/UNI_fuse_features.py --read_global_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --read_local_path /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --save_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/ --sample XEN_P11_LUAD --mode single
+[Step 3.5] Visium metadata preparation
+[prepare_visium_inputs] Processing: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD
+  pixel_size_raw = 0.251300 mpp
+  target_mpp     = 0.5
+  scale          = 0.502600  (processed / raw)
+  Note: 1 in-tissue spots not in RCTD output (RCTD filtered them) — excluded from locs.tsv
+  Aligned 11793 spots (RCTD had 11793, tissue_positions had 11794)
+  Wrote anno-names.txt  (8 cell types: ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Myeloid', 'Stromal'])
+  Wrote anno_matrix.tsv (11793 spots × 8 cell types)
+  Wrote locs-raw.tsv    (11793 spots, raw fullres coords)
+  Wrote locs.tsv        (11793 spots, processed-image coords)
+  Wrote radius-raw.txt  (119.2952 raw pixels)
+  Wrote radius.txt      (59 processed-image pixels, ÷16 → 3 feature-grid pixels)
+  Wrote pixel-size.txt  (0.5 mpp)
+
+[prepare_visium_inputs] Done.
+Preparing inference inputs for sample: VIS_P11_LUAD
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg with shape (23520, 24192, 3)
+height: 23520 width: 24192
+[prepare_visium_inputs] Skipping /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD: not a Visium sample (missing deconvolution_rctd/major_prop.csv or spatial/ folder).
+Preparing inference inputs for sample: XEN_P11_LUAD
+prefix = /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/he.jpg with shape (24640, 25760, 3)
+height: 24640 width: 25760
+
+[meowcat] Preparing Visium inputs: VIS_P11_LUAD
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_visium_inputs.py --sample_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD --target_mpp 0.5
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_inference_new_sample.py /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input VIS_P11_LUAD
+
+[meowcat] Preparing Visium inputs: XEN_P11_LUAD
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_visium_inputs.py --sample_dir /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD --target_mpp 0.5
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/prepare_inference_new_sample.py /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input XEN_P11_LUAD
+[Step 4a] Visium batch preparation
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/anno_matrix.tsv
+Scanned 1 samples | N_total=11793, K=8, domains=1
+[coreset] kept 11793 / 11793 (100.0%)
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/anno_matrix.tsv
+Pickle loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/embeddings-hist.pickle
+Dataframe loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/locs.tsv
+Image loaded from /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/he.jpg
+[save] VIS_P11_LUAD: +11793
+
+Saved: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches/batch_000.pkl
+Shapes: X(11793, 29, 2048) Y(11793, 8) D(11793,) | T=29 C=2048 K=8
+[save] domain 0: 11793 spots
+
+Done. Saved 1 samples to /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py --config ./config.yaml --mode visium
+[Step 4b] Xenium batch preparation
+Found 1 Xenium samples: ['XEN_P11_LUAD']
+
+============================================================
+Part A: Xenium Preliminary Processing
+============================================================
+
+Processing XEN_P11_LUAD ...
+Traceback (most recent call last):
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py", line 829, in <module>
+    _run_xenium()
+  File "/home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py", line 654, in _run_xenium
+    assert (adata_cellbin.obs_names == adata_histology.obs_names).all(), \
+  File "/home/liranmao/miniconda3/envs/he_anno/lib/python3.10/site-packages/pandas/core/ops/common.py", line 76, in new_method
+    return method(self, other)
+  File "/home/liranmao/miniconda3/envs/he_anno/lib/python3.10/site-packages/pandas/core/arraylike.py", line 40, in __eq__
+    return self._cmp_method(other, operator.eq)
+  File "/home/liranmao/miniconda3/envs/he_anno/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 7251, in _cmp_method
+    raise ValueError("Lengths must match to compare")
+ValueError: Lengths must match to compare
+$ python -u /home/liranmao/06_he_anno/code/MeowCat/MeowCat/meowcat/Preprocess/batched_data_preparing.py --config ./config.yaml --mode xenium

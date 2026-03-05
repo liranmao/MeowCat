@@ -150,11 +150,54 @@ def main():
     print(f"  scale          = {scale:.6f}  (processed / raw)")
 
     # ------------------------------------------------------------------
-    # 2. RCTD output → anno-names.txt  +  anno_matrix.tsv
+    # 2. Read RCTD output + tissue positions, then ALIGN on barcode
+    #
+    #    CRITICAL: anno_matrix.tsv and locs.tsv must have the same barcodes
+    #    in the same order.  RCTD may filter spots or reorder them relative
+    #    to tissue_positions.csv, so we join on barcode to guarantee
+    #    row-level alignment.
     # ------------------------------------------------------------------
     df_rctd    = pd.read_csv(rctd_csv, index_col=0)
     cell_types = list(df_rctd.columns)
 
+    df_pos    = _read_tissue_positions(spatial_dir)
+    df_tissue = df_pos[df_pos["in_tissue"] == 1].copy()
+
+    # Use RCTD barcodes as the canonical set — they are a (possibly
+    # strict) subset of in-tissue barcodes.
+    rctd_barcodes = df_rctd.index.tolist()
+    tissue_barcodes = set(df_tissue["barcode"].values)
+
+    # Sanity: every RCTD barcode should exist in tissue positions
+    missing = [b for b in rctd_barcodes if b not in tissue_barcodes]
+    if missing:
+        print(f"  WARNING: {len(missing)} RCTD barcodes missing from "
+              f"tissue_positions (first 5: {missing[:5]})")
+
+    # Filter tissue positions to RCTD barcodes and reorder to match
+    df_tissue_indexed = df_tissue.set_index("barcode")
+    rctd_barcodes_present = [b for b in rctd_barcodes
+                             if b in df_tissue_indexed.index]
+    df_tissue_aligned = df_tissue_indexed.loc[rctd_barcodes_present].reset_index()
+
+    n_rctd = len(df_rctd)
+    n_tissue = len(df_tissue)
+    n_aligned = len(df_tissue_aligned)
+    if n_aligned < n_rctd:
+        print(f"  WARNING: {n_rctd - n_aligned} RCTD spots have no coordinates "
+              f"— dropping them from anno_matrix.tsv")
+        # Also filter RCTD to only barcodes with coordinates
+        df_rctd = df_rctd.loc[rctd_barcodes_present]
+    if n_aligned < n_tissue:
+        print(f"  Note: {n_tissue - n_aligned} in-tissue spots not in RCTD output "
+              f"(RCTD filtered them) — excluded from locs.tsv")
+
+    print(f"  Aligned {n_aligned} spots "
+          f"(RCTD had {n_rctd}, tissue_positions had {n_tissue})")
+
+    # ------------------------------------------------------------------
+    # 2b. Write anno-names.txt + anno_matrix.tsv (aligned)
+    # ------------------------------------------------------------------
     with open(os.path.join(sample_dir, "anno-names.txt"), "w") as f:
         for ct in cell_types:
             f.write(f"{ct}\n")
@@ -171,26 +214,19 @@ def main():
     )
 
     # ------------------------------------------------------------------
-    # 3. Visium spatial positions → locs-raw.tsv  +  locs.tsv
-    #
-    #    locs-raw.tsv : spot x/y in raw fullres pixel coordinates
-    #    locs.tsv     : spot x/y scaled to processed image (he.jpg) pixels
-    #                   = locs_raw * (pixel_size_raw / target_mpp)
+    # 3. Write locs-raw.tsv + locs.tsv (aligned to same barcode order)
     # ------------------------------------------------------------------
-    df_pos    = _read_tissue_positions(spatial_dir)
-    df_tissue = df_pos[df_pos["in_tissue"] == 1].copy()
-
     df_locs_raw = pd.DataFrame({
-        "spot": df_tissue["barcode"].values,
-        "x":    df_tissue["pxl_col"].values.astype(int),  # pxl_col_in_fullres
-        "y":    df_tissue["pxl_row"].values.astype(int),  # pxl_row_in_fullres
+        "spot": df_tissue_aligned["barcode"].values,
+        "x":    df_tissue_aligned["pxl_col"].values.astype(int),
+        "y":    df_tissue_aligned["pxl_row"].values.astype(int),
     })
     df_locs_raw.to_csv(
         os.path.join(sample_dir, "locs-raw.tsv"), sep="\t", index=False
     )
     print(
         f"  Wrote locs-raw.tsv    "
-        f"({len(df_locs_raw)} in-tissue spots, raw fullres coords)"
+        f"({len(df_locs_raw)} spots, raw fullres coords)"
     )
 
     # Scale x, y to processed image resolution; spot column is unchanged
@@ -202,7 +238,7 @@ def main():
     )
     print(
         f"  Wrote locs.tsv        "
-        f"({len(df_locs)} in-tissue spots, processed-image coords)"
+        f"({len(df_locs)} spots, processed-image coords)"
     )
 
     # ------------------------------------------------------------------

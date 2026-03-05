@@ -1,0 +1,35 @@
+============================================
+ MeowCat Example 3: Visium + Xenium (single pair)
+ Config: ./config.yaml
+============================================
+[Step 4b] Xenium batch preparation
+Found 1 Xenium samples: ['XEN_P11_LUAD']
+
+============================================================
+Part A: Xenium Preliminary Processing
+============================================================
+
+Processing XEN_P11_LUAD ...
+  Merged histology_2048 from single_super_emb.h5ad
+  finished XEN_P11_LUAD
+
+============================================================
+Part B: Xenium Batch Creation
+============================================================
+
+Loading reference parameters...
+  Classes (8): ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Myeloid', 'Stromal']
+  Max tokens (T): 29
+  Feature dim (C): 2048
+
+Determining Xenium domain IDs...
+  Max Visium domain ID: 0
+  Xenium domain IDs will start from: 1
+
+Radius mode: FIXED = 75.2 px
+
+============================================================
+Processing: XEN_P11_LUAD (batch_xen_000, domain=1)
+============================================================
+  Copied anno-names.txt -> /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/XEN_P11_LUAD/anno-names.txt
+Loading Xenium data...

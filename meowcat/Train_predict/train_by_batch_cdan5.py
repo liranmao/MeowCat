@@ -33,6 +33,13 @@ import os
 import sys
 import torch
 
+# Ensure sibling directories are importable (Preprocess/ and Train_predict/ itself)
+_this_dir = os.path.dirname(os.path.abspath(__file__))
+_preprocess_dir = os.path.join(os.path.dirname(_this_dir), "Preprocess")
+for _d in (_this_dir, _preprocess_dir):
+    if _d not in sys.path:
+        sys.path.insert(0, _d)
+
 import pytorch_lightning as pl
 from torch.optim import Adam
 from torch import nn

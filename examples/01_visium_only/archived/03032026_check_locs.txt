@@ -1,0 +1,24 @@
+A (original): /project/KidneyHE/data_lung/P11_LUAD/locs.tsv
+B (test):     /project/KidneyHE/01_meowcat_test/01_visium_only/input/VIS_P11_LUAD/locs.tsv
+
+shape  A: (11793, 3)  B: (11794, 3)
+columns A: ['spot', 'x', 'y']
+columns B: ['spot', 'x', 'y']
+
+--- A head ---
+                 spot      x      y
+0  AACAATCCGAGTGGAC-1   5960   2848
+1  AACAATGGAACCACAT-1   4416  11311
+2  AACAATGTGCTCCGAG-1  17048   3771
+3  AACACCAGCCTACTCG-1   5094  15291
+4  AACACCATTCGCATAC-1  15108  11541
+
+--- B head ---
+                 spot     x      y
+0  CGAGGATATTCAGAGC-1  1169  20629
+1  TCTGGTACTAATGCGG-1  1369  20630
+2  AGGTGACCATGACGCT-1  1569  20631
+3  CAGAGGTGTACGTAGC-1  1769  20632
+4  TAGCTAGAAGATACAT-1  1968  20633
+
+Shape or columns differ — cannot compare element-wise

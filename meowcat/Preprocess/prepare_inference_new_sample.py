@@ -9,8 +9,8 @@ import pickle
 import json
 import sys
 import warnings
-sys.path.append('./ExtractFeatures/') 
-from UTILS import * 
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ExtractFeatures'))
+from UTILS import *
 
 warnings.filterwarnings("ignore")
 Image.MAX_IMAGE_PIXELS = None 

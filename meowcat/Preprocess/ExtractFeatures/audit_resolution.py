@@ -20,7 +20,9 @@ from UTILS import get_image_filename
 def get_args():
     parser = argparse.ArgumentParser(description="Audit image resolutions across samples")
     parser.add_argument('--base_dir', type=str, required=True, help="Base directory containing sample folders")
-    parser.add_argument('--pattern', type=str, default="GBM*", help="Folder pattern to match (default: GBM*)")
+    parser.add_argument('--pattern', type=str, default=None, help="Folder pattern to match (default: GBM*)")
+    parser.add_argument('--samples', type=str, default=None,
+                        help="Comma-separated list of sample names (takes precedence over --pattern)")
     parser.add_argument('--raw_flag', type=str, default="he_raw", help="Raw flag for image filename")
     parser.add_argument('--target_mpp', type=float, default=0.5, help="Target microns per pixel (default: 0.5)")
     parser.add_argument('--pixel_size_raw', type=float, default=None,
@@ -152,19 +154,27 @@ def main():
     args = get_args()
     
     import glob
-    
-    # Find all matching folders
-    pattern = os.path.join(args.base_dir, args.pattern, "")
-    sample_dirs = sorted(glob.glob(pattern))
-    
+
+    # Find all matching folders: --samples takes precedence over --pattern
+    if args.samples:
+        sample_names = [s.strip() for s in args.samples.split(",") if s.strip()]
+        sample_dirs = [os.path.join(args.base_dir, s, "") for s in sample_names
+                       if os.path.isdir(os.path.join(args.base_dir, s))]
+        discovery_label = f"Samples: {','.join(sample_names)}"
+    else:
+        pat = args.pattern or "GBM*"
+        pattern = os.path.join(args.base_dir, pat, "")
+        sample_dirs = sorted(glob.glob(pattern))
+        discovery_label = f"Pattern: {pat}"
+
     if not sample_dirs:
-        print(f"No folders found matching {pattern}")
+        print(f"No folders found ({discovery_label})")
         sys.exit(1)
-    
+
     print("=" * 80)
     print(f"RESOLUTION AUDIT")
     print(f"Base directory: {args.base_dir}")
-    print(f"Pattern: {args.pattern}")
+    print(f"{discovery_label}")
     print(f"Target MPP: {args.target_mpp}")
     if args.pixel_size_raw is not None:
         print(f"Manual pixel size: {args.pixel_size_raw} (auto-detection skipped)")
@@ -197,6 +207,28 @@ def main():
             if scale > 1.0:
                 needs_upscale.append(result)
             continue
+
+        # Check for per-sample pixel-size-raw.txt (user-provided or from previous run)
+        pixel_size_file = os.path.join(feature_dir, "pixel-size-raw.txt")
+        if os.path.exists(pixel_size_file):
+            try:
+                with open(pixel_size_file) as f:
+                    mpp_x = float(f.read().strip())
+                scale = mpp_x / args.target_mpp
+                result = {
+                    'sample': sample,
+                    'mpp': mpp_x,
+                    'method': "pixel-size-raw.txt (per-sample file)",
+                    'image_path': None,
+                    'extension': 'N/A',
+                    'scale': scale
+                }
+                successful.append(result)
+                if scale > 1.0:
+                    needs_upscale.append(result)
+                continue
+            except (ValueError, IOError):
+                pass  # Fall through to auto-detection
 
         # Get image path
         try:

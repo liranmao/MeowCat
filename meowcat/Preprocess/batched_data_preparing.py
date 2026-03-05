@@ -27,16 +27,15 @@ EXCLUDE_SET  = {'P21_LUAD'}
 DOMAIN_MAP_TSV = None
 
 # ── Xenium defaults (overridden by config xenium section) ───────────────────
-XEN_XENIUM_DATA_ROOT = "/path/to/xenium/raw"
-XEN_CELLBIN_ROOT = "/path/to/xenium/cellbin"
-XEN_PROCESSED_ROOT = "/path/to/xenium/processed"
-XEN_HISTOLOGY_ROOT = "/path/to/xenium/histology"
-XEN_ANNO_DIR = "/path/to/xenium_cell_type_anno"
-XEN_SAMPLE_PATTERN = "P*_Xenium"
+# New unified structure: all Xenium data under project.data_root/SAMPLE/
+# Each sample folder contains: xenium_raw/, adata_cellbin_HistoSweep.h5ad,
+# annotation.csv, and optionally single_super_emb.h5ad
+XEN_DATA_ROOT = "/path/to/data"          # = project.data_root
+XEN_SAMPLE_PATTERN = "XEN*"              # = xenium.sample_pattern
 XEN_INCLUDE_ONLY = None
 XEN_EXCLUDE_SET = set()
 XEN_OUT_DIR = "/path/to/xenium/batches"
-XEN_PIXEL_SIZE_RAW = 0.2125
+XEN_DAPI_PIXEL_SIZE = 0.2125
 XEN_FIXED_RADIUS = 75.20
 XEN_ANNO_NAMES_PATH = "/path/to/anno-names.txt"
 XEN_CELL_TYPE_MAPPING_JSON = None
@@ -47,31 +46,38 @@ XEN_SEED = 42
 if _known.config:
     with open(_known.config) as _f:
         _cfg = _yaml.safe_load(_f) or {}
-    # Visium overrides
+    # Visium overrides — visium section preferred, with batches/project fallback
     _proj    = _cfg.get('project', {})
     _batches = _cfg.get('batches', {})
+    _vis     = _cfg.get('visium', {})
     if _proj.get('data_root'):       PREFIX         = _proj['data_root']
-    if _proj.get('sample_pattern'):  SAMPLE_PATTERN = _proj['sample_pattern']
+    # sample_pattern: visium > batches > project (backward compat)
+    if _vis.get('sample_pattern'):        SAMPLE_PATTERN = _vis['sample_pattern']
+    elif _batches.get('sample_pattern'):  SAMPLE_PATTERN = _batches['sample_pattern']
+    elif _proj.get('sample_pattern'):     SAMPLE_PATTERN = _proj['sample_pattern']
     if _batches.get('out_dir'):      OUT_DIR        = _batches['out_dir']
     if _batches.get('keep_frac') is not None: KEEP_FRAC    = _batches['keep_frac']
     if _batches.get('strategy'): STRATEGY     = _batches['strategy']
     if _batches.get('seed') is not None:      SEED         = _batches['seed']
-    if _batches.get('include_only') is not None: INCLUDE_ONLY = set(_batches['include_only']) if _batches['include_only'] else None
-    if _batches.get('exclude_set'): EXCLUDE_SET  = set(_batches['exclude_set'])
-    if _batches.get('domain_map_tsv'): DOMAIN_MAP_TSV = _batches['domain_map_tsv']
-    # Xenium overrides
+    # include_only, exclude_set, domain_map_tsv: visium > batches (backward compat)
+    _inc = _vis.get('include_only', _batches.get('include_only'))
+    if _inc is not None: INCLUDE_ONLY = set(_inc) if _inc else None
+    _exc = _vis.get('exclude_set', _batches.get('exclude_set'))
+    if _exc: EXCLUDE_SET = set(_exc)
+    _dmt = _vis.get('domain_map_tsv', _batches.get('domain_map_tsv'))
+    if _dmt: DOMAIN_MAP_TSV = _dmt
+    # Xenium overrides — uses project.data_root by default
     _xen = _cfg.get('xenium', {})
-    if _xen.get('xenium_data_root'): XEN_XENIUM_DATA_ROOT = _xen['xenium_data_root']
-    if _xen.get('cellbin_root'):     XEN_CELLBIN_ROOT     = _xen['cellbin_root']
-    if _xen.get('processed_root'):   XEN_PROCESSED_ROOT   = _xen['processed_root']
-    if _xen.get('histology_root'):   XEN_HISTOLOGY_ROOT   = _xen['histology_root']
-    if _xen.get('xenium_anno_dir'):  XEN_ANNO_DIR         = _xen['xenium_anno_dir']
+    XEN_DATA_ROOT = _proj.get('data_root', XEN_DATA_ROOT)
+    # xenium.sample_pattern for Xenium sample discovery
     if _xen.get('sample_pattern'):   XEN_SAMPLE_PATTERN   = _xen['sample_pattern']
+    elif _proj.get('sample_pattern'): XEN_SAMPLE_PATTERN  = _proj['sample_pattern']
     if _xen.get('include_only') is not None:
         XEN_INCLUDE_ONLY = set(_xen['include_only']) if _xen['include_only'] else None
     if _xen.get('exclude_set'):      XEN_EXCLUDE_SET      = set(_xen['exclude_set'])
     if _xen.get('out_dir'):          XEN_OUT_DIR          = _xen['out_dir']
-    if _xen.get('pixel_size_raw') is not None: XEN_PIXEL_SIZE_RAW = _xen['pixel_size_raw']
+    if _xen.get('dapi_pixel_size_raw') is not None: XEN_DAPI_PIXEL_SIZE = _xen['dapi_pixel_size_raw']
+    elif _xen.get('pixel_size_raw') is not None: XEN_DAPI_PIXEL_SIZE = _xen['pixel_size_raw']  # legacy
     if _xen.get('fixed_radius') is not None:   XEN_FIXED_RADIUS   = _xen['fixed_radius']
     if _xen.get('anno_names_path'):  XEN_ANNO_NAMES_PATH  = _xen['anno_names_path']
     if _xen.get('cell_type_mapping_json'): XEN_CELL_TYPE_MAPPING_JSON = _xen['cell_type_mapping_json']
@@ -79,7 +85,7 @@ if _known.config:
     if _xen.get('seed') is not None: XEN_SEED             = _xen['seed']
 
 # ── imports ─────────────────────────────────────────────────────────────────
-import gc, math, pickle, json
+import gc, math, pickle, json, shutil
 import glob as _glob_mod
 import numpy as np
 import pandas as pd
@@ -381,17 +387,43 @@ def xen_get_max_visium_domain_id(visium_batch_dir):
     return max_domain
 
 
-def xen_extract_features_for_cells(cell_indices, df_pairs, adata_cellbin, max_tokens, random_seed):
-    """Extract and pad/truncate features for selected cells."""
+def xen_extract_features_for_cells(cell_indices, df_pairs, adata_cellbin,
+                                   max_tokens, random_seed, out_npy_path=None):
+    """Extract and pad/truncate features for selected cells.
+
+    When *out_npy_path* is provided the result is written incrementally to a
+    disk-backed .npy memmap so the full array never resides in RAM.
+    Returns the (memmap or in-memory) float16 array.
+    """
     grouped = df_pairs.groupby('cell_idx')
     np.random.seed(random_seed)
-    X_list = []
-    for cell_idx in cell_indices:
-        bin_idxs = grouped.get_group(cell_idx)['bin_idx'].values
-        if 'histology_2048' in adata_cellbin.obsm.keys():
-            feats = adata_cellbin.obsm['histology_2048'][bin_idxs]
-        else:
-            feats = adata_cellbin.X[bin_idxs]
+    n_cells = len(cell_indices)
+
+    # Determine feature dimension from first cell
+    first_bins = np.sort(grouped.get_group(cell_indices[0])['bin_idx'].values)
+    if 'histology_2048' not in adata_cellbin.obsm.keys():
+        raise RuntimeError(
+            "adata_cellbin is missing 'histology_2048' in .obsm. "
+            "Ensure single_super_emb.h5ad exists in the sample folder and "
+            "re-run prepare-xenium-batches to merge histology features."
+        )
+    feat_dim = adata_cellbin.obsm['histology_2048'][first_bins[:1]].shape[1]
+
+    size_gb = n_cells * max_tokens * feat_dim * 2 / 1e9
+    print(f"  Shape: ({n_cells}, {max_tokens}, {feat_dim}) float16  ({size_gb:.1f} GB)")
+
+    # Allocate output: memmap (disk-backed) when path given, else in-memory
+    if out_npy_path is not None:
+        X = np.lib.format.open_memmap(
+            out_npy_path, mode='w+', dtype=np.float16,
+            shape=(n_cells, max_tokens, feat_dim),
+        )
+    else:
+        X = np.empty((n_cells, max_tokens, feat_dim), dtype=np.float16)
+
+    for i, cell_idx in enumerate(cell_indices):
+        bin_idxs = np.sort(grouped.get_group(cell_idx)['bin_idx'].values)
+        feats = adata_cellbin.obsm['histology_2048'][bin_idxs]
         if hasattr(feats, 'toarray'):
             feats = feats.toarray()
         k = feats.shape[0]
@@ -401,8 +433,17 @@ def xen_extract_features_for_cells(cell_indices, df_pairs, adata_cellbin, max_to
         else:
             choice = np.random.choice(k, max_tokens, replace=False)
             token_tensor = feats[choice]
-        X_list.append(token_tensor)
-    return np.stack(X_list)
+        X[i] = token_tensor.astype(np.float16)
+
+        if (i + 1) % 50000 == 0:
+            if out_npy_path is not None:
+                X.flush()
+            print(f"  Progress: {i + 1}/{n_cells} cells")
+
+    if out_npy_path is not None:
+        X.flush()
+    print(f"  Done: {n_cells} cells extracted")
+    return X
 
 
 def xen_save_batch(X, Y, domain_id, batch_name, output_dir):
@@ -548,9 +589,9 @@ def _run_xenium():
             "See config/cell_type_mapping_lung.json for an example."
         )
 
-    # Discover samples
+    # Discover samples from data_root
     samples = list_xenium_samples(
-        XEN_PROCESSED_ROOT,
+        XEN_DATA_ROOT,
         sample_pattern=XEN_SAMPLE_PATTERN,
         include_only=XEN_INCLUDE_ONLY,
         exclude_set=XEN_EXCLUDE_SET,
@@ -559,22 +600,38 @@ def _run_xenium():
     print(f"Found {len(samples)} Xenium samples: {samples}")
 
     # ── Part A: Preliminary h5ad processing ────────────────────────────────
+    # New unified directory structure: all data under data_root/SAMPLE/
+    #   xenium_raw/                    — cell_feature_matrix.h5, cells.parquet
+    #   adata_cellbin_HistoSweep.h5ad  — cellbin (location mapping from HistoSweep)
+    #   annotation.csv                 — cell type annotations
+    #   single_super_emb.h5ad          — UNI histology features (from meowcat preprocess, REQUIRED)
     print("\n" + "=" * 60)
     print("Part A: Xenium Preliminary Processing")
     print("=" * 60)
 
     for sample in samples:
         print(f'\nProcessing {sample} ...')
-        pt_data = os.path.join(XEN_CELLBIN_ROOT, sample, 'adata_cellbin_HistoSweep.h5ad')
-        data_path = os.path.join(XEN_XENIUM_DATA_ROOT, sample, sample)
-        sample_folder = os.path.join(XEN_PROCESSED_ROOT, sample)
+        sample_folder = os.path.join(XEN_DATA_ROOT, sample)
 
-        # Check if already processed — skip to avoid redundant work
+        # All data lives under sample_folder
+        pt_data = os.path.join(sample_folder, 'adata_cellbin_HistoSweep.h5ad')
+        data_path = os.path.join(sample_folder, 'xenium_raw')
+        ann_path = os.path.join(sample_folder, 'annotation.csv')
+
+        # Check if already processed — skip only if histology_2048 is present
         cellbin_out = os.path.join(sample_folder, 'Xenium_adata_cellbin_analysis_qv20.h5ad')
         cell_out = os.path.join(sample_folder, 'Xenium_adata_cell.h5ad')
         if os.path.exists(cellbin_out) and os.path.exists(cell_out):
-            print(f'  [skip] h5ad files already exist for {sample}')
-            continue
+            adata_cb = sc.read(cellbin_out, backed='r')
+            has_hist = 'histology_2048' in adata_cb.obsm.keys()
+            if hasattr(adata_cb, 'file'):
+                adata_cb.file.close()
+            del adata_cb
+            if has_hist:
+                print(f'  [skip] h5ad files already exist with histology_2048 for {sample}')
+                continue
+            else:
+                print(f'  [re-merge] histology_2048 missing — will merge from single_super_emb.h5ad')
 
         os.makedirs(sample_folder, exist_ok=True)
 
@@ -583,23 +640,33 @@ def _run_xenium():
         cells_parquet = pd.read_parquet(os.path.join(data_path, 'cells.parquet'))
         micro_loc = cells_parquet[["x_centroid", "y_centroid"]].to_numpy()
 
-        pxl_loc = micro_loc / XEN_PIXEL_SIZE_RAW
+        pxl_loc = micro_loc / XEN_DAPI_PIXEL_SIZE
         adata_xenium.obsm['spatial'] = pxl_loc
 
-        histology_path = os.path.join(XEN_HISTOLOGY_ROOT, sample, 'single_super_emb.h5ad')
-        adata_histology = sc.read(histology_path)
-
-        ann_path = os.path.join(XEN_ANNO_DIR, sample + '.csv')
         ann = pd.read_csv(ann_path, sep=None, engine="python")
 
-        # Align histology with cellbin
+        # Merge histology features if cellbin doesn't already have them
         adata_cellbin.obsm["gene_expression"] = adata_cellbin.X.copy()
-        assert (adata_cellbin.obs_names == adata_histology.obs_names).all(), \
-            "obs mismatch between bins & histology"
-        adata_cellbin.obsm["histology_2048"] = (
-            adata_histology.X.A if hasattr(adata_histology.X, "A") else adata_histology.X
-        )
-        adata_cellbin.uns["histology_2048_var_names"] = np.array(adata_histology.var_names)
+        if "histology_2048" not in adata_cellbin.obsm:
+            histology_path = os.path.join(sample_folder, 'single_super_emb.h5ad')
+            if os.path.exists(histology_path):
+                adata_histology = sc.read(histology_path)
+                assert (adata_cellbin.obs_names == adata_histology.obs_names).all(), \
+                    "obs mismatch between bins & histology"
+                adata_cellbin.obsm["histology_2048"] = (
+                    adata_histology.X.A if hasattr(adata_histology.X, "A") else adata_histology.X
+                )
+                adata_cellbin.uns["histology_2048_var_names"] = np.array(adata_histology.var_names)
+                print(f'  Merged histology_2048 from single_super_emb.h5ad')
+            else:
+                raise FileNotFoundError(
+                    f"Cannot find histology features for {sample}. "
+                    f"Expected single_super_emb.h5ad at: {histology_path}\n"
+                    f"Run 'meowcat preprocess --samples {sample}' first to generate "
+                    f"UNI features, then re-run prepare-xenium-batches."
+                )
+        else:
+            print(f'  Cellbin already has histology_2048 — skipping merge')
 
         # Map cell types
         adata_xenium.obs = adata_xenium.obs.join(ann.set_index("cell_id"), how="left")
@@ -674,7 +741,13 @@ def _run_xenium():
         print(f"Processing: {sample} (batch_xen_{idx:03d}, domain={domain_id})")
         print(f"{'=' * 60}")
 
-        processed_path = os.path.join(XEN_PROCESSED_ROOT, sample)
+        processed_path = os.path.join(XEN_DATA_ROOT, sample)
+
+        # Copy anno-names.txt into sample folder (needed by predict step)
+        sample_anno = os.path.join(processed_path, 'anno-names.txt')
+        if not os.path.exists(sample_anno):
+            shutil.copy2(XEN_ANNO_NAMES_PATH, sample_anno)
+            print(f"  Copied anno-names.txt -> {sample_anno}")
 
         print("Loading Xenium data...")
         adata_cell, adata_cellbin = xen_load_xenium_data(processed_path)
@@ -702,15 +775,21 @@ def _run_xenium():
         )
 
         max_tokens = ref_params.get('max_tokens', 100)
+
+        batch_name = f"batch_xen_{idx:03d}"
+        x_path = os.path.join(XEN_OUT_DIR, f"{batch_name}_x.npy")
         print("Extracting features...")
         X = xen_extract_features_for_cells(
-            selected_cells, df_pairs, adata_cellbin, max_tokens, XEN_SEED
+            selected_cells, df_pairs, adata_cellbin, max_tokens, XEN_SEED,
+            out_npy_path=x_path,
         )
         Y = Y_all[selected_cells]
 
-        batch_name = f"batch_xen_{idx:03d}"
+        # X already saved to disk via memmap — save Y and D only
         print(f"Saving {batch_name} with domain_id={domain_id}...")
-        xen_save_batch(X, Y, domain_id, batch_name, XEN_OUT_DIR)
+        np.save(os.path.join(XEN_OUT_DIR, f"{batch_name}_y.npy"), Y.astype(np.float32))
+        np.save(os.path.join(XEN_OUT_DIR, f"{batch_name}_d.npy"),
+                np.full(len(selected_cells), domain_id, dtype=np.int64))
 
         if hasattr(adata_cellbin, 'file'):
             adata_cellbin.file.close()

@@ -1,0 +1,23 @@
+{
+  "cmap_name": "self_design",
+  "ordered_cell_types": [
+    "NonTumor_Epi",
+    "Tumor_Epi",
+    "Plasma",
+    "T",
+    "NK",
+    "Myeloid",
+    "B",
+    "Stromal"
+  ],
+  "type_to_color": {
+    "NonTumor_Epi": "#ff0000",
+    "Tumor_Epi": "#f97a00",
+    "Plasma": "#00b8a9",
+    "T": "#a8df8e",
+    "NK": "#ffef5f",
+    "Myeloid": "#000080",
+    "B": "#f875aa",
+    "Stromal": "#a7aae1"
+  }
+}

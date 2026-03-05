@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Example 4: Train on multiple Visium + multiple Xenium samples
+# Example 5: Train on multiple Visium + multiple Xenium samples
 #            (3-phase sequential + CDAN cross-patient domain adaptation)
 #
 # Training paradigm:
@@ -14,7 +14,7 @@
 # VIS_S2 is held out as an out-of-sample monitor during training.
 #
 # Expected input layout:
-#   /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/input/
+#   /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/
 #     VIS_S1/                        <- Visium patient 1
 #       he_raw.tif
 #       filtered_feature_bc_matrix/
@@ -22,10 +22,10 @@
 #     VIS_S2/                        <- Visium patient 2 (also OOS monitor)
 #       ... (same layout as VIS_S1)
 #     XEN_S1/                        <- Xenium patient 1
-#       he_raw.tif
-#       adata_cellbin_HistoSweep.h5ad
-#       XEN_S1_cell_type_anno.csv
-#       anno-names.txt
+#       he_raw.tif                     <- raw H&E image
+#       xenium_raw/                    <- 10x Xenium output
+#       adata_cellbin_HistoSweep.h5ad  <- cell-bin location mapping (external HistoSweep)
+#       annotation.csv                 <- cell type annotations
 #     XEN_S2/                        <- Xenium patient 2
 #       ... (same layout as XEN_S1)
 #
@@ -35,7 +35,7 @@
 #                                locs.tsv, radius.txt, pixel-size.txt
 #
 # Expected output layout:
-#   /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/
+#   /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/
 #     mask/
 #     batches/
 #       batch_vis_000_x/y/d.npy      <- VIS_S1 (domain 0)
@@ -48,15 +48,15 @@
 #     VIS_S1/  VIS_S2/  XEN_S1/  XEN_S2/
 #       embeddings-hist.pickle
 #       pred_fullgrid_outputs.pkl
-#     results_ex04.pptx
+#     results_ex05.pptx
 # =============================================================================
-
+export PYTHONWARNINGS="ignore"
 set -euo pipefail
 
 CFG="$(dirname "$0")/config.yaml"
 
 echo "============================================"
-echo " MeowCat Example 4: Multi-sample Visium + Xenium"
+echo " MeowCat Example 5: Multi-sample Visium + Xenium"
 echo " Config: $CFG"
 echo "============================================"
 
@@ -76,18 +76,24 @@ echo "[Step 2] Resolution check"
 meowcat check-resolution --config "$CFG"
 
 # ---------------------------------------------------------------------------
-# Step 3: Preprocess all four samples
+# Step 3: Preprocess all images (data-agnostic — works for both Visium and Xenium)
+# Auto-discovers both VIS* and XEN* samples from data_root.
 # Can run in parallel on a cluster (one job per sample).
 # Activate: micromamba activate rapids_singlecell
+# Produces single_super_emb.h5ad (UNI histology features) per sample.
+# For Xenium, prepare-xenium-batches (Step 4b) will automatically merge
+# histology features from single_super_emb.h5ad into the cellbin.
 # ---------------------------------------------------------------------------
-# Preprocess Visium samples (auto-discovered from project.sample_pattern: "VIS*")
-echo "[Step 3a] Image preprocessing — Visium samples"
+echo "[Step 3] Image preprocessing — all samples (VIS* + XEN*)"
 meowcat preprocess --config "$CFG"
 
-# Preprocess Xenium samples (override sample_pattern with --samples)
-# Replace XEN_S1,XEN_S2 with your actual Xenium folder names.
-echo "[Step 3b] Image preprocessing — Xenium samples"
-meowcat preprocess --config "$CFG" --samples XEN_S1,XEN_S2
+# ---------------------------------------------------------------------------
+# Step 3.5: Prepare Visium metadata + embeddings
+# Creates: anno-names.txt, anno_matrix.tsv, locs.tsv, radius.txt,
+#          pixel-size.txt, embeddings-hist.pickle
+# ---------------------------------------------------------------------------
+echo "[Step 3.5] Visium metadata preparation"
+meowcat prepare-visium --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 4a: Build Visium training batches
@@ -96,7 +102,7 @@ meowcat preprocess --config "$CFG" --samples XEN_S1,XEN_S2
 # Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 4a] Visium batch preparation"
-meowcat prepare-batches --config "$CFG"
+meowcat prepare-visium-batches --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 4b: Build Xenium training batches
@@ -121,6 +127,8 @@ meowcat train --config "$CFG"
 # ---------------------------------------------------------------------------
 # Step 6: Predict and visualize on all samples
 # Activate: conda activate he_anno
+# Auto-discovers both VIS* and XEN* samples from data_root.
+# To override: meowcat predict --config "$CFG" --samples VIS_S1,VIS_S2,XEN_S1,XEN_S2
 # ---------------------------------------------------------------------------
 echo "[Step 6] Prediction — all samples"
 meowcat predict --config "$CFG"
@@ -135,5 +143,5 @@ echo "[Step 7] Slide wrap"
 meowcat slide --config "$CFG"
 
 echo "============================================"
-echo " Done. Outputs: /project/KidneyHE/01_meowcat_test/04_multi_visium_xenium/output/"
+echo " Done. Outputs: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/"
 echo "============================================"
