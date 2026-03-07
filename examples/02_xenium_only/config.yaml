@@ -17,9 +17,6 @@ preprocess:
 
 batches:
   out_dir: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/batches
-  keep_frac: 0.5      # keep all cells (single sample)
-  strategy: stratified
-  seed: 0
 
 # Xenium config — uses project.data_root for sample discovery.
 # Each sample folder (e.g., input/XEN_P11_LUAD/) must contain (user-provided):
@@ -29,12 +26,11 @@ batches:
 #   annotation.csv                 -> cell type annotations (cell_id, cell_state)
 xenium:
   sample_pattern: "XEN*"
-  out_dir: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/batches
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
   anno_names_path: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/anno-names.txt
   cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
-  visium_batch_dir: /project/KidneyHE/01_meowcat_test/01_visium_only/output/batches
+  keep_frac: 0.5
   seed: 42
 
 # Training paradigm: Recon (Phase 0) -> Xenium CE (Phase 1)

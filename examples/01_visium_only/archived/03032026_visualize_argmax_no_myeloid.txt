@@ -1,6 +1,0 @@
-Loading /project/KidneyHE/01_meowcat_test/01_visium_only/input/VIS_P11_LUAD/pred_fullgrid_outputs.pkl
-p_map shape: (1470, 1512, 8)
-Cell types (8): ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Myeloid', 'Stromal']
-Mask shape: (1470, 1512), tissue pixels: 987458
-Excluded 'Myeloid' (index 6), remaining: ['NonTumor_Epi', 'Tumor_Epi', 'B', 'Plasma', 'T', 'NK', 'Stromal']
-Saved: /project/KidneyHE/01_meowcat_test/01_visium_only/output/VIS_P11_LUAD/VIS_P11_LUAD_predicted_celltype_map_no_Myeloid.png

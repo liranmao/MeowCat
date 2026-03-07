@@ -9,23 +9,23 @@
 #   - New H&E images under project.data_root/<SAMPLE>/he_raw.<ext>
 
 inference:
-  model_dir: /path/to/training/batches    # directory containing states/*/model.ckpt
-  anno_names: /path/to/anno-names.txt     # cell-type names from training
+  model_dir: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/batches
+  anno_names: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/anno-names.txt
 
 project:
   name: ex06_predict_new
-  data_root: /path/to/new_samples         # root with per-sample subfolders
-  out_root:  /path/to/output
+  data_root: /project/KidneyHE/01_meowcat_test/06_predict_new_sample/input
+  out_root:  /project/KidneyHE/01_meowcat_test/06_predict_new_sample/output
 
 visium:
-  sample_pattern: "HE*"
+  sample_pattern: "P*"
 
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
-  pixel_size_raw: null       # null = auto-detect; set a float if metadata missing
+  pixel_size_raw: 0.5       # null = auto-detect; set a float if metadata missing
   pad: 224
-  uni_weights: /path/to/uni_weights.bin
+  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
   fusion_mode: single
 
 predict:

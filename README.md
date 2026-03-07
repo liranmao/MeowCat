@@ -51,7 +51,7 @@ MeowCat predicts cell-type distributions across an entire H&E whole-slide image 
 
 ```bash
 # 1. Clone / navigate to the repo
-cd 00_main_v3
+cd MeowCat
 
 # 2. Install the meowcat CLI (requires Python >= 3.9, PyYAML)
 pip install -e .
@@ -60,7 +60,7 @@ pip install -e .
 meowcat --help
 ```
 
-The pipeline uses **two conda environments** for different steps:
+The pipeline uses **three conda environments** for different steps:
 
 | Environment | Steps | How to activate |
 |-------------|-------|----------------|
@@ -75,7 +75,7 @@ The pipeline uses **two conda environments** for different steps:
 ## Repository Layout
 
 ```
-00_main_v3/
+MeowCat/
 ├── config/
 │   ├── default.yaml                 <- all paths & hyperparameters (copy & edit per experiment)
 │   └── visualization_cmap.json      <- default cell-type color map for visualization
@@ -293,15 +293,15 @@ Tokenizes Visium spots, applies coreset subsampling, and writes `.npy` batch fil
 meowcat prepare-visium-batches --config config/my_run.yaml
 ```
 
-Key config knobs (from the `batches` section):
+Key config knobs:
 
 | Key | Default | Effect |
 |-----|---------|--------|
 | `batches.out_dir` | — | Where batch `.npy` files are written |
-| `batches.keep_frac` | `0.25` | Fraction of spots retained by coreset |
-| `batches.strategy` | `stratified` | Coreset strategy: `stratified` or `kcenter` |
-| `batches.exclude_set` | `[]` | Sample names to skip |
-| `batches.domain_map_tsv` | `null` | Optional TSV for multi-patient domain assignment |
+| `visium.keep_frac` | `0.25` | Fraction of spots retained by coreset |
+| `visium.strategy` | `stratified` | Coreset strategy: `stratified` or `kcenter` |
+| `visium.exclude_set` | `[]` | Sample names to skip |
+| `visium.domain_map_tsv` | `null` | Optional TSV for multi-patient domain assignment |
 
 **Output:** `batch_vis_XXX_x/y/d.npy` in `batches.out_dir`.
 
@@ -320,9 +320,9 @@ Key config knobs (from the `xenium` section):
 
 | Key | Default | Effect |
 |-----|---------|--------|
-| `xenium.visium_batch_dir` | `null` | Path to Visium batch dir — domain IDs continue from the last Visium domain so IDs don't collide |
 | `xenium.anno_names_path` | — | Path to the shared `anno-names.txt` (cell-type list must match Visium) |
 | `xenium.dapi_pixel_size_raw` | `0.2125` | Xenium DAPI instrument coordinate-to-pixel conversion factor |
+| `xenium.keep_frac` | `null` | Fraction of valid cells to keep (`null` = use Visium batch_size or all cells) |
 
 **Output:** `batch_xen_XXX_x/y/d.npy` in `batches.out_dir`.
 
@@ -475,7 +475,7 @@ All parameters live in `config/default.yaml`. Commonly changed keys:
 | `project` | `name` | `meowcat_run` | Experiment name (for logging) |
 | `project` | `data_root` | — | Root folder with per-sample subfolders |
 | `project` | `out_root` | — | Root for all outputs |
-| `project` | `sample_pattern` | `GBM*` | Glob pattern to find sample dirs |
+| `visium` | `sample_pattern` | `VIS*` | Glob pattern to find Visium sample dirs |
 | `rctd` | `reference_rds` | — | Path to single-cell reference RDS (Seurat v5) |
 | `rctd` | `cell_type_column` | `MainType` | Metadata column for cell-type labels |
 | `rctd` | `group_column` | `""` | Metadata column for group subsetting (`""` = use all cells) |
@@ -489,11 +489,13 @@ All parameters live in `config/default.yaml`. Commonly changed keys:
 | `preprocess` | `pad` | `224` | Padding multiple for rescaled image |
 | `preprocess` | `uni_weights` | — | Path to UNI ViT-Large `.bin` weights |
 | `preprocess` | `fusion_mode` | `single` | Feature fusion: `single` or `multi` |
-| `batches` | `out_dir` | — | Where batch `.npy` files are written |
-| `batches` | `keep_frac` | `0.25` | Coreset fraction of spots to keep |
-| `batches` | `strategy` | `stratified` | `stratified` or `kcenter` |
-| `batches` | `exclude_set` | `[]` | Sample names to skip |
-| `batches` | `fixed_radius` | `null` | Override spot radius (null = from `radius.txt`) |
+| `visium` | `include_only` | `null` | Sample names to include (null = all matching pattern) |
+| `visium` | `exclude_set` | `[]` | Sample names to skip |
+| `visium` | `domain_map_tsv` | `null` | TSV mapping sample names to domain strings |
+| `visium` | `fixed_radius` | `null` | Override spot radius (null = from `radius.txt`) |
+| `visium` | `keep_frac` | `0.25` | Coreset fraction of spots to keep |
+| `visium` | `strategy` | `stratified` | `stratified` or `kcenter` |
+| `batches` | `out_dir` | — | Where batch `.npy` files are written (shared by Visium and Xenium) |
 | `train` | `n_states` | `2` | Independent model replicas (ensemble) |
 | `train` | `two_stage` | `true` | Phase 0 reconstruction pretraining |
 | `train` | `epochs1` | `15` | Reconstruction epochs |
@@ -625,13 +627,15 @@ Identical to MultiTaskModel plus:
 
 ## Examples
 
-See the [`examples/`](examples/) folder for four ready-to-run test cases. All use paths under `/project/KidneyHE/01_meowcat_test/`.
+See the [`examples/`](examples/) folder for seven ready-to-run test cases. All use paths under `/project/KidneyHE/01_meowcat_test/`.
 
 | Folder | Training data | Training paradigm |
 |--------|--------------|-------------------|
 | [`examples/01_visium_only/`](examples/01_visium_only/) | 1 Visium sample | Recon → Visium MSE |
 | [`examples/02_xenium_only/`](examples/02_xenium_only/) | 1 Xenium sample | Recon → Xenium CE |
 | [`examples/03_visium_xenium_single/`](examples/03_visium_xenium_single/) | 1 Visium + 1 Xenium | Recon → Visium → Xenium (3-phase) |
+| [`examples/04_multi_visium/`](examples/04_multi_visium/) | Multiple Visium samples | Multi-sample Visium MSE with CDAN |
+| [`examples/04_multi_xenium/`](examples/04_multi_xenium/) | Multiple Xenium samples | Multi-sample Xenium CE with CDAN |
 | [`examples/05_multi_visium_xenium/`](examples/05_multi_visium_xenium/) | 2 Visium + 2 Xenium | Multi-sample 3-phase with CDAN |
 | [`examples/06_predict_new_sample/`](examples/06_predict_new_sample/) | New H&E images | Inference using trained model |
 

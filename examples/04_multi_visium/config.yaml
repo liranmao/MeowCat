@@ -11,6 +11,9 @@ project:
 
 visium:
   sample_pattern: "P*"
+  keep_frac: 0.25     # subsample to 25% per sample to keep training tractable
+  strategy: stratified
+  seed: 0
 
 rctd:
   reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
@@ -31,9 +34,6 @@ preprocess:
 
 batches:
   out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/batches
-  keep_frac: 0.25     # subsample to 25% per sample to keep training tractable
-  strategy: stratified
-  seed: 0
 
 # No xenium section needed — defaults are fine since no Xenium steps run.
 

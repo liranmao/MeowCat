@@ -285,16 +285,15 @@ def run_one_sample(
         data_root_ori = data_root
     sample_dir_ori = os.path.join(data_root_ori, sample)
 
+    print(f"  Visualizing sample: {sample}")
+
     # Load custom color map if provided
     cmap_dict = None
     if cmap_json is not None:
         if os.path.isfile(cmap_json):
             cmap_dict = load_cmap_json(cmap_json)
-            print(f"Loaded custom color map from: {cmap_json}")
-            print(f"  - cmap_name: {cmap_dict.get('cmap_name', 'N/A')}")
-            print(f"  - cell types: {list(cmap_dict.get('type_to_color', {}).keys())}")
         else:
-            print(f"WARNING: cmap_json not found: {cmap_json}, using default palette")
+            print(f"    WARNING: cmap_json not found: {cmap_json}, using default palette")
 
     # Resolve prediction file
     if pkl_path is not None:
@@ -329,7 +328,10 @@ def run_one_sample(
         # be defensive
         ctypes = [f"{ctypes[i] if i < len(ctypes) else f'celltype_{i}'}" for i in range(K)]
 
-    print(f"Cell types in data: {ctypes}")
+    print(f"    Cell types ({K}): {ctypes}")
+    print(f"    Map size: {H}x{W}, latent dim: {D}")
+    if cmap_dict:
+        print(f"    Color map: {cmap_dict.get('cmap_name', 'custom')} ({cmap_json})")
 
     # Mask
     mask_path = os.path.join(sample_dir_ori, "mask", "mask-small.png")
@@ -387,29 +389,31 @@ def run_one_sample(
     #     base_palette="tab20",
     # )
 
-    # Optional per-cluster highlight images
-    if save_highlights:
-        for cid in range(n_clusters):
-            out_png = os.path.join(out_highlights, f"{sample}_cluster_{cid:02d}.png")
-            save_single_cluster_highlight(
-                lab_map,
-                cid,
-                out_png=out_png,
-                mask=mask,
-                alpha_bg=0.10,
-                base_palette="tab20",
-                title_prefix="Cluster"
-            )
+    # # Optional per-cluster highlight images
+    # if save_highlights:
+    #     for cid in range(n_clusters):
+    #         out_png = os.path.join(out_highlights, f"{sample}_cluster_{cid:02d}.png")
+    #         save_single_cluster_highlight(
+    #             lab_map,
+    #             cid,
+    #             out_png=out_png,
+    #             mask=mask,
+    #             alpha_bg=0.10,
+    #             base_palette="tab20",
+    #             title_prefix="Cluster"
+    #         )
 
     # -------- Masked intensity maps for each cell type --------
     for i, ct in enumerate(ctypes):
         arr = p_map[..., i]
         out_png = os.path.join(out_intensity, f"masked_{safe_name(ct)}.png")
         save_masked_intensity(arr, mask, out_png, title=f"{sample} – Masked {ct}", p_lo=p_lo, p_hi=p_hi)
+    print(f"    Saved {K} intensity maps -> {out_intensity}")
 
     # -------- Predicted cell-type argmax map --------
     argmax_png = os.path.join(out_sample, f"{sample}_predicted_celltype_map.png")
     save_argmax_celltype_map(p_map, ctypes, mask, argmax_png, cmap_dict=cmap_dict, base_palette="tab20")
+    print(f"    Saved argmax map -> {argmax_png}")
 
     # -------- Minimal text summary --------
     summary_txt = os.path.join(out_sample, "summary.txt")

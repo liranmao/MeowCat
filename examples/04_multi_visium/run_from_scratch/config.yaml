@@ -27,8 +27,8 @@ preprocess:
   uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
   fusion_mode: single
 
-batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/batches
+visium:
+  sample_pattern: "VIS*"
   keep_frac: 0.25     # subsample to 25% per sample to keep training tractable
   strategy: stratified
   seed: 0
@@ -36,6 +36,9 @@ batches:
   exclude_set: []
   domain_map_tsv: null   # null = one domain per WSI folder (auto-assigned)
   fixed_radius: null
+
+batches:
+  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/batches
 
 # No xenium section needed — defaults are fine since no Xenium steps run.
 

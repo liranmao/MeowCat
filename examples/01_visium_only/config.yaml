@@ -9,6 +9,9 @@ project:
 
 visium:
   sample_pattern: "VIS*"
+  keep_frac: 1.0      # keep all spots (single sample, no need to subsample)
+  strategy: stratified
+  seed: 0
 
 
 rctd:
@@ -30,9 +33,6 @@ preprocess:
 
 batches:
   out_dir: /project/KidneyHE/01_meowcat_test/01_visium_only/output/batches
-  keep_frac: 1.0      # keep all spots (single sample, no need to subsample)
-  strategy: stratified
-  seed: 0
 
 # Training paradigm: Recon (Phase 0) -> Visium MSE (Phase 1)
 # No Xenium batches present, so sequential_training has no effect.

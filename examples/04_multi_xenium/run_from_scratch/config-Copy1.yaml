@@ -1,8 +1,7 @@
 # Example 4b: Train on multiple Xenium samples (no Visium)
 #             Multi-patient with CDAN cross-patient domain adaptation
-#             4 LUAD samples: P24, P19, P17, P11
 # Input:  /project/KidneyHE/01_meowcat_test/04_multi_xenium/input/
-#           P24_LUAD_Xenium/  P19_LUAD_Xenium/  P17_LUAD_Xenium/  P11_LUAD_Xenium/
+#           XEN_S1/  XEN_S2/   (2+ Xenium samples)
 # Output: /project/KidneyHE/01_meowcat_test/04_multi_xenium/output/
 
 project:
@@ -24,12 +23,12 @@ batches:
   out_dir: /project/KidneyHE/01_meowcat_test/04_multi_xenium/output/batches
 
 xenium:
-  sample_pattern: "P*"
+  sample_pattern: "XEN*"
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/04_multi_xenium/input/anno-names.txt
+  anno_names_path: /project/KidneyHE/01_meowcat_test/04_multi_xenium/anno-names.txt
   cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
-  keep_frac: 0.03346869815 # same as visium 59389/(443616*4)
+  keep_frac: 0.25
   seed: 42
 
 # Training paradigm: Recon (Phase 0) -> Xenium CE (Phase 1) + CDAN
