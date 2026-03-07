@@ -1,6 +1,6 @@
 # MeowCat Examples
 
-Four self-contained test cases, each with a `config.yaml` and `run.sh`.
+Seven self-contained test cases, each with a `config.yaml` and `run.sh`.
 All data lives under `/project/KidneyHE/01_meowcat_test/`.
 
 ---
@@ -31,7 +31,10 @@ meowcat run-all --config examples/01_visium_only/config.yaml --dry-run
 | [01_visium_only](#01-visium-only) | 1 Visium | Recon → Visium MSE | off |
 | [02_xenium_only](#02-xenium-only) | 1 Xenium | Recon → Xenium CE | off |
 | [03_visium_xenium_single](#03-visium--xenium-single-pair) | 1 Visium + 1 Xenium | Recon → Visium → Xenium | off |
+| [04_multi_visium](#04-multiple-visium) | Multiple Visium | Recon → Visium MSE + CDAN | on |
+| [04_multi_xenium](#04-multiple-xenium) | Multiple Xenium | Recon → Xenium CE + CDAN | on |
 | [05_multi_visium_xenium](#05-multiple-visium--xenium) | 2 Visium + 2 Xenium | Recon → Visium+CDAN → Xenium | on |
+| [06_predict_new_sample](#06-predict-new-sample) | New H&E images | Inference using trained model | — |
 
 ---
 
@@ -123,12 +126,16 @@ train:
 
 **Batch preparation:** Uses `meowcat prepare-xenium-batches` (not `prepare-visium-batches`, which is Visium-only).
 
+**Xenium batch size logic (`xenium.keep_frac`):**
+- If `keep_frac` is set (e.g. `0.25`): each sample selects `ceil(keep_frac * n_valid_cells)` cells via stratified sampling.
+- If `keep_frac` is **omitted** (default `None`): each sample selects the same number of cells as the first Visium batch file (`batch_vis_000_x.npy`'s row count). If no Visium batches exist, all valid cells are used. This keeps Xenium domain sizes balanced with Visium domains.
+
 **Key config settings:**
 ```yaml
 xenium:
-  xenium_data_root: .../xenium_raw
+  sample_pattern: "XEN*"
   anno_names_path: .../XEN_S1/anno-names.txt
-  visium_batch_dir: null   # no Visium batches in xenium-only mode
+  keep_frac: 0.5
 
 train:
   two_stage: true
@@ -185,14 +192,13 @@ train:
 | 1 — Visium | 100 | MSE on RCTD soft proportions | Only `batch_vis_*` |
 | 2 — Xenium | 50 | CE on hard labels | Only `batch_xen_*` |
 
-**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches/` directory. Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
+**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches.out_dir` directory. Xenium domain IDs continue from where Visium left off (auto-detected from existing `batch_vis_*_d.npy` files in `batches.out_dir`).
 
 **Key config settings:**
 ```yaml
 xenium:
-  xenium_data_root: .../xenium_raw
+  sample_pattern: "XEN*"
   anno_names_path: .../VIS_S1/anno-names.txt
-  visium_batch_dir: .../output/batches   # for domain ID offset
 
 train:
   two_stage: true
@@ -204,6 +210,26 @@ train:
   xenium_weight: 0.01
   adv_lambda: 0
 ```
+
+---
+
+## 04 — Multiple Visium
+
+**Path:** `examples/04_multi_visium/`
+
+**Use case:** Multiple Visium slides from different patients. CDAN domain adaptation aligns cross-patient representations. Visium-only training (MSE loss).
+
+**Key config settings:** Similar to `01_visium_only` but with multiple samples and `adv_lambda > 0` for CDAN.
+
+---
+
+## 04 — Multiple Xenium
+
+**Path:** `examples/04_multi_xenium/`
+
+**Use case:** Multiple Xenium slides from different patients. CDAN domain adaptation aligns cross-patient representations. Xenium-only training (CE loss).
+
+**Key config settings:** Similar to `02_xenium_only` but with multiple samples and `adv_lambda > 0` for CDAN.
 
 ---
 
@@ -249,7 +275,7 @@ train:
 
 **Key config settings:**
 ```yaml
-batches:
+visium:
   keep_frac: 0.25        # subsample 25% per patient
   domain_map_tsv: null   # auto: one domain per WSI folder
 
@@ -265,7 +291,7 @@ visualize:
   save_highlights: true   # saves per-cluster highlight images
 ```
 
-**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium (domains 0–1), then `meowcat prepare-xenium-batches` for Xenium (domains 2–3). Xenium domain IDs continue from where Visium left off (via `xenium.visium_batch_dir`).
+**Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium (domains 0–1), then `meowcat prepare-xenium-batches` for Xenium (domains 2–3). Xenium domain IDs continue from where Visium left off (auto-detected from existing `batch_vis_*_d.npy` files in `batches.out_dir`).
 
 **Domain ID assignment (auto):** Visium domains are assigned alphabetically (VIS_S1=0, VIS_S2=1). Xenium domains continue from the max Visium domain + 1 (XEN_S1=2, XEN_S2=3). To override Visium domain assignment, create a TSV:
 ```
@@ -274,4 +300,14 @@ VIS_S2	cohort_A
 XEN_S1	cohort_B
 XEN_S2	cohort_B
 ```
-and set `batches.domain_map_tsv` to its path. This groups the two cohorts rather than four individuals.
+and set `visium.domain_map_tsv` to its path. This groups the two cohorts rather than four individuals.
+
+---
+
+## 06 — Predict New Sample
+
+**Path:** `examples/06_predict_new_sample/`
+
+**Use case:** Run inference on new H&E images using a previously trained model. Uses `meowcat infer` to chain preprocessing, prediction, and visualization.
+
+**Key config settings:** Uses the `inference` section to point to a trained model directory and `anno-names.txt`. See [Inference on New H&E Images](../README.md#inference-on-new-he-images) in the main README.

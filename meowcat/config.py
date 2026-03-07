@@ -55,14 +55,14 @@ class VisiumConfig:
     exclude_set: List[str] = field(default_factory=list)
     domain_map_tsv: Optional[str] = None
     fixed_radius: Optional[float] = None
+    keep_frac: float = 0.25
+    strategy: str = "stratified"
+    seed: int = 0
 
 
 @dataclass
 class BatchesConfig:
     out_dir: str = "/path/to/batches"
-    keep_frac: float = 0.25
-    strategy: str = "stratified"
-    seed: int = 0
 
 
 @dataclass
@@ -79,8 +79,6 @@ class XeniumConfig:
     include_only: Optional[List[str]] = None
     # Samples to exclude
     exclude_set: List[str] = field(default_factory=list)
-    # Output directory for batch_xen_*_{x,y,d}.npy files
-    out_dir: str = "/path/to/xenium/batches"
     # Pixel size of Xenium DAPI images (microns per pixel; 0.2125 for standard Xenium).
     # Used to convert Xenium instrument coordinates (microns) to pixel coordinates.
     dapi_pixel_size_raw: float = 0.2125
@@ -90,8 +88,8 @@ class XeniumConfig:
     anno_names_path: str = "/path/to/anno-names.txt"
     # Path to cell type mapping JSON (fine -> coarse labels)
     cell_type_mapping_json: Optional[str] = None
-    # Visium batch directory (to determine domain ID offset; null = start from 0)
-    visium_batch_dir: Optional[str] = None
+    # Fraction of valid cells to keep (null = use Visium batch_size or all cells)
+    keep_frac: Optional[float] = None
     seed: int = 42
 
 
@@ -210,7 +208,8 @@ def load_config(path: Optional[str] = None) -> MeowCatConfig:
 
     # batches.{include_only,exclude_set,domain_map_tsv,fixed_radius} -> visium.*
     batches_raw = raw.get("batches") or {}
-    for key in ("include_only", "exclude_set", "domain_map_tsv", "fixed_radius"):
+    for key in ("include_only", "exclude_set", "domain_map_tsv", "fixed_radius",
+                "keep_frac", "strategy", "seed"):
         if key in batches_raw and key not in visium_raw:
             visium_raw[key] = batches_raw.pop(key)
 

@@ -51,35 +51,23 @@ visium:
   domain_map_tsv: null
   # Fixed spot radius in pixels (null = derive from radius.txt)
   fixed_radius: null
-
-batches:
-  # Directory where batch_XXX_x/y/d.npy files are written
-  out_dir: /path/to/batches
   # Fraction of spots to keep (coreset subsampling)
   keep_frac: 0.25
   # Coreset strategy: "stratified" or "kcenter"
   strategy: stratified
   seed: 0
 
+batches:
+  # Directory where batch_XXX_x/y/d.npy files are written (shared by Visium and Xenium)
+  out_dir: /path/to/batches
+
 xenium:
-  # Root for raw Xenium data (sample/sample/ substructure with cell_feature_matrix.h5, cells.parquet)
-  xenium_data_root: /path/to/xenium/raw
-  # Root for HistoSweep cellbin h5ad (sample/adata_cellbin_HistoSweep.h5ad)
-  cellbin_root: /path/to/xenium/cellbin
-  # Root for processed Xenium data (sample/ subfolders with output h5ad + embeddings)
-  processed_root: /path/to/xenium/processed
-  # Root for histology embeddings (sample/single_super_emb.h5ad)
-  histology_root: /path/to/xenium/histology
-  # Directory with per-sample cell type annotation CSVs (<sample>.csv)
-  xenium_anno_dir: /path/to/xenium_cell_type_anno
-  # Glob pattern for Xenium sample folders under processed_root
-  sample_pattern: "P*_Xenium"
+  # Glob pattern for Xenium sample folders under data_root
+  sample_pattern: "XEN*"
   # Samples to include (null = all matching pattern)
   include_only: null
   # Samples to exclude
   exclude_set: []
-  # Output directory for batch_xen_*_{x,y,d}.npy files
-  out_dir: /path/to/xenium/batches
   # Pixel size of Xenium DAPI images (microns per pixel; 0.2125 for standard Xenium).
   # Converts Xenium instrument coordinates (microns) to pixel coordinates.
   dapi_pixel_size_raw: 0.2125
@@ -89,8 +77,8 @@ xenium:
   anno_names_path: /path/to/anno-names.txt
   # Path to cell type mapping JSON (fine -> coarse labels)
   cell_type_mapping_json: null
-  # Visium batch directory (to determine domain ID offset; null = start from 0)
-  visium_batch_dir: null
+  # Fraction of valid cells to keep (null = use Visium batch_size or all cells)
+  keep_frac: null
   seed: 42
 
 train:
@@ -135,6 +123,8 @@ visualize:
   p_lo: 5
   p_hi: 95
   save_highlights: false
+  # Custom cell-type color map JSON (null = use bundled default)
+  cmap_json: null
 
 slide:
   # Output PowerPoint file path (relative to out_root or absolute)

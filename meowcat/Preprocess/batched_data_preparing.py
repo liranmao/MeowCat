@@ -34,12 +34,11 @@ XEN_DATA_ROOT = "/path/to/data"          # = project.data_root
 XEN_SAMPLE_PATTERN = "XEN*"              # = xenium.sample_pattern
 XEN_INCLUDE_ONLY = None
 XEN_EXCLUDE_SET = set()
-XEN_OUT_DIR = "/path/to/xenium/batches"
 XEN_DAPI_PIXEL_SIZE = 0.2125
 XEN_FIXED_RADIUS = 75.20
 XEN_ANNO_NAMES_PATH = "/path/to/anno-names.txt"
 XEN_CELL_TYPE_MAPPING_JSON = None
-XEN_VISIUM_BATCH_DIR = None
+XEN_KEEP_FRAC = None
 XEN_SEED = 42
 
 # ── config override ─────────────────────────────────────────────────────────
@@ -56,9 +55,12 @@ if _known.config:
     elif _batches.get('sample_pattern'):  SAMPLE_PATTERN = _batches['sample_pattern']
     elif _proj.get('sample_pattern'):     SAMPLE_PATTERN = _proj['sample_pattern']
     if _batches.get('out_dir'):      OUT_DIR        = _batches['out_dir']
-    if _batches.get('keep_frac') is not None: KEEP_FRAC    = _batches['keep_frac']
-    if _batches.get('strategy'): STRATEGY     = _batches['strategy']
-    if _batches.get('seed') is not None:      SEED         = _batches['seed']
+    _kf = _vis.get('keep_frac', _batches.get('keep_frac'))
+    if _kf is not None: KEEP_FRAC = _kf
+    _st = _vis.get('strategy', _batches.get('strategy'))
+    if _st: STRATEGY = _st
+    _sd = _vis.get('seed', _batches.get('seed'))
+    if _sd is not None: SEED = _sd
     # include_only, exclude_set, domain_map_tsv: visium > batches (backward compat)
     _inc = _vis.get('include_only', _batches.get('include_only'))
     if _inc is not None: INCLUDE_ONLY = set(_inc) if _inc else None
@@ -75,13 +77,12 @@ if _known.config:
     if _xen.get('include_only') is not None:
         XEN_INCLUDE_ONLY = set(_xen['include_only']) if _xen['include_only'] else None
     if _xen.get('exclude_set'):      XEN_EXCLUDE_SET      = set(_xen['exclude_set'])
-    if _xen.get('out_dir'):          XEN_OUT_DIR          = _xen['out_dir']
     if _xen.get('dapi_pixel_size_raw') is not None: XEN_DAPI_PIXEL_SIZE = _xen['dapi_pixel_size_raw']
     elif _xen.get('pixel_size_raw') is not None: XEN_DAPI_PIXEL_SIZE = _xen['pixel_size_raw']  # legacy
     if _xen.get('fixed_radius') is not None:   XEN_FIXED_RADIUS   = _xen['fixed_radius']
     if _xen.get('anno_names_path'):  XEN_ANNO_NAMES_PATH  = _xen['anno_names_path']
     if _xen.get('cell_type_mapping_json'): XEN_CELL_TYPE_MAPPING_JSON = _xen['cell_type_mapping_json']
-    if _xen.get('visium_batch_dir'): XEN_VISIUM_BATCH_DIR = _xen['visium_batch_dir']
+    if _xen.get('keep_frac') is not None: XEN_KEEP_FRAC = _xen['keep_frac']
     if _xen.get('seed') is not None: XEN_SEED             = _xen['seed']
 
 # ── imports ─────────────────────────────────────────────────────────────────
@@ -716,11 +717,11 @@ def _run_xenium():
     print("Part B: Xenium Batch Creation")
     print("=" * 60)
 
-    os.makedirs(XEN_OUT_DIR, exist_ok=True)
+    os.makedirs(OUT_DIR, exist_ok=True)
 
     # Load reference parameters
     print("\nLoading reference parameters...")
-    ref_params = xen_load_visium_reference(XEN_ANNO_NAMES_PATH, XEN_VISIUM_BATCH_DIR)
+    ref_params = xen_load_visium_reference(XEN_ANNO_NAMES_PATH, OUT_DIR)
     print(f"  Classes ({len(ref_params['class_names'])}): {ref_params['class_names']}")
     if 'max_tokens' in ref_params:
         print(f"  Max tokens (T): {ref_params['max_tokens']}")
@@ -728,7 +729,7 @@ def _run_xenium():
 
     # Determine domain offset
     print("\nDetermining Xenium domain IDs...")
-    max_visium_domain = xen_get_max_visium_domain_id(XEN_VISIUM_BATCH_DIR)
+    max_visium_domain = xen_get_max_visium_domain_id(OUT_DIR)
     xenium_domain_start = max_visium_domain + 1
     print(f"  Xenium domain IDs will start from: {xenium_domain_start}")
     print(f"\nRadius mode: FIXED = {XEN_FIXED_RADIUS} px")
@@ -768,7 +769,11 @@ def _run_xenium():
         print(f"  Bins per cell: median={mapping_stats['bins_per_cell_median']:.0f}, "
               f"mean={mapping_stats['bins_per_cell_mean']:.1f}")
 
-        target_size = ref_params.get('batch_size', valid_mask.sum())
+        if XEN_KEEP_FRAC is not None:
+            n_valid = int(valid_mask.sum())
+            target_size = max(1, int(np.ceil(XEN_KEEP_FRAC * n_valid)))
+        else:
+            target_size = ref_params.get('batch_size', valid_mask.sum())
         print(f"Selecting cells (target: {target_size})...")
         selected_cells = xen_stratified_sample_cells(
             df_pairs, valid_mask, labels, target_size, XEN_SEED
@@ -777,7 +782,7 @@ def _run_xenium():
         max_tokens = ref_params.get('max_tokens', 100)
 
         batch_name = f"batch_xen_{idx:03d}"
-        x_path = os.path.join(XEN_OUT_DIR, f"{batch_name}_x.npy")
+        x_path = os.path.join(OUT_DIR, f"{batch_name}_x.npy")
         print("Extracting features...")
         X = xen_extract_features_for_cells(
             selected_cells, df_pairs, adata_cellbin, max_tokens, XEN_SEED,
@@ -787,8 +792,8 @@ def _run_xenium():
 
         # X already saved to disk via memmap — save Y and D only
         print(f"Saving {batch_name} with domain_id={domain_id}...")
-        np.save(os.path.join(XEN_OUT_DIR, f"{batch_name}_y.npy"), Y.astype(np.float32))
-        np.save(os.path.join(XEN_OUT_DIR, f"{batch_name}_d.npy"),
+        np.save(os.path.join(OUT_DIR, f"{batch_name}_y.npy"), Y.astype(np.float32))
+        np.save(os.path.join(OUT_DIR, f"{batch_name}_d.npy"),
                 np.full(len(selected_cells), domain_id, dtype=np.int64))
 
         if hasattr(adata_cellbin, 'file'):
@@ -805,7 +810,7 @@ def _run_xenium():
         }
 
     # Save batch-sample mapping
-    mapping_path = os.path.join(XEN_OUT_DIR, "batch_sample_mapping.json")
+    mapping_path = os.path.join(OUT_DIR, "batch_sample_mapping.json")
     with open(mapping_path, 'w') as f:
         json.dump(batch_mapping, f, indent=2)
 

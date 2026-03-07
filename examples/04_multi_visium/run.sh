@@ -50,16 +50,16 @@ echo "============================================"
 # Phase 0 (15 ep):   reconstruction pretraining
 # Phase 1 (100 ep):  Visium MSE + CDAN domain adversarial (adv_lambda=0.005)
 # ---------------------------------------------------------------------------
-echo "[Step 5] Training (Recon -> Visium MSE + CDAN)"
-meowcat train --config "$CFG"
+# echo "[Step 5] Training (Recon -> Visium MSE + CDAN)"
+# meowcat train --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 6: Predict and visualize on all samples
 # Reads embeddings-hist.pickle from each P* sample via symlinks
 # Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
-echo "[Step 6] Prediction — all samples"
-meowcat predict --config "$CFG"
+# echo "[Step 6] Prediction — all samples"
+# meowcat predict --config "$CFG"
 
 echo "[Step 6] Visualization — all samples"
 meowcat visualize --config "$CFG"

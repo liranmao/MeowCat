@@ -1,10 +1,8 @@
 # Example 5: Train on multiple Visium + multiple Xenium samples
 #            (3-phase sequential training with CDAN domain adaptation)
-#            Visium: P* samples from 04_multi_visium
-#            Xenium: P24, P19, P17, P11 LUAD samples from 04_multi_xenium
 # Input:  /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/
-#           P*/                (Visium samples, symlinked from 04_multi_visium)
-#           P*_LUAD_Xenium/    (Xenium samples, symlinked from 04_multi_xenium)
+#           VIS_S1/  VIS_S2/   (2 Visium samples)
+#           XEN_S1/  XEN_S2/   (2 Xenium samples)
 # Output: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/
 
 project:
@@ -13,7 +11,7 @@ project:
   out_root:  /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output
 
 visium:
-  sample_pattern: "P*_LUAD"     # matches Visium P*_LUAD dirs (not P*_LUAD_Xenium)
+  sample_pattern: "VIS*"   # preprocess auto-discovers all samples (VIS* + XEN*)
   keep_frac: 0.25     # subsample to 25% per sample to keep training tractable
   strategy: stratified
   seed: 0
@@ -49,10 +47,10 @@ batches:
 # conversion in cells.parquet), NOT the H&E image MPP.
 # Each XEN_* sample folder should contain: xenium_raw/, adata_cellbin_HistoSweep.h5ad, annotation.csv
 xenium:
-  sample_pattern: "P*_LUAD_Xenium"
+  sample_pattern: "XEN*"
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/anno-names.txt
+  anno_names_path: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/VIS_S1/anno-names.txt
   cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
   seed: 42
 
@@ -73,8 +71,8 @@ train:
   xenium_weight: 0.01
   monitor_metric: val_weak_mse
   # Out-of-sample monitoring: hold one sample out to watch generalisation
-  oos_sample: null
-  oos_tmpdir: null
+  oos_sample: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/VIS_S2
+  oos_tmpdir: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/oos_batch
   device: cuda
 
 predict:

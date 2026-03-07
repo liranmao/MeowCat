@@ -224,11 +224,11 @@ Returns 6 sequential sub-commands for one sample:
 - **Config fields consumed (via YAML override):**
   - `project.data_root` → `PREFIX`
   - `batches.out_dir` → `OUT_DIR`
-  - `batches.keep_frac` → `KEEP_FRAC`
-  - `batches.strategy` → `STRATEGY`
-  - `batches.seed` → `SEED`
-  - `batches.include_only` → `INCLUDE_ONLY`
-  - `batches.exclude_set` → `EXCLUDE_SET`
+  - `visium.keep_frac` → `KEEP_FRAC` (fallback: `batches.keep_frac`)
+  - `visium.strategy` → `STRATEGY` (fallback: `batches.strategy`)
+  - `visium.seed` → `SEED` (fallback: `batches.seed`)
+  - `visium.include_only` → `INCLUDE_ONLY` (fallback: `batches.include_only`)
+  - `visium.exclude_set` → `EXCLUDE_SET` (fallback: `batches.exclude_set`)
 - **Inputs (disk, per Visium sample):**
   - `<PREFIX>/<sample>/embeddings-hist.pickle` — fused UNI features [H,W,C]
   - `<PREFIX>/<sample>/anno-names.txt` — cell-type names

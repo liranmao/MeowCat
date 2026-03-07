@@ -31,8 +31,8 @@ class TestDefaultConfig:
         assert cfg.preprocess.pad == 224
         assert cfg.train.n_states == 2
         assert cfg.train.two_stage is True
-        assert cfg.batches.keep_frac == 0.25
-        assert cfg.batches.strategy == "stratified"
+        assert cfg.visium.keep_frac == 0.25
+        assert cfg.visium.strategy == "stratified"
         assert cfg.visualize.n_clusters == 6
 
     def test_section_types(self):
@@ -100,11 +100,24 @@ class TestCustomConfig:
 
     def test_exclude_set_is_list(self):
         path = self._write_yaml("""
-            batches:
+            visium:
               exclude_set: [P21_LUAD, P_bad]
         """)
         cfg = load_config(path)
-        assert cfg.batches.exclude_set == ["P21_LUAD", "P_bad"]
+        assert cfg.visium.exclude_set == ["P21_LUAD", "P_bad"]
+        os.unlink(path)
+
+    def test_backward_compat_batches_keep_frac(self):
+        path = self._write_yaml("""
+            batches:
+              keep_frac: 0.5
+              strategy: kcenter
+              seed: 42
+        """)
+        cfg = load_config(path)
+        assert cfg.visium.keep_frac == 0.5
+        assert cfg.visium.strategy == "kcenter"
+        assert cfg.visium.seed == 42
         os.unlink(path)
 
 
