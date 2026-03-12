@@ -6,6 +6,18 @@
 
 A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered transcriptomics data as training supervision.
 
+
+## Table of Contents
+1. [Examples](#examples)
+2. [Installation](#installation)
+3. [Repository Layout](#repository-layout)
+4. [Data Requirements](#data-requirements)
+5. [Pipeline Walkthrough](#pipeline-walkthrough)
+6. [Inference on New H&E Images](#inference-on-new-he-images)
+7. [Config Reference](#config-reference)
+8. [Training Paradigms](#training-paradigms)
+
+
 ## Examples
 
 See the [`examples/`](examples/) folder for seven ready-to-run test cases. Each contains a `config.yaml` and a `run.sh`. See [`examples/README.md`](examples/README.md) for details.
@@ -20,15 +32,6 @@ See the [`examples/`](examples/) folder for seven ready-to-run test cases. Each 
 | [`05_multi_visium_xenium/`](examples/05_multi_visium_xenium/) | 2 Visium + 2 Xenium | Multi-sample 3-phase with CDAN |
 | [`06_predict_new_sample/`](examples/06_predict_new_sample/) | New H&E images | Inference using trained model |
 
-## Table of Contents
-1. [Examples](#examples)
-2. [Installation](#installation)
-3. [Repository Layout](#repository-layout)
-4. [Data Requirements](#data-requirements)
-5. [Pipeline Walkthrough](#pipeline-walkthrough)
-6. [Inference on New H&E Images](#inference-on-new-he-images)
-7. [Config Reference](#config-reference)
-8. [Training Paradigms](#training-paradigms)
 
 ## Installation
 
