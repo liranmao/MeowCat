@@ -32,19 +32,72 @@ See the [`examples/`](examples/) folder for seven ready-to-run test cases. Each 
 
 ## Installation
 
+The pipeline uses **three conda environments** for different steps. Create them from the YAML files in `env/`:
+
+### 1. RCTD (Step 1: Visium deconvolution)
+
+Runs the R-based RCTD deconvolution of Visium spots into cell-type proportions.
+
 ```bash
-cd MeowCat
-pip install -e .
-meowcat --help
+conda env create -f env/RCTD_env.yml
 ```
 
-The pipeline uses **three conda environments** for different steps:
+Key packages: R, spacexr, Seurat v5.
+
+### 2. rapids_singlecell (Steps 2–3: image preprocessing & feature extraction)
+
+Handles image preprocessing, resolution checking, rescaling, tissue masking, UNI feature extraction, and feature fusion.
+
+```bash
+conda env create -f env/rapids_singlecell_env.yml
+```
+
+Key packages: rapids-singlecell, cupy, scanpy, torch, timm.
+
+### 3. he_anno (Steps 4–7: batching, training, prediction, visualization)
+
+Main environment for batch preparation, model training, prediction, and visualization. The MeowCat CLI is also installed here.
+
+```bash
+conda env create -f env/MeowCat_env.yml
+```
+
+Key packages: torch, pytorch-lightning, scanpy, anndata, squidpy.
+
+### Installing the MeowCat CLI
+
+After creating the `he_anno` environment, install MeowCat in editable mode:
+
+```bash
+conda activate he_anno
+cd MeowCat
+pip install -e .
+```
+
+This makes the `meowcat` command available. The CLI orchestrates all pipeline steps by spawning subprocesses into the appropriate conda environment (configured in your run YAML).
+
+### UNI Model Weights
+
+MeowCat uses the [UNI ViT-Large](https://huggingface.co/MahmoodLab/UNI) foundation model for histology patch embeddings. You must download the pretrained weights separately and specify the path in your config YAML under `preprocess.uni_weights`.
+
+### Quick Verification
+
+```bash
+# Verify the CLI is installed
+conda activate he_anno
+meowcat --help
+
+# Dry-run a config to check paths without executing
+meowcat run-all --config config/my_run.yaml --dry-run
+```
+
+### Environment summary
 
 | Environment | Steps | How to activate |
 |-------------|-------|----------------|
 | `rapids_singlecell` | Image preprocessing (Steps 2, 3, 6a) | `micromamba activate rapids_singlecell` |
-| `he_anno` | Batch preparation, training, prediction, visualization (Steps 4-7) | `conda activate he_anno` |
-| R / `RCTD` | RCTD deconvolution (Step 1) | `conda activate RCTD` |
+| `he_anno` | Batch preparation, training, prediction, visualization (Steps 4–7) | `conda activate he_anno` |
+| `RCTD` | RCTD deconvolution (Step 1) | `conda activate RCTD` |
 
 > **Note:** The `meowcat` CLI generates the correct subprocess commands. Activate the appropriate environment before running each step.
 
