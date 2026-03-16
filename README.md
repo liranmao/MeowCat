@@ -4,7 +4,7 @@
 
 ## Overview
 
-A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered transcriptomics data as training supervision.
+A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered omics data as training supervision. Accept any omics and any spatial resolution. 
 
 
 ## Table of Contents
