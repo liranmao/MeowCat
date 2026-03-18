@@ -147,10 +147,10 @@ def extract_tiff_subregions(
 def load_image(filename, verbose=True):
     ext = os.path.splitext(filename)[-1].lower()
 
-    if ext == ".svs":
+    if ext in (".svs", ".ndpi"):
         import pyvips
 
-        # Load SVS via pyvips
+        # Load WSI (SVS/NDPI) via pyvips
         slide = pyvips.Image.new_from_file(filename, access="sequential")
         if verbose:
             print(f"Width: {slide.width}, Height: {slide.height}, Bands: {slide.bands}")
@@ -254,7 +254,7 @@ def rescale_image_cv2(img, scale):
 def get_image_filename(prefix):
     print(f"prefix = {prefix}")
     file_exists = False
-    for suffix in ['.jpg', '.jpeg','.png', '.tiff', ".tif", ".svs"]:
+    for suffix in ['.jpg', '.jpeg','.png', '.tiff', ".tif", ".svs", ".ndpi"]:
         filename = prefix + suffix
         if os.path.exists(filename):
             file_exists = True
