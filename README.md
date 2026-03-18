@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="image/logo_v2.png" alt="MeowCat Logo" width="400"/>
-</p>
+
 
 ## Overview
 
