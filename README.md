@@ -154,9 +154,9 @@ The reason why we need this is that `meowcat preprocess` produces `single_super_
 2. Align the H&E image to the Xenium DAPI image. You should do a coordinate transformation from H&E pixel space to DAPI pixel space.
 3. Apply the transformation to each superpixel's `.obsm['spatial']` coordinates, converting them from H&E space to DAPI space.
 4. Save the result as `adata_cellbin_HistoSweep.h5ad` with the transformed coordinates stored in `.obsm['transformed_pxl_loc_in_morphology']`.
+5. Optionally, add histology features from `single_super_emb.hoad` to   `.obsm['histology_2048']` in `adata_cellbin_HistoSweep.h5ad`. If absent, the pipeline automatically loads and merges them from `single_super_emb.h5ad` using matched `.obs_names`.
 
-**Required structure:**
-
+Here is required structure for this `adata_cellbin_HistoSweep.h5ad` data: 
 | Slot | Shape | Description |
 |------|-------|-------------|
 | `.obs_names` | `(n_bins,)` | Superpixel/bin IDs — **must match** `single_super_emb.h5ad` `.obs_names` |
