@@ -68,33 +68,22 @@ meowcat run-all --config config.yaml
 
 **Output:**
 ```
+# Generated in input folder (data_root):
+/project/KidneyHE/01_meowcat_test/01_visium_only/input/
+  VIS_S1/
+    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
+
+# Generated in output folder (out_root):
 /project/KidneyHE/01_meowcat_test/01_visium_only/output/
   batches/
-    batch_vis_000_x/y/d.npy      <- tokenized Visium spots
+    batch_vis_000_x/y/d.npy       <- tokenized Visium spots
     states/00/model.ckpt
     states/01/model.ckpt
   VIS_S1/
-    embeddings-hist.pickle
-    pred_fullgrid_outputs.pkl
+    argmax_map.png                 <- cell-type prediction map
+    intensity_*.png                <- per-cell-type intensity maps
   results_ex01.pptx
-```
-
-**Training phases:**
-
-| Phase | Epochs | Loss |
-|-------|--------|------|
-| 0 — Reconstruction | 15 | MSE on masked UNI features |
-| 1 — Visium | 100 | MSE on RCTD soft proportions |
-
-**Key config settings:**
-```yaml
-train:
-  two_stage: true
-  epochs1: 15
-  sequential_training: false
-  visium_epochs: 100
-  xenium_epochs: 0
-  adv_lambda: 0    # CDAN off (single patient)
 ```
 
 ---
@@ -134,46 +123,27 @@ meowcat run-all --config config.yaml
 
 **Output:**
 ```
+# Generated in input folder (data_root):
+/project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/input/
+  XEN_P11_LUAD/
+    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
+
+# Generated in output folder (out_root):
 /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/
   batches/
-    batch_xen_000_x/y/d.npy      <- one-hot hard labels in _y.npy
+    batch_xen_000_x/y/d.npy       <- one-hot hard labels in _y.npy
     states/00/model.ckpt
     states/01/model.ckpt
   XEN_P11_LUAD/
-    embeddings-hist.pickle
-    pred_fullgrid_outputs.pkl
+    argmax_map.png
+    intensity_*.png
   results_ex02.pptx
 ```
-
-**Training phases:**
-
-| Phase | Epochs | Loss |
-|-------|--------|------|
-| 0 — Reconstruction | 15 | MSE on masked UNI features |
-| 1 — Xenium | 100 | Cross-entropy on hard labels |
-
-**Batch preparation:** Uses `meowcat prepare-xenium-batches` (not `prepare-visium-batches`, which is Visium-only).
 
 **Xenium batch size logic (`xenium.keep_frac`):**
 - If `keep_frac` is set (e.g. `0.5`): each sample selects `ceil(keep_frac * n_valid_cells)` cells via stratified sampling.
 - If `keep_frac` is **omitted** (default `None`): each sample selects the same number of cells as the first Visium batch file (`batch_vis_000_x.npy`'s row count). If no Visium batches exist, all valid cells are used. This keeps Xenium domain sizes balanced with Visium domains.
-
-**Key config settings:**
-```yaml
-xenium:
-  sample_pattern: "XEN*"
-  anno_names_path: .../anno-names.txt
-  cell_type_mapping_json: .../cell_type_mapping_lung.json
-  keep_frac: 0.5
-
-train:
-  two_stage: true
-  epochs1: 15
-  sequential_training: false
-  visium_epochs: 0
-  xenium_epochs: 100
-  xenium_weight: 1.0
-```
 
 ---
 
@@ -218,45 +188,26 @@ meowcat run-all --config config.yaml
 
 **Output:**
 ```
+# Generated in input folder (data_root):
+/project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/
+  VIS_P11_LUAD/  XEN_P11_LUAD/
+    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
+
+# Generated in output folder (out_root):
 /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/
   batches/
-    batch_vis_000_x/y/d.npy      <- Visium (resolution=0, MSE)
-    batch_xen_000_x/y/d.npy      <- Xenium (resolution=1, CE)
+    batch_vis_000_x/y/d.npy       <- Visium (resolution=0, MSE)
+    batch_xen_000_x/y/d.npy       <- Xenium (resolution=1, CE)
     states/00/model.ckpt
     states/01/model.ckpt
   VIS_P11_LUAD/  XEN_P11_LUAD/
-    embeddings-hist.pickle
-    pred_fullgrid_outputs.pkl
+    argmax_map.png
+    intensity_*.png
   results_ex03.pptx
 ```
 
-**Training phases:**
-
-| Phase | Epochs | Loss | Notes |
-|-------|--------|------|-------|
-| 0 — Reconstruction | 15 | MSE on masked UNI features | All data |
-| 1 — Visium | 100 | MSE on RCTD soft proportions | Only `batch_vis_*` |
-| 2 — Xenium | 50 | CE on hard labels | Only `batch_xen_*` |
-
 **Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches.out_dir` directory. Xenium domain IDs continue from where Visium left off (auto-detected from existing `batch_vis_*_d.npy` files in `batches.out_dir`).
-
-**Key config settings:**
-```yaml
-xenium:
-  sample_pattern: "XEN*"
-  anno_names_path: .../VIS_P11_LUAD/anno-names.txt   # shared vocab from Visium RCTD
-  cell_type_mapping_json: .../cell_type_mapping_lung.json
-
-train:
-  two_stage: true
-  epochs1: 15
-  sequential_training: true
-  visium_epochs: 100
-  xenium_epochs: 50
-  freeze_encoder_n: 2    # stabilizes fine-tuning at phase transitions
-  xenium_weight: 0.01
-  adv_lambda: 0
-```
 
 ---
 
@@ -289,21 +240,6 @@ meowcat slide                    --config config.yaml   # Step 7: assemble Power
 meowcat run-all --config config.yaml
 ```
 
-**Key config settings:**
-```yaml
-visium:
-  sample_pattern: "P*"
-  keep_frac: 0.25        # subsample 25% per patient
-
-train:
-  two_stage: true
-  epochs1: 15
-  sequential_training: false
-  visium_epochs: 100
-  xenium_epochs: 0
-  adv_lambda: 0.005      # CDAN cross-patient alignment
-```
-
 ---
 
 ## 04 — Multiple Xenium
@@ -333,24 +269,6 @@ meowcat visualize                --config config.yaml   # Step 6: argmax + inten
 meowcat slide                    --config config.yaml   # Step 7: assemble PowerPoint
 # Or run all at once:
 meowcat run-all --config config.yaml
-```
-
-**Key config settings:**
-```yaml
-xenium:
-  sample_pattern: "P*"
-  anno_names_path: .../anno-names.txt
-  cell_type_mapping_json: .../cell_type_mapping_lung.json
-  keep_frac: 0.03346869815   # balanced with Visium domain size: 59389/(443616*4)
-
-train:
-  two_stage: true
-  epochs1: 15
-  sequential_training: false
-  visium_epochs: 0
-  xenium_epochs: 100
-  xenium_weight: 1.0
-  adv_lambda: 0.005      # CDAN cross-patient alignment
 ```
 
 ---
@@ -401,29 +319,28 @@ meowcat run-all --config config.yaml
 
 **Output:**
 ```
+# Generated in input folder (data_root):
+/project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/
+  P11_LUAD/  P17_LUAD/  ...  P11_LUAD_Xenium/  ...
+    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
+
+# Generated in output folder (out_root):
 /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/
   batches/
-    batch_vis_000_x/y/d.npy   <- Visium sample 1 (domain 0)
-    batch_vis_001_x/y/d.npy   <- Visium sample 2 (domain 1)
+    batch_vis_000_x/y/d.npy       <- Visium sample 1 (domain 0)
+    batch_vis_001_x/y/d.npy       <- Visium sample 2 (domain 1)
     ...
-    batch_xen_000_x/y/d.npy   <- Xenium sample 1 (domain N)
-    batch_xen_001_x/y/d.npy   <- Xenium sample 2 (domain N+1)
+    batch_xen_000_x/y/d.npy       <- Xenium sample 1 (domain N)
+    batch_xen_001_x/y/d.npy       <- Xenium sample 2 (domain N+1)
     ...
     states/00/model.ckpt
     states/01/model.ckpt
   P11_LUAD/  P17_LUAD/  ...  P11_LUAD_Xenium/  ...
-    embeddings-hist.pickle
-    pred_fullgrid_outputs.pkl
+    argmax_map.png
+    intensity_*.png
   results_ex05.pptx
 ```
-
-**Training phases:**
-
-| Phase | Epochs | Loss | Notes |
-|-------|--------|------|-------|
-| 0 — Reconstruction | 15 | MSE on masked UNI features | All domains |
-| 1 — Visium | 100 | MSE + CDAN adversarial | `adv_lambda=0.005` |
-| 2 — Xenium | 100 | CE on hard labels | `xenium_weight=0.01` |
 
 **Batch preparation:** Two separate steps — `meowcat prepare-visium-batches` for Visium, then `meowcat prepare-xenium-batches` for Xenium. Both write to the same `batches.out_dir` directory. Xenium domain IDs continue from where Visium left off (auto-detected from existing `batch_vis_*_d.npy` files in `batches.out_dir`).
 
@@ -435,28 +352,6 @@ P19_LUAD	cohort_B
 P24_LUAD	cohort_B
 ```
 and set `visium.domain_map_tsv` to its path. This groups samples into cohorts rather than individual domains.
-
-**Key config settings:**
-```yaml
-visium:
-  sample_pattern: "P*_LUAD"
-  keep_frac: 0.25        # subsample 25% per patient
-
-xenium:
-  sample_pattern: "P*_LUAD_Xenium"
-  anno_names_path: .../anno-names.txt
-  cell_type_mapping_json: .../cell_type_mapping_lung.json
-
-train:
-  sequential_training: true
-  visium_epochs: 100
-  xenium_epochs: 100
-  adv_lambda: 0.005      # CDAN cross-patient alignment
-  xenium_weight: 0.01
-
-visualize:
-  save_highlights: true   # saves per-cluster highlight images
-```
 
 > **OOS monitoring (optional):** To hold out a sample for out-of-sample generalization monitoring, set `train.oos_sample` to the sample path and `train.oos_tmpdir` to a scratch directory. This config has OOS disabled (`null`) by default.
 
@@ -481,19 +376,6 @@ visualize:
 ```bash
 meowcat infer --config config.yaml
 # This chains: preprocess -> predict -> visualize -> slide
-```
-
-**Key config settings:**
-```yaml
-inference:
-  model_dir: .../05_multi_visium_xenium/output/batches   # path to states/ with model.ckpt files
-  anno_names: .../anno-names.txt                          # cell-type list from training
-
-visium:
-  sample_pattern: "P*"     # discovers new sample folders
-
-preprocess:
-  pixel_size_raw: 0.5      # set explicitly if image metadata is unreliable
 ```
 
 See [Inference on New H&E Images](../README.md#inference-on-new-he-images) in the main README for more details.
