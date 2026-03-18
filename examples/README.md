@@ -25,16 +25,15 @@ meowcat run-all --config examples/01_visium_only/config.yaml --dry-run
 
 ## Overview
 
-| Example | Input samples | Training paradigm | CDAN |
-|---------|--------------|-------------------|------|
-| [01_visium_only](#01--visium-only) | 1 Visium | Recon → Visium MSE | off |
-| [02_xenium_only](#02--xenium-only) | 1 Xenium | Recon → Xenium CE | off |
-| [03_visium_xenium_single](#03--visium--xenium-single-pair) | 1 Visium + 1 Xenium | Recon → Visium → Xenium | off |
-| [04_multi_visium](#04--multiple-visium) | Multiple Visium | Recon → Visium MSE + CDAN | on |
-| [04_multi_xenium](#04--multiple-xenium) | Multiple Xenium | Recon → Xenium CE + CDAN | on |
-| [05_multi_visium_xenium](#05--multiple-visium--xenium) | Multiple Visium + Xenium | Recon → Visium+CDAN → Xenium | on |
-| [06_predict_new_sample](#06--predict-new-sample) | New H&E images | Inference using trained model | — |
-
+| Example | Input samples |
+|---------|--------------|
+| [01_visium_only](#01--visium-only) | 1 Visium | 
+| [02_xenium_only](#02--xenium-only) | 1 Xenium | 
+| [03_visium_xenium_single](#03--visium--xenium-single-pair) | 1 Visium + 1 Xenium | 
+| [04_multi_visium](#04--multiple-visium) | Multiple Visium | 
+| [04_multi_xenium](#04--multiple-xenium) | Multiple Xenium | 
+| [05_multi_visium_xenium](#05--multiple-visium--xenium) | Multiple Visium + Xenium | 
+| [06_predict_new_sample](#06--predict-new-sample) | New H&E images | 
 ---
 
 ## 01 — Visium only
