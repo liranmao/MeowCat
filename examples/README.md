@@ -1,7 +1,6 @@
 # MeowCat Examples
 
-Seven self-contained examples, each with a `config.yaml` and `run.sh`.
-All data lives under `/project/KidneyHE/01_meowcat_test/`.
+Seven examples, each with a `config.yaml` and `run.sh`.
 
 ---
 
