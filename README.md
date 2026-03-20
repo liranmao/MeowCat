@@ -34,37 +34,11 @@ See the [`examples/`](examples/) folder for seven ready-to-run test cases. Each 
 
 ## Installation
 
-The pipeline uses **three conda environments** for different steps. Create them from the YAML files in `env/`:
-
-### 1. RCTD (Step 1: Visium deconvolution)
-
-Runs the R-based RCTD deconvolution of Visium spots into cell-type proportions.
-
-```bash
-conda env create -f env/RCTD_env.yml
-```
-
-Key packages: R, spacexr, Seurat v5.
-
-### 2. rapids_singlecell (Steps 2–3: image preprocessing & feature extraction)
-
-Handles image preprocessing, resolution checking, rescaling, tissue masking, UNI feature extraction, and feature fusion.
-
-```bash
-conda env create -f env/rapids_singlecell_env.yml
-```
-
-Key packages: rapids-singlecell, cupy, scanpy, torch, timm.
-
-### 3. he_anno (Steps 4–7: batching, training, prediction, visualization)
-
-Main environment for batch preparation, model training, prediction, and visualization. The MeowCat CLI is also installed here.
+Create the conda env from the YAML file in `env/`:
 
 ```bash
 conda env create -f env/MeowCat_env.yml
 ```
-
-Key packages: torch, pytorch-lightning, scanpy, anndata, squidpy.
 
 ### Installing the MeowCat CLI
 
@@ -76,7 +50,7 @@ cd MeowCat
 pip install -e .
 ```
 
-This makes the `meowcat` command available. The CLI orchestrates all pipeline steps by spawning subprocesses into the appropriate conda environment (configured in your run YAML).
+This makes the `meowcat` command available.
 
 ### UNI Model Weights
 
