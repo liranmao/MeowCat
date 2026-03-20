@@ -270,6 +270,11 @@ def cmd_infer(cfg: MeowCatConfig, args: argparse.Namespace) -> None:
 
 
 def cmd_run_all(cfg: MeowCatConfig, args: argparse.Namespace) -> None:
+    # run-all doesn't register --samples or --start-from, so set defaults
+    if not hasattr(args, "samples"):
+        args.samples = None
+    if not hasattr(args, "start_from"):
+        args.start_from = 1
     cmd_rctd(cfg, args)
     cmd_check_resolution(cfg, args)
     cmd_preprocess(cfg, args)
