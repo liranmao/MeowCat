@@ -67,15 +67,6 @@ meowcat --help
 meowcat run-all --config config/my_run.yaml --dry-run
 ```
 
-### Environment summary
-
-| Environment | Steps | How to activate |
-|-------------|-------|----------------|
-| `rapids_singlecell` | Image preprocessing (Steps 2, 3, 6a) | `micromamba activate rapids_singlecell` |
-| `he_anno` | Batch preparation, training, prediction, visualization (Steps 4–7) | `conda activate he_anno` |
-| `RCTD` | RCTD deconvolution (Step 1) | `conda activate RCTD` |
-
-> **Note:** The `meowcat` CLI generates the correct subprocess commands. Activate the appropriate environment before running each step.
 
 ## Repository Layout
 
