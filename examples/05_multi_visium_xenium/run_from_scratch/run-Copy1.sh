@@ -62,7 +62,7 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution for both Visium samples
-# Activate: conda activate RCTD
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 1] RCTD deconvolution (Visium samples)"
 echo "  NOTE: Set rctd.reference_rds in $CFG to your single-cell reference RDS"
@@ -70,7 +70,7 @@ echo "  NOTE: Set rctd.reference_rds in $CFG to your single-cell reference RDS"
 
 # ---------------------------------------------------------------------------
 # Step 2: Resolution check
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 2] Resolution check"
 meowcat check-resolution --config "$CFG"
@@ -79,7 +79,7 @@ meowcat check-resolution --config "$CFG"
 # Step 3: Preprocess all images (data-agnostic — works for both Visium and Xenium)
 # Auto-discovers both VIS* and XEN* samples from data_root.
 # Can run in parallel on a cluster (one job per sample).
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # Produces single_super_emb.h5ad (UNI histology features) per sample.
 # For Xenium, prepare-xenium-batches (Step 4b) will automatically merge
 # histology features from single_super_emb.h5ad into the cellbin.

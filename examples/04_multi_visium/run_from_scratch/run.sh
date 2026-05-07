@@ -45,14 +45,14 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution for all Visium samples
-# Activate: conda activate RCTD
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 1] RCTD deconvolution (all Visium samples)"
 meowcat rctd --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 2: Resolution check
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 2] Resolution check"
 meowcat check-resolution --config "$CFG"
@@ -61,7 +61,7 @@ meowcat check-resolution --config "$CFG"
 # Step 3: Preprocess all Visium images
 # Auto-discovers all VIS* samples from project.sample_pattern.
 # Can run in parallel on a cluster (one job per sample).
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 3] Image preprocessing — all Visium samples"
 meowcat preprocess --config "$CFG"

@@ -192,7 +192,7 @@ meowcat <step> --config config/my_run.yaml --dry-run
 *Visium only.* Decomposes spot-level gene expression into cell-type proportions using RCTD.
 
 ```bash
-# activate RCTD, then:
+# activate he_anno, then:
 meowcat rctd --config config/my_run.yaml
 ```
 
@@ -203,7 +203,7 @@ Set `rctd.reference_rds` to your single-cell reference. Optionally use `rctd.gro
 Audits image resolution (MPP) across samples.
 
 ```bash
-# activate rapids_singlecell, then:
+# activate he_anno, then:
 meowcat check-resolution --config config/my_run.yaml
 ```
 
@@ -214,7 +214,7 @@ If auto-detection fails, set `preprocess.pixel_size_raw` in your config to the k
 **Data-agnostic** — works identically for both Visium and Xenium samples. Rescales images, generates tissue masks, extracts UNI ViT-Large features, and fuses them into `single_super_emb.h5ad`.
 
 ```bash
-# activate rapids_singlecell, then:
+# activate he_anno, then:
 meowcat preprocess --config config/my_run.yaml
 
 # process specific samples:
@@ -267,10 +267,8 @@ See [Training Paradigms](#training-paradigms) for config details.
 ### Step 6 — Prediction & Visualization
 
 ```bash
-# activate rapids_singlecell for preprocessing new samples:
+# activate he_anno, then:
 meowcat preprocess --config config/my_run.yaml --samples P_new1,P_new2
-
-# activate he_anno for prediction and visualization:
 meowcat predict   --config config/my_run.yaml --samples P_new1,P_new2
 meowcat visualize --config config/my_run.yaml --samples P_new1,P_new2
 ```
