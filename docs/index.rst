@@ -6,7 +6,7 @@ MeowCat (**M**\ ulti-resolution **O**\ mics informed **W**\ hole-slide
 cell-type annotation in H&E histopathology images, supervised by spatially
 registered transcriptomics data.
 
-.. image:: https://github.com/user-attachments/assets/26cfd660-0370-47be-9122-6a354894c6b9
+.. image:: _static/diagram.png
    :width: 90%
    :align: center
 
