@@ -13,8 +13,7 @@
 #   4. Visualize results (argmax map + intensity maps)
 #   5. Generate PowerPoint summary
 #
-# NOTE: Preprocessing (step 1) requires rapids_singlecell environment.
-#       Steps 2-5 require he_anno environment.
+# NOTE: All steps run inside the he_anno environment.
 #       Use --start-from 6 to skip preprocessing if already done.
 #
 # Usage:

@@ -57,7 +57,7 @@ echo "[Step 1] Skipped — Xenium data uses hard cell-type labels, no RCTD neede
 
 # ---------------------------------------------------------------------------
 # Step 2: Check image resolution (optional)
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 2] Resolution check"
 meowcat check-resolution --config "$CFG"
@@ -66,7 +66,7 @@ meowcat check-resolution --config "$CFG"
 # Step 3: Preprocess all Xenium H&E images
 # Auto-discovers all XEN* samples from project.sample_pattern.
 # Can run in parallel on a cluster (one job per sample).
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 3] Image preprocessing — all Xenium samples"
 meowcat preprocess --config "$CFG"

@@ -27,9 +27,7 @@
 #   conda activate he_anno
 #   bash run.sh > log.txt 2>&1 &
 #
-# NOTE: Steps 1-3 require different conda environments (see comments).
-#       Activate the appropriate env before running each step, or run
-#       them individually:  meowcat <step> --config config.yaml
+# All steps run inside the he_anno environment.
 # =============================================================================
 set -euo pipefail
 export PYTHONWARNINGS="ignore"
@@ -43,7 +41,7 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution (produces soft cell-type proportion labels)
-# Activate: conda activate RCTD
+# Activate: conda activate he_anno
 # Output:   deconvolution_rctd/major_prop.csv
 # ---------------------------------------------------------------------------
 echo "[Step 1] RCTD deconvolution"
@@ -51,14 +49,14 @@ meowcat rctd --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 2: Check image resolution (optional, informational only)
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 2] Resolution check"
 meowcat check-resolution --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 3: Preprocess the Visium image
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # Sub-steps: get_pixel_size -> RunPreprocess -> RunHistoSweep
 #            -> UNI_extract_features -> UNI_fuse_features
 # Output:   he.jpg, mask/, single_super_emb.h5ad

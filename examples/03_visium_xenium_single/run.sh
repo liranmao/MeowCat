@@ -55,14 +55,14 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution for Visium
-# Activate: conda activate RCTD
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 # echo "[Step 1] RCTD deconvolution (Visium only)"
 # meowcat rctd --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 2: Resolution check (checks all samples matching sample_pattern)
-# Activate: micromamba activate rapids_singlecell
+# Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 # echo "[Step 2] Resolution check"
 # meowcat check-resolution --config "$CFG"
