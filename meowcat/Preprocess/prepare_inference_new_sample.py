@@ -2,6 +2,7 @@
 
 import os
 import numpy as np
+import numpy.lib.format as npy_fmt
 import pandas as pd
 from PIL import Image
 import scanpy as sc
@@ -13,7 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Extrac
 from UTILS import *
 
 warnings.filterwarnings("ignore")
-Image.MAX_IMAGE_PIXELS = None 
+Image.MAX_IMAGE_PIXELS = None
 
 def main(base_path, sample):
     print(f"Preparing inference inputs for sample: {sample}")
@@ -24,11 +25,17 @@ def main(base_path, sample):
     prefix = os.path.join(sample_path, "he")   # or "he" depending on naming
     image_path = get_image_filename(prefix)
 
-    img = load_image(image_path, verbose=True)
-
-    # get width / height
-    height, width = img.shape[:2]
-    print("height:", height, "width:", width)
+    # Get image dimensions without loading full image into RAM.
+    # Use PIL for formats it supports; fall back to load_image for others.
+    try:
+        with Image.open(image_path) as pil_img:
+            width, height = pil_img.size          # (W, H)
+        print(f"height: {height} width: {width}  (PIL header-only)")
+    except Exception:
+        img = load_image(image_path, verbose=True)
+        height, width = img.shape[:2]
+        del img
+        print(f"height: {height} width: {width}  (full load fallback)")
 
 
     adata_img = sc.read(os.path.join(sample_path, "single_super_emb.h5ad"))
@@ -36,15 +43,47 @@ def main(base_path, sample):
     feature_dim = adata_img.shape[1]
     grid_w = width // patch_size
     grid_h = height // patch_size
-    feature_array = np.zeros((grid_h, grid_w, feature_dim), dtype=np.float32)
+    print(f"grid: {grid_h} x {grid_w}, feature_dim: {feature_dim}")
 
-    coords = adata_img.obsm['spatial']
-    for i, (x, y) in enumerate(coords):
-        if 0 <= y < grid_h and 0 <= x < grid_w:
-            feature_array[y, x, :] = adata_img.X[i]
+    shape = (grid_h, grid_w, feature_dim)
+    nbytes = grid_h * grid_w * feature_dim * 4
+    GB = nbytes / (1024 ** 3)
 
-    with open(os.path.join(sample_path, "embeddings-hist.pickle"), "wb") as f:
-        pickle.dump(feature_array, f)
+    # For large grids (>4 GB), use memory-mapped .npy to avoid OOM.
+    # For small grids, use the original in-memory pickle for compatibility.
+    if GB > 4.0:
+        print(f"Large grid ({GB:.1f} GB) — writing memory-mapped .npy")
+        npy_path = os.path.join(sample_path, "embeddings-hist.npy")
+        with open(npy_path, 'wb') as f:
+            npy_fmt.write_array_header_2_0(f,
+                {'descr': np.dtype('float32').str,
+                 'fortran_order': False, 'shape': shape})
+            header_offset = f.tell()
+
+        feature_array = np.memmap(npy_path, dtype='float32', mode='r+',
+                                  shape=shape, offset=header_offset)
+        feature_array[:] = 0
+
+        coords = adata_img.obsm['spatial']
+        for i, (x, y) in enumerate(coords):
+            if 0 <= y < grid_h and 0 <= x < grid_w:
+                feature_array[y, x, :] = adata_img.X[i]
+
+        feature_array.flush()
+        del feature_array
+        print(f"Saved {npy_path}")
+    else:
+        print(f"Small grid ({GB:.1f} GB) — writing pickle")
+        feature_array = np.zeros(shape, dtype=np.float32)
+
+        coords = adata_img.obsm['spatial']
+        for i, (x, y) in enumerate(coords):
+            if 0 <= y < grid_h and 0 <= x < grid_w:
+                feature_array[y, x, :] = adata_img.X[i]
+
+        with open(os.path.join(sample_path, "embeddings-hist.pickle"), "wb") as f:
+            pickle.dump(feature_array, f)
+        print(f"Saved embeddings-hist.pickle")
 
 
 if __name__ == "__main__":

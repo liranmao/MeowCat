@@ -148,19 +148,24 @@ def load_image(filename, verbose=True):
     ext = os.path.splitext(filename)[-1].lower()
 
     if ext in (".svs", ".ndpi"):
-        import pyvips
-
-        # Load WSI (SVS/NDPI) via pyvips
-        slide = pyvips.Image.new_from_file(filename, access="sequential")
-        if verbose:
-            print(f"Width: {slide.width}, Height: {slide.height}, Bands: {slide.bands}")
-
-        # Convert to NumPy array (8-bit per channel assumed)
-        img = np.ndarray(
-            buffer=slide.write_to_memory(),
-            dtype=np.uint8,
-            shape=(slide.height, slide.width, slide.bands),
-        )
+        # Try pyvips first, fall back to OpenSlide
+        try:
+            import pyvips
+            slide = pyvips.Image.new_from_file(filename, access="sequential")
+            if verbose:
+                print(f"Width: {slide.width}, Height: {slide.height}, Bands: {slide.bands}")
+            img = np.ndarray(
+                buffer=slide.write_to_memory(),
+                dtype=np.uint8,
+                shape=(slide.height, slide.width, slide.bands),
+            )
+        except (ImportError, OSError):
+            import openslide
+            slide = openslide.OpenSlide(filename)
+            if verbose:
+                print(f"Width: {slide.dimensions[0]}, Height: {slide.dimensions[1]} (OpenSlide)")
+            img = np.array(slide.read_region((0, 0), 0, slide.dimensions).convert("RGB"))
+            slide.close()
 
     elif ext in [".tif", ".tiff"]:
         # Load TIFF via tifffile

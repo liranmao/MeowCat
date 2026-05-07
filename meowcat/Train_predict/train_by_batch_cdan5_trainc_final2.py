@@ -1246,9 +1246,9 @@ def train_sequential(
     # ========== Phase 1: Visium Training ==========
     visium_prefix = os.path.join(prefix, 'visium_phase/')
     os.makedirs(visium_prefix, exist_ok=True)
-    
+
     print(f"\n--- Phase 1: Visium Training ({visium_epochs} epochs) ---")
-    
+
     # Create model if not already created from recon phase
     if model is None:
         model_kwargs = dict(
@@ -1273,7 +1273,7 @@ def train_sequential(
         model.adv_lambda_max = float(adv_lambda)
         model.entropy_cond = bool(entropy_cond)
         model.set_training_mode('visium_only')
-    
+
     extra_cbs_vis = []
     if oos_sample:
         extra_cbs_vis.append(OOSMonitorMultiRes(
@@ -1284,7 +1284,7 @@ def train_sequential(
             batch_size=oos_batch_size,
             resolution=0,
         ))
-    
+
     model, _, trainer1 = train_model_multi_res(
         dataset=visium_train_dataset,
         batch_size=batch_size,
@@ -1298,11 +1298,11 @@ def train_sequential(
         monitor_metric='val_visium_mse',
         extra_callbacks=extra_cbs_vis,
     )
-    
+
     visium_ckpt = os.path.join(visium_prefix, 'model_visium.ckpt')
     trainer1.save_checkpoint(visium_ckpt)
     print(f"Visium phase complete. Saved to {visium_ckpt}")
-    
+
     # ========== Phase 2: Xenium Fine-tuning ==========
     if xenium_epochs > 0 and len(xenium_train_dataset) > 0:
         xenium_prefix = os.path.join(prefix, 'xenium_phase/')

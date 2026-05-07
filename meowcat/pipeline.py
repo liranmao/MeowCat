@@ -209,6 +209,15 @@ def cmd_prepare_xenium_batches(cfg: MeowCatConfig, config_path: str) -> List[str
     ]
 
 
+# ── Slim Xenium cellbins ─────────────────────────────────────────────────────
+def cmd_slim_xenium(cfg: MeowCatConfig, config_path: str) -> List[str]:
+    return [
+        "python", "-u", _pkg("Preprocess/batched_data_preparing.py"),
+        "--config", config_path,
+        "--mode", "slim-xenium",
+    ]
+
+
 # ── Step 5 ─────────────────────────────────────────────────────────────────────
 def cmd_train(cfg: MeowCatConfig) -> List[str]:
     t = cfg.train

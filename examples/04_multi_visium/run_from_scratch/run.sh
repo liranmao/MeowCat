@@ -29,7 +29,7 @@
 #       states/00/model.ckpt
 #       states/01/model.ckpt
 #     VIS_S1/  VIS_S2/
-#       embeddings-hist.pickle
+#       embeddings-hist.pickle or .npy
 #       pred_fullgrid_outputs.pkl
 #     results_ex04_multi_visium.pptx
 # =============================================================================
@@ -69,7 +69,7 @@ meowcat preprocess --config "$CFG"
 # ---------------------------------------------------------------------------
 # Step 3.5: Prepare Visium metadata + embeddings
 # Creates: anno-names.txt, anno_matrix.tsv, locs.tsv, radius.txt,
-#          pixel-size.txt, embeddings-hist.pickle
+#          pixel-size.txt, embeddings-hist.pickle or .npy
 # Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 echo "[Step 3.5] Visium metadata preparation"

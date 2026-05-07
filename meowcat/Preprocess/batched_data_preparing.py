@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import argparse as _ap, yaml as _yaml
 _p = _ap.ArgumentParser(add_help=False)
 _p.add_argument('--config', default=None)
-_p.add_argument('--mode', default='visium', choices=['visium', 'xenium'])
+_p.add_argument('--mode', default='visium', choices=['visium', 'xenium', 'slim-xenium'])
 _known, _ = _p.parse_known_args()
 
 # ── Visium defaults (overridden by config batches/project section) ──────────
@@ -307,7 +307,7 @@ def xen_create_label_matrix(adata_cell, class_to_idx, cell_type_mapping):
     """Create one-hot encoded label matrix aligned with Visium classes."""
     n_cells = adata_cell.n_obs
     n_classes = len(class_to_idx)
-    mapped_labels = adata_cell.obs['cell_state'].map(cell_type_mapping).fillna("Unknown").values
+    mapped_labels = adata_cell.obs['cell_state'].astype(str).map(cell_type_mapping).values
     Y = np.zeros((n_cells, n_classes), dtype=np.float32)
     valid_mask = np.zeros(n_cells, dtype=bool)
     for i, label in enumerate(mapped_labels):
@@ -647,7 +647,6 @@ def _run_xenium():
         ann = pd.read_csv(ann_path, sep=None, engine="python")
 
         # Merge histology features if cellbin doesn't already have them
-        adata_cellbin.obsm["gene_expression"] = adata_cellbin.X.copy()
         if "histology_2048" not in adata_cellbin.obsm:
             histology_path = os.path.join(sample_folder, 'single_super_emb.h5ad')
             if os.path.exists(histology_path):
@@ -708,7 +707,30 @@ def _run_xenium():
                     dpi=300, bbox_inches="tight")
         plt.close()
 
-        adata_cellbin.write_h5ad(cellbin_out)
+        # Slim cellbin before writing: keep only obsm needed for batch creation
+        # (histology_2048, transformed_pxl_loc_in_morphology) — drop .X to save disk
+        import anndata as ad
+        from scipy import sparse as _sp
+        _keep_obsm = {}
+        for _k in ['histology_2048', 'transformed_pxl_loc_in_morphology']:
+            if _k in adata_cellbin.obsm:
+                _v = adata_cellbin.obsm[_k]
+                _keep_obsm[_k] = _v.toarray() if hasattr(_v, 'toarray') else np.array(_v)
+        _obs_names = adata_cellbin.obs_names.copy()
+        _n = adata_cellbin.n_obs
+        del adata_cellbin
+        gc.collect()
+        adata_cellbin_slim = ad.AnnData(
+            X=_sp.csr_matrix((_n, 0)),
+        )
+        adata_cellbin_slim.obs_names = _obs_names
+        for _k, _v in _keep_obsm.items():
+            adata_cellbin_slim.obsm[_k] = _v
+        adata_cellbin_slim.write_h5ad(cellbin_out)
+        del adata_cellbin_slim, _keep_obsm
+        gc.collect()
+        print(f'  Wrote slim cellbin ({os.path.getsize(cellbin_out)/1e9:.1f} GB)')
+
         adata_xenium.write_h5ad(cell_out)
         print(f'  finished {sample}')
 
@@ -825,6 +847,88 @@ def _run_xenium():
 
 
 # =========================================================================
+# SLIM XENIUM CELLBINS
+# =========================================================================
+
+def _run_slim_xenium():
+    """Slim existing Xenium_adata_cellbin_analysis_qv20.h5ad files.
+
+    Keeps only .obsm['histology_2048'] and .obsm['transformed_pxl_loc_in_morphology'],
+    dropping .X and all other obsm keys. Reduces file size from ~100GB to ~5GB.
+    Original files are renamed to .h5ad.full as backup.
+    """
+    import scanpy as sc
+    import anndata as ad
+    from scipy import sparse as _sp
+
+    samples = list_xenium_samples(
+        XEN_DATA_ROOT,
+        sample_pattern=XEN_SAMPLE_PATTERN,
+        include_only=XEN_INCLUDE_ONLY,
+        exclude_set=XEN_EXCLUDE_SET,
+    )
+    if not samples:
+        print("No Xenium samples found.")
+        return
+
+    print(f"Found {len(samples)} Xenium samples: {samples}")
+
+    CELLBIN_NAME = "Xenium_adata_cellbin_analysis_qv20.h5ad"
+
+    for sample in samples:
+        cellbin_path = os.path.join(XEN_DATA_ROOT, sample, CELLBIN_NAME)
+        if not os.path.exists(cellbin_path):
+            print(f"\n[skip] {sample}: {CELLBIN_NAME} not found")
+            continue
+
+        size_gb = os.path.getsize(cellbin_path) / 1e9
+        if size_gb < 10:
+            print(f"\n[skip] {sample}: already slim ({size_gb:.1f} GB)")
+            continue
+
+        print(f"\n{'=' * 60}")
+        print(f"Slimming {sample} ({size_gb:.1f} GB)")
+        print(f"{'=' * 60}")
+
+        print(f"  Reading ...")
+        adata = sc.read(cellbin_path)
+
+        keep_obsm = {}
+        for key in ['histology_2048', 'transformed_pxl_loc_in_morphology']:
+            if key in adata.obsm:
+                val = adata.obsm[key]
+                keep_obsm[key] = val.toarray() if hasattr(val, 'toarray') else np.array(val)
+                print(f"  Kept .obsm['{key}']: {val.shape}")
+            else:
+                print(f"  WARNING: .obsm['{key}'] not found!")
+
+        obs_names = adata.obs_names.copy()
+        n_obs = adata.n_obs
+        del adata
+        gc.collect()
+
+        adata_slim = ad.AnnData(X=_sp.csr_matrix((n_obs, 0)))
+        adata_slim.obs_names = obs_names
+        for key, val in keep_obsm.items():
+            adata_slim.obsm[key] = val
+
+        backup_path = cellbin_path + ".full"
+        print(f"  Renaming original -> {backup_path}")
+        os.rename(cellbin_path, backup_path)
+
+        print(f"  Saving slim version ...")
+        adata_slim.write_h5ad(cellbin_path)
+
+        slim_size = os.path.getsize(cellbin_path) / 1e9
+        print(f"  Done: {size_gb:.1f} GB -> {slim_size:.1f} GB")
+
+        del adata_slim, keep_obsm
+        gc.collect()
+
+    print("\nSlim complete.")
+
+
+# =========================================================================
 # MODE DISPATCH
 # =========================================================================
 
@@ -832,3 +936,5 @@ if _known.mode == 'visium':
     _run_visium()
 elif _known.mode == 'xenium':
     _run_xenium()
+elif _known.mode == 'slim-xenium':
+    _run_slim_xenium()

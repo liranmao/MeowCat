@@ -16,7 +16,7 @@
 #   <out_root>/
 #     mask/                          <- HistoSweep tissue masks
 #     <SAMPLE>/
-#       embeddings-hist.pickle       <- UNI features [H, W, C]
+#       embeddings-hist.pickle or .npy       <- UNI features [H, W, C]
 #       pred_fullgrid_outputs.pkl    <- prediction results
 #     batches/
 #       batch_vis_000_x/y/d.npy      <- tokenized training batches
@@ -70,7 +70,7 @@ meowcat preprocess --config "$CFG"
 # Step 3.5: Prepare Visium metadata + embeddings
 # Activate: conda activate he_anno
 # Creates: anno-names.txt, anno_matrix.tsv, locs.tsv, radius.txt,
-#          pixel-size.txt, embeddings-hist.pickle
+#          pixel-size.txt, embeddings-hist.pickle or .npy
 # ---------------------------------------------------------------------------
 echo "[Step 3.5] Visium metadata preparation"
 meowcat prepare-visium --config "$CFG"

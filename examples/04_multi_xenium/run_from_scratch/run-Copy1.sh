@@ -36,7 +36,7 @@
 #       states/00/model.ckpt
 #       states/01/model.ckpt
 #     XEN_S1/  XEN_S2/
-#       embeddings-hist.pickle
+#       embeddings-hist.pickle or .npy
 #       pred_fullgrid_outputs.pkl
 #     results_ex04_multi_xenium.pptx
 # =============================================================================
