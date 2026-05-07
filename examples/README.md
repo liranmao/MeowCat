@@ -71,7 +71,7 @@ meowcat run-all --config config.yaml
 # Generated in input folder (data_root):
 /project/KidneyHE/01_meowcat_test/01_visium_only/input/
   VIS_S1/
-    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    embeddings-hist.pickle or .npy  <- UNI features reshaped to [H,W,C] grid
     pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
 
 # Generated in output folder (out_root):
@@ -126,7 +126,7 @@ meowcat run-all --config config.yaml
 # Generated in input folder (data_root):
 /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/input/
   XEN_P11_LUAD/
-    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    embeddings-hist.pickle or .npy  <- UNI features reshaped to [H,W,C] grid
     pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
 
 # Generated in output folder (out_root):
@@ -191,7 +191,7 @@ meowcat run-all --config config.yaml
 # Generated in input folder (data_root):
 /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/
   VIS_P11_LUAD/  XEN_P11_LUAD/
-    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    embeddings-hist.pickle or .npy  <- UNI features reshaped to [H,W,C] grid
     pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
 
 # Generated in output folder (out_root):
@@ -322,7 +322,7 @@ meowcat run-all --config config.yaml
 # Generated in input folder (data_root):
 /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/
   P11_LUAD/  P17_LUAD/  ...  P11_LUAD_Xenium/  ...
-    embeddings-hist.pickle         <- UNI features reshaped to [H,W,C] grid
+    embeddings-hist.pickle or .npy  <- UNI features reshaped to [H,W,C] grid
     pred_fullgrid_outputs.pkl      <- full-grid prediction (z_map, p_map)
 
 # Generated in output folder (out_root):

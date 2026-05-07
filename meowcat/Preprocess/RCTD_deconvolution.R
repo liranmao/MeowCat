@@ -77,9 +77,10 @@ read_positions_visium <- function(spatial_dir) {
   tp_list <- file.path(spatial_dir, "tissue_positions_list.csv")
   f <- if (file.exists(tp_csv)) tp_csv else tp_list
   stopifnot(file.exists(f))
-  df <- tryCatch(read.csv(f, header = TRUE),
-                 error = function(e) read.csv(f, header = FALSE))
-  if (is.null(colnames(df)) || all(colnames(df) == paste0("V", seq_len(ncol(df))))) {
+  first_line <- readLines(f, n = 1)
+  has_header <- grepl("barcode", first_line, ignore.case = TRUE)
+  df <- read.csv(f, header = has_header, stringsAsFactors = FALSE)
+  if (!has_header) {
     colnames(df) <- c("barcode","in_tissue","array_row","array_col",
                       "pxl_row_in_fullres","pxl_col_in_fullres")
   }

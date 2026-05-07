@@ -1,0 +1,70 @@
+{
+    "B": "B",
+    "Plasma": "Plasma",
+
+    "Myeloid_C1_Mac_alveolar": "Macro_alveolar",
+    "Myeloid_C2_Mac_MARCO": "Macro_alveolar",
+
+    "Myeloid_C7_Langhans": "Macro_TAM",
+    "Myeloid_C17_Mac_CCL5": "Macro_TAM",
+    "Myeloid_C9_Mac_MMP9": "Macro_TAM",
+    "Myeloid_C15_Mac_IL1B_NLRP3": "Macro_TAM",
+    "Myeloid_C8_Mac_prolif": "Macro_TAM",
+    "Myeloid_C6_Mac_SPP1_MMP12": "Macro_TAM",
+    "Myeloid_C5_Mac_CXCL9_CXCL10": "Macro_TAM",
+    "Myeloid_C16_Mac_CCL4L2_CCL2": "Macro_TAM",
+    "Myeloid_C0_Mac_SLC40A1": "Macro_TAM",
+    "Myeloid_C18_Mac_str": "Macro_TAM",
+
+    "Myeloid_C4_cDC2": "CD_cDC",
+    "Myeloid_C10_cDC1": "CD_cDC",
+    "Myeloid_C12_DC_LAMP3": "CD_cDC",
+    "Myeloid_C11_pDC": "CD_cDC",
+    "Myeloid_C13_CCL19": "CD_cDC",
+
+    "Myeloid_C3_Neutro": "Neutrophil",
+    "Mast": "Mast",
+
+    "Stromal_C1_myCAF": "myCAF",
+    "Stromal_C8_iCAF_CCL2": "iCAF",
+
+    "Stromal_C2_Fib_alveolar": "Fibroblast",
+    "Stromal_C6_Fib_PI16": "Fibroblast",
+
+    "Stromal_C0_Vas_endo_capillary": "Endo",
+    "Stromal_C5_Lym_endo": "Endo",
+    "Stromal_C7_Vas_endo_venous": "Endo",
+
+    "Stromal_C3_SMC": "Mural",
+    "Stromal_C4_pericyte": "Mural",
+
+    "Club": "NonTumor_Epi",
+    "Basal": "NonTumor_Epi",
+    "Ciliated": "NonTumor_Epi",
+    "Goblet": "NonTumor_Epi",
+    "Ciliated_prolif": "NonTumor_Epi",
+    "AT1": "NonTumor_Epi",
+    "AT2_inflam": "NonTumor_Epi",
+    "AT2": "NonTumor_Epi",
+
+    "NE": "Tumor_Epi",
+    "KAC": "Tumor_Epi",
+    "KAC_prolif": "Tumor_Epi",
+    "Tumor_epi_LUAD": "Tumor_Epi",
+
+    "CD4_Tmem_IL7R": "T_CD4",
+    "T_str_JUN": "T_CD4",
+    "CD4_T_CD69_ICOS": "T_CD4",
+    "CD4_Tmem_CD44": "T_CD4",
+    "T_prolif": "T_CD4",
+    "T_isg": "T_CD4",
+    "CD4_Tfh_CXCL13": "T_CD4",
+
+    "CD4_Treg_FOXP3": "T_CD4_Treg",
+
+    "CD8_Tem_GZMK": "T_CD8",
+    "CD8_Teff_CCL4L2": "T_CD8",
+    "CD8_Tex": "T_CD8",
+
+    "NK": "NK"
+}

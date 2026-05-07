@@ -166,6 +166,11 @@ def cmd_prepare_xenium_batches(cfg: MeowCatConfig, args: argparse.Namespace) -> 
     _run(_pl.cmd_prepare_xenium_batches(cfg, args.config), args.dry_run)
 
 
+def cmd_slim_xenium(cfg: MeowCatConfig, args: argparse.Namespace) -> None:
+    """Slim Xenium cellbin h5ad files — drop .X, keep only histology_2048 and coordinates."""
+    _run(_pl.cmd_slim_xenium(cfg, args.config), args.dry_run)
+
+
 def cmd_train(cfg: MeowCatConfig, args: argparse.Namespace) -> None:
     _run(_pl.cmd_train(cfg), args.dry_run)
 
@@ -313,6 +318,7 @@ def _build_parser() -> argparse.ArgumentParser:
         ("rctd",                    "Step 1: RCTD deconvolution (R)"),
         ("prepare-visium-batches",  "Step 4: build Visium training batch files"),
         ("prepare-xenium-batches",  "Step 4x: build Xenium training batch files"),
+        ("slim-xenium",             "Slim Xenium cellbin h5ad files (drop gene expression, keep histology)"),
         ("train",                   "Step 5: train MeowCat models"),
         ("slide",                   "Step 7: generate PowerPoint summary"),
         ("run-all",                 "Run all steps in order (1→7)"),
@@ -382,6 +388,7 @@ _HANDLERS = {
     "preprocess":               cmd_preprocess,
     "prepare-visium-batches":   cmd_prepare_visium_batches,
     "prepare-xenium-batches":   cmd_prepare_xenium_batches,
+    "slim-xenium":              cmd_slim_xenium,
     "train":                    cmd_train,
     "predict":                  cmd_predict,
     "visualize":                cmd_visualize,

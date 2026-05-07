@@ -8,7 +8,7 @@
 #
 # This runs the full inference pipeline:
 #   1. Preprocess each sample (pixel size, rescale, mask, UNI features, fusion)
-#   2. Prepare embeddings (single_super_emb.h5ad -> embeddings-hist.pickle)
+#   2. Prepare embeddings (single_super_emb.h5ad -> embeddings-hist.pickle or .npy)
 #   3. Predict cell-type distributions using trained model checkpoints
 #   4. Visualize results (argmax map + intensity maps)
 #   5. Generate PowerPoint summary

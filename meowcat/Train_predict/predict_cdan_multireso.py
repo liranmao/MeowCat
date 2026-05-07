@@ -66,9 +66,21 @@ def load_sample(prefix: str, sample_name: str):
     if not os.path.isdir(sample_dir):
         raise FileNotFoundError(f"Sample dir not found: {sample_dir}")
     ctypes = read_lines(os.path.join(sample_dir, 'anno-names.txt'))
-    embs = load_pickle(os.path.join(sample_dir, 'embeddings-hist.pickle'))  # [H,W,C], np.ndarray
+
+    # Prefer memory-mapped .npy (large slides) with fallback to pickle
+    npy_path = os.path.join(sample_dir, 'embeddings-hist.npy')
+    pkl_path = os.path.join(sample_dir, 'embeddings-hist.pickle')
+    if os.path.exists(npy_path):
+        embs = np.load(npy_path, mmap_mode='r')  # memory-mapped, no OOM
+        print(f"[load_sample] Loaded .npy (memmap): {npy_path}")
+    elif os.path.exists(pkl_path):
+        embs = load_pickle(pkl_path)
+    else:
+        raise FileNotFoundError(
+            f"Neither embeddings-hist.npy nor .pickle found in {sample_dir}")
+
     if not isinstance(embs, np.ndarray) or embs.ndim != 3:
-        raise RuntimeError(f"embeddings-hist.pickle must be [H,W,C], got {None if not hasattr(embs,'shape') else embs.shape}")
+        raise RuntimeError(f"embeddings-hist must be [H,W,C], got {None if not hasattr(embs,'shape') else embs.shape}")
     H, W, C = embs.shape
     return sample_dir, ctypes, embs, H, W, C
 
@@ -99,10 +111,8 @@ def predict_fullgrid(models: List[MultiResolutionModel],
     H, W, C = embs.shape
     Npix = H * W
 
-    # Flatten to [Npix, C] in row-major order
+    # Flatten to [Npix, C] in row-major order (view for memmap, no copy)
     X = embs.reshape(Npix, C)
-    if not np.isfinite(X).all():
-        X = np.nan_to_num(X, copy=False)
 
     # Output buffers
     z_out = np.empty((Npix, D), dtype=np.float32)
@@ -121,7 +131,9 @@ def predict_fullgrid(models: List[MultiResolutionModel],
         for cidx in range(base_chunk, min(base_chunk + cpb, num_chunks)):
             start = cidx * t_chunk
             end   = min((cidx + 1) * t_chunk, Npix)
-            x_flat = X[start:end]                               # [T_eff, C]
+            x_flat = np.array(X[start:end])                      # [T_eff, C] — copy from memmap
+            if not np.isfinite(x_flat).all():
+                x_flat = np.nan_to_num(x_flat, copy=False)
             if end - start < t_chunk:
                 pad_len = t_chunk - (end - start)
                 pad = np.zeros((pad_len, C), dtype=x_flat.dtype)

@@ -18,7 +18,7 @@
 #   /project/KidneyHE/01_meowcat_test/04_multi_visium/input/
 #     P001/ -> (symlink) /project/KidneyHE/data_lung/7_new_sc_data/P001/
 #     P002/ -> ...
-#     Each sample contains: embeddings-hist.pickle, anno-names.txt, mask/
+#     Each sample contains: embeddings-hist.pickle or .npy, anno-names.txt, mask/
 #
 # Output layout:
 #   /project/KidneyHE/01_meowcat_test/04_multi_visium/output/
@@ -55,7 +55,7 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 6: Predict and visualize on all samples
-# Reads embeddings-hist.pickle from each P* sample via symlinks
+# Reads embeddings-hist.pickle or .npy from each P* sample via symlinks
 # Activate: conda activate he_anno
 # ---------------------------------------------------------------------------
 # echo "[Step 6] Prediction — all samples"

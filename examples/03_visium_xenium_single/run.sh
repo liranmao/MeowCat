@@ -36,7 +36,7 @@
 #       states/00/model.ckpt
 #       states/01/model.ckpt
 #     VIS_P11_LUAD/  XEN_P11_LUAD/
-#       embeddings-hist.pickle
+#       embeddings-hist.pickle or .npy
 #       pred_fullgrid_outputs.pkl
 #     results_ex03.pptx
 # =============================================================================
@@ -80,7 +80,7 @@ echo "============================================"
 # ---------------------------------------------------------------------------
 # Step 3.5: Prepare Visium metadata + embeddings
 # Creates: anno-names.txt, anno_matrix.tsv, locs.tsv, radius.txt,
-#          pixel-size.txt, embeddings-hist.pickle
+#          pixel-size.txt, embeddings-hist.pickle or .npy
 # ---------------------------------------------------------------------------
 # echo "[Step 3.5] Visium metadata preparation"
 # meowcat prepare-visium --config "$CFG"
