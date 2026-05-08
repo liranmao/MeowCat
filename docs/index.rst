@@ -22,7 +22,6 @@ registered transcriptomics data.
    examples
    cli
    api
-   references
 
 Citation
 ========
