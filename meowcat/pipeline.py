@@ -144,10 +144,11 @@ def cmds_preprocess_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
 def cmds_prepare_visium_sample(cfg: MeowCatConfig, sample: str) -> List[List[str]]:
     """
     Prepare all Visium-specific files for one sample.
-    Returns an ordered list of commands:
-      1. prepare_visium_inputs.py — RCTD + spatial → anno-names.txt, anno_matrix.tsv,
-         locs.tsv, radius.txt, pixel-size.txt
-      2. prepare_inference_new_sample.py — single_super_emb.h5ad → embeddings-hist.pickle
+
+    Returns an ordered list of two commands:
+
+    1. ``prepare_visium_inputs.py`` — RCTD + spatial → anno-names.txt, anno_matrix.tsv, locs.tsv, radius.txt, pixel-size.txt
+    2. ``prepare_inference_new_sample.py`` — single_super_emb.h5ad → embeddings-hist.pickle or .npy
 
     Non-Visium samples are skipped gracefully by prepare_visium_inputs.py.
     Requires pixel-size-raw.txt to already exist (written by get_pixel_size.py).
