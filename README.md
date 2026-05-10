@@ -15,6 +15,7 @@ A deep learning framework for cell-type annotation in histopathology H&E images,
 6. [Inference on New H&E Images](#inference-on-new-he-images)
 7. [Config Reference](#config-reference)
 8. [Training Paradigms](#training-paradigms)
+9. [AI Tools](#ai-tools)
 
 
 ## Examples
@@ -412,3 +413,18 @@ train:
 ```
 
 When `adv_lambda > 0`, CDAN domain adaptation is enabled with a sigmoid ramp schedule.
+
+## AI Tools
+
+AI helper files are in [`agent_helpers/`](agent_helpers/):
+
+| File | Purpose |
+|------|---------|
+| [`CLAUDE.md`](agent_helpers/CLAUDE.md) | Project context auto-loaded by Claude Code |
+| [`meowcat-setup.md`](agent_helpers/meowcat-setup.md) | `/meowcat-setup` skill — interactive config generator |
+| [`meowcat-check.md`](agent_helpers/meowcat-check.md) | `/meowcat-check` skill — validates data layout before running |
+| [`config_scaffold_prompt.md`](agent_helpers/config_scaffold_prompt.md) | Copy-paste prompt for any AI assistant |
+
+**Claude Code users:** open the repo and run `/meowcat-setup` to generate a `config.yaml` for your dataset, or `/meowcat-check config/my_run.yaml` to validate your data layout before running the pipeline.
+
+**Other AI tools:** paste the prompt from `agent_helpers/config_scaffold_prompt.md` into any assistant to generate a correct config.
