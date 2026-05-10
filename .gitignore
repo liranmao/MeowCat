@@ -29,3 +29,7 @@ Thumbs.db
 
 # Sphinx build output
 docs/_build/
+
+# Local AI assistant files (not for GitHub)
+CLAUDE.md
+.claude/commands/
