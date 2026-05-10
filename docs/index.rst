@@ -22,6 +22,7 @@ registered transcriptomics data.
    examples
    cli
    api
+   ai_tools
 
 Citation
 ========
