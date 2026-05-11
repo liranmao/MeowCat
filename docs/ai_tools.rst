@@ -10,7 +10,7 @@ All helper files live in ``agent_helpers/`` at the repository root:
 .. code-block:: text
 
    agent_helpers/
-   ├── CLAUDE.md                  <- project context (auto-loaded by Claude Code from repo root)
+   ├── CLAUDE.md                  <- project context for Claude Code
    ├── meowcat-setup.md           <- /meowcat-setup skill definition
    ├── meowcat-check.md           <- /meowcat-check skill definition
    └── config_scaffold_prompt.md  <- copy-paste prompt for any AI assistant
@@ -49,9 +49,9 @@ with actionable error messages.
 Skill definition: ``agent_helpers/meowcat-check.md``
 
 .. note::
-   Claude Code skills must be placed in ``.claude/commands/`` to be recognised. The
-   repository ships with copies there automatically — ``agent_helpers/`` is the
-   human-readable source of truth.
+   Claude Code skills must be placed in ``.claude/commands/`` to be recognised.
+   Copy ``agent_helpers/meowcat-setup.md`` and ``agent_helpers/meowcat-check.md``
+   into ``.claude/commands/`` in your local clone to activate the slash commands.
 
 Config Scaffolding Prompt
 --------------------------
@@ -67,9 +67,7 @@ AI will generate a correct ``config.yaml`` and list the commands to run.
 CLAUDE.md
 ---------
 
-``agent_helpers/CLAUDE.md`` (also at the repo root as ``CLAUDE.md``) is loaded
-automatically by Claude Code when you open the project. It gives the assistant instant
-context about:
+``agent_helpers/CLAUDE.md`` contains project context for Claude Code, covering:
 
 - The role of every key file (``cli.py``, ``pipeline.py``, ``config.py``)
 - All pipeline steps and their order
@@ -77,4 +75,9 @@ context about:
 - Required input files per sample
 - Common development tasks
 
-No setup needed — Claude Code reads it automatically on project open.
+To activate it, copy it to your repo root as ``CLAUDE.md`` — Claude Code loads that file
+automatically whenever you open the project.
+
+.. code-block:: bash
+
+   cp agent_helpers/CLAUDE.md CLAUDE.md
