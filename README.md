@@ -420,7 +420,7 @@ We provide ready-made resources in [`agent_helpers/`](agent_helpers/) so that AI
 
 | File | Purpose |
 |------|---------|
-| [`CLAUDE.md`](agent_helpers/CLAUDE.md) | Project context auto-loaded by Claude Code |
+| [`CLAUDE.md`](agent_helpers/CLAUDE.md) | Project context for Claude Code (copy to repo root to activate) |
 | [`meowcat-setup.md`](agent_helpers/meowcat-setup.md) | `/meowcat-setup` skill — interactive config generator |
 | [`meowcat-check.md`](agent_helpers/meowcat-check.md) | `/meowcat-check` skill — validates data layout before running |
 | [`config_scaffold_prompt.md`](agent_helpers/config_scaffold_prompt.md) | Copy-paste prompt for any AI assistant |
