@@ -1,7 +1,11 @@
 AI Tools
 ========
 
-All AI helper files live in ``agent_helpers/`` at the repository root:
+We provide ready-made resources so that AI agents such as **Claude** and **Codex** can
+understand and use MeowCat quickly — generating configs, validating data layouts, and
+running the pipeline with minimal manual setup.
+
+All helper files live in ``agent_helpers/`` at the repository root:
 
 .. code-block:: text
 

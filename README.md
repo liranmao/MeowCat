@@ -416,7 +416,7 @@ When `adv_lambda > 0`, CDAN domain adaptation is enabled with a sigmoid ramp sch
 
 ## AI Tools
 
-AI helper files are in [`agent_helpers/`](agent_helpers/):
+We provide ready-made resources in [`agent_helpers/`](agent_helpers/) so that AI agents such as **Claude** and **Codex** can understand and use MeowCat quickly — generating configs, validating data layouts, and running the pipeline with minimal manual setup.
 
 | File | Purpose |
 |------|---------|
@@ -427,4 +427,4 @@ AI helper files are in [`agent_helpers/`](agent_helpers/):
 
 **Claude Code users:** open the repo and run `/meowcat-setup` to generate a `config.yaml` for your dataset, or `/meowcat-check config/my_run.yaml` to validate your data layout before running the pipeline.
 
-**Other AI tools:** paste the prompt from `agent_helpers/config_scaffold_prompt.md` into any assistant to generate a correct config.
+**Other AI agents (Codex, Cursor, etc.):** paste the prompt from `agent_helpers/config_scaffold_prompt.md` into your agent to generate a correct config.
