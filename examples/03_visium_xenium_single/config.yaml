@@ -1,13 +1,13 @@
 # Example 3: Train on one Visium + one Xenium sample (3-phase sequential training)
-# Input:  /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/
+# Input:  <DEMO_DATA_ROOT>/03_visium_xenium_single/input/
 #           VIS_P11_LUAD/  (Visium — symlinked from ex01)
 #           XEN_P11_LUAD/  (Xenium — symlinked from ex02)
-# Output: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/
+# Output: <DEMO_DATA_ROOT>/03_visium_xenium_single/output/
 
 project:
   name: ex03_visium_xenium_single
-  data_root: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input
-  out_root:  /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output
+  data_root: <DEMO_DATA_ROOT>/03_visium_xenium_single/input
+  out_root: <DEMO_DATA_ROOT>/03_visium_xenium_single/output
 
 # Both VIS* and XEN* samples live under the same data_root.
 # preprocess auto-discovers all samples (VIS* + XEN*).
@@ -18,7 +18,7 @@ visium:
   seed: 0
 
 rctd:
-  reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
+  reference_rds: <USER_PATH_TO_RCTD_REFERENCE_RDS>
   cell_type_column: MainType
   group_column: Group_ID
   groups: [LUAD]
@@ -34,12 +34,12 @@ preprocess:
   target_mpp: 0.5
   pixel_size_raw: null      # auto-detect per image (use null for mixed Visium+Xenium)
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 # Visium batch preparation — only used by `meowcat prepare-visium-batches`.
 batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/batches
+  out_dir: <DEMO_DATA_ROOT>/03_visium_xenium_single/output/batches
 
 # Xenium batch preparation — only used by `meowcat prepare-xenium-batches`.
 # NOTE: This section does NOT control image preprocessing (that's the `preprocess` section).
@@ -51,8 +51,8 @@ xenium:
   sample_pattern: "XEN*"
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/VIS_P11_LUAD/anno-names.txt
-  cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
+  anno_names_path: <DEMO_DATA_ROOT>/03_visium_xenium_single/input/anno-names.txt
+  cell_type_mapping_json: config/cell_type_mapping_lung.json
   seed: 42
 
 # Training paradigm: Recon -> Visium MSE -> Xenium CE (3-phase sequential)

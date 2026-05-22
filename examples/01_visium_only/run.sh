@@ -41,18 +41,24 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution (produces soft cell-type proportion labels)
-# Activate: conda activate he_anno
-# Output:   deconvolution_rctd/major_prop.csv
+# Skipped: the Zenodo demo bundle ships deconvolution_rctd/major_prop.csv per
+# Visium sample, so this step is unnecessary. For NEW samples (not the demo),
+# uncomment the two lines below and set rctd.reference_rds in the config.
+# Output: deconvolution_rctd/major_prop.csv
 # ---------------------------------------------------------------------------
-echo "[Step 1] RCTD deconvolution"
-meowcat rctd --config "$CFG"
+# echo "[Step 1] RCTD deconvolution"
+# meowcat rctd --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 2: Check image resolution (optional, informational only)
-# Activate: conda activate he_anno
+# Skipped: the Zenodo demo bundle ships pixel-size-raw.txt per sample.
+# For new samples: if you know the H&E resolution, write it (in µm/px) into
+# pixel-size-raw.txt in each sample folder. If you DO NOT know it and your
+# image is a TIF with embedded resolution metadata, uncomment the following
+# code to auto-detect.
 # ---------------------------------------------------------------------------
-echo "[Step 2] Resolution check"
-meowcat check-resolution --config "$CFG"
+# echo "[Step 2] Resolution check"
+# meowcat check-resolution --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 3: Preprocess the Visium image

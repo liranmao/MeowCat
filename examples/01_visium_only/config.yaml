@@ -1,11 +1,11 @@
 # Example 1: Train on a single Visium sample (soft labels, MSE loss)
-# Input:  /project/KidneyHE/01_meowcat_test/01_visium_only/input/VIS_S1/
-# Output: /project/KidneyHE/01_meowcat_test/01_visium_only/output/
+# Input:  <DEMO_DATA_ROOT>/01_visium_only/input/VIS_S1/
+# Output: <DEMO_DATA_ROOT>/01_visium_only/output/
 
 project:
   name: ex01_visium_only
-  data_root: /project/KidneyHE/01_meowcat_test/01_visium_only/input
-  out_root:  /project/KidneyHE/01_meowcat_test/01_visium_only/output
+  data_root: <DEMO_DATA_ROOT>/01_visium_only/input
+  out_root: <DEMO_DATA_ROOT>/01_visium_only/output
 
 visium:
   sample_pattern: "VIS*"
@@ -15,7 +15,7 @@ visium:
 
 
 rctd:
-  reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
+  reference_rds: <USER_PATH_TO_RCTD_REFERENCE_RDS>
   cell_type_column: MainType
   group_column: Group_ID
   groups: [LUAD]
@@ -28,11 +28,11 @@ preprocess:
   target_mpp: 0.5
   pixel_size_raw: 0.2513   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/01_visium_only/output/batches
+  out_dir: <DEMO_DATA_ROOT>/01_visium_only/output/batches
 
 # Training paradigm: Recon (Phase 0) -> Visium MSE (Phase 1)
 # No Xenium batches present, so sequential_training has no effect.
