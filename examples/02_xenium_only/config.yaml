@@ -1,22 +1,22 @@
 # Example 2: Train on a single Xenium sample P11_LUAD (hard labels, cross-entropy loss)
-# Input:  /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/input/XEN_P11_LUAD/
-# Output: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/
+# Input:  <DEMO_DATA_ROOT>/02_xenium_only/input/XEN_P11_LUAD/
+# Output: <DEMO_DATA_ROOT>/02_xenium_only/output/
 
 project:
   name: ex02_xenium_only
-  data_root: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/input
-  out_root:  /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output
+  data_root: <DEMO_DATA_ROOT>/02_xenium_only/input
+  out_root: <DEMO_DATA_ROOT>/02_xenium_only/output
 
 preprocess:
   raw_flag: he_raw
   target_mpp: 0.5
   pixel_size_raw: 0.2125   # standard Xenium pixel size
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/batches
+  out_dir: <DEMO_DATA_ROOT>/02_xenium_only/output/batches
 
 # Xenium config — uses project.data_root for sample discovery.
 # Each sample folder (e.g., input/XEN_P11_LUAD/) must contain (user-provided):
@@ -28,8 +28,8 @@ xenium:
   sample_pattern: "XEN*"
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/anno-names.txt
-  cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
+  anno_names_path: <DEMO_DATA_ROOT>/02_xenium_only/input/anno-names.txt
+  cell_type_mapping_json: config/cell_type_mapping_lung.json
   keep_frac: 0.5
   seed: 42
 

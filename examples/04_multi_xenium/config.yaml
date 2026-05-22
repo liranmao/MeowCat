@@ -1,14 +1,14 @@
 # Example 4b: Train on multiple Xenium samples (no Visium)
 #             Multi-patient with CDAN cross-patient domain adaptation
 #             4 LUAD samples: P24, P19, P17, P11
-# Input:  /project/KidneyHE/01_meowcat_test/04_multi_xenium/input/
+# Input:  <DEMO_DATA_ROOT>/04_multi_xenium/input/
 #           P24_LUAD_Xenium/  P19_LUAD_Xenium/  P17_LUAD_Xenium/  P11_LUAD_Xenium/
-# Output: /project/KidneyHE/01_meowcat_test/04_multi_xenium/output/
+# Output: <DEMO_DATA_ROOT>/04_multi_xenium/output/
 
 project:
   name: ex04_multi_xenium
-  data_root: /project/KidneyHE/01_meowcat_test/04_multi_xenium/input
-  out_root:  /project/KidneyHE/01_meowcat_test/04_multi_xenium/output
+  data_root: <DEMO_DATA_ROOT>/04_multi_xenium/input
+  out_root: <DEMO_DATA_ROOT>/04_multi_xenium/output
 
 # No rctd section needed — Xenium uses hard labels from annotation.csv
 
@@ -17,18 +17,18 @@ preprocess:
   target_mpp: 0.5
   pixel_size_raw: 0.2125   # standard Xenium pixel size
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_xenium/output/batches
+  out_dir: <DEMO_DATA_ROOT>/04_multi_xenium/output/batches
 
 xenium:
   sample_pattern: "P*"
   dapi_pixel_size_raw: 0.2125
   fixed_radius: 75.20
-  anno_names_path: /project/KidneyHE/01_meowcat_test/04_multi_xenium/input/anno-names.txt
-  cell_type_mapping_json: /home/liranmao/06_he_anno/code/MeowCat/MeowCat/config/cell_type_mapping_lung.json
+  anno_names_path: <DEMO_DATA_ROOT>/04_multi_xenium/input/anno-names.txt
+  cell_type_mapping_json: config/cell_type_mapping_lung.json
   keep_frac: 0.03346869815 # same as visium 59389/(443616*4)
   seed: 42
 

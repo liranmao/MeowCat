@@ -11,7 +11,7 @@
 # spot-level spatial knowledge to single-cell resolution.
 #
 # Expected input layout:
-#   /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/input/
+#   <DEMO_DATA_ROOT>/03_visium_xenium_single/input/
 #     VIS_P11_LUAD/
 #       he_raw.tif
 #       filtered_feature_bc_matrix/
@@ -28,7 +28,7 @@
 #                                 locs.tsv, radius.txt, pixel-size.txt
 #
 # Expected output layout:
-#   /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/
+#   <DEMO_DATA_ROOT>/03_visium_xenium_single/output/
 #     mask/
 #     batches/
 #       batch_vis_000_x/y/d.npy        <- Visium batches (resolution=0, MSE)
@@ -55,14 +55,20 @@ echo "============================================"
 
 # ---------------------------------------------------------------------------
 # Step 1: RCTD deconvolution for Visium
-# Activate: conda activate he_anno
+# Skipped: the Zenodo demo bundle ships deconvolution_rctd/major_prop.csv per
+# Visium sample, so this step is unnecessary. For NEW samples (not the demo),
+# uncomment the two lines below and set rctd.reference_rds in the config.
 # ---------------------------------------------------------------------------
 # echo "[Step 1] RCTD deconvolution (Visium only)"
 # meowcat rctd --config "$CFG"
 
 # ---------------------------------------------------------------------------
 # Step 2: Resolution check (checks all samples matching sample_pattern)
-# Activate: conda activate he_anno
+# Skipped: the Zenodo demo bundle ships pixel-size-raw.txt per sample.
+# For new samples: if you know the H&E resolution, write it (in µm/px) into
+# pixel-size-raw.txt in each sample folder. If you DO NOT know it and your
+# image is a TIF with embedded resolution metadata, uncomment the following
+# code to auto-detect.
 # ---------------------------------------------------------------------------
 # echo "[Step 2] Resolution check"
 # meowcat check-resolution --config "$CFG"
@@ -132,5 +138,5 @@ echo "[Step 7] Slide wrap"
 meowcat slide --config "$CFG"
 
 echo "============================================"
-echo " Done. Outputs: /project/KidneyHE/01_meowcat_test/03_visium_xenium_single/output/"
+echo " Done. Outputs: <DEMO_DATA_ROOT>/03_visium_xenium_single/output/"
 echo "============================================"

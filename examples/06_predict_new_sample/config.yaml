@@ -9,13 +9,13 @@
 #   - New H&E images under project.data_root/<SAMPLE>/he_raw.<ext>
 
 inference:
-  model_dir: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/output/batches
-  anno_names: /project/KidneyHE/01_meowcat_test/05_multi_visium_xenium/input/anno-names.txt
+  model_dir: <DEMO_DATA_ROOT>/06_predict_new_sample/model
+  anno_names: <DEMO_DATA_ROOT>/06_predict_new_sample/model/anno-names.txt
 
 project:
   name: ex06_predict_new
-  data_root: /project/KidneyHE/01_meowcat_test/06_predict_new_sample/input
-  out_root:  /project/KidneyHE/01_meowcat_test/06_predict_new_sample/output
+  data_root: <DEMO_DATA_ROOT>/06_predict_new_sample/input
+  out_root: <DEMO_DATA_ROOT>/06_predict_new_sample/output
 
 visium:
   sample_pattern: "P*"
@@ -25,7 +25,7 @@ preprocess:
   target_mpp: 0.5
   pixel_size_raw: 0.5       # null = auto-detect; set a float if metadata missing
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 predict:

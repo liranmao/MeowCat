@@ -7,7 +7,7 @@
 #   Phase 1 (Xenium):  CE on hard one-hot cell-type labels (100 epochs)
 #
 # Expected input layout (user-provided):
-#   /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/
+#   <DEMO_DATA_ROOT>/02_xenium_only/
 #     input/XEN_P11_LUAD/
 #       he_raw.<tif|svs>               -> raw H&E image (for meowcat preprocess -> single_super_emb.h5ad)
 #       xenium_raw/                    -> raw xenium data (cell_feature_matrix.h5, cells.parquet)
@@ -38,7 +38,11 @@ echo "[Step 1] Skipped — Xenium data uses hard cell-type labels, no RCTD neede
 
 # ---------------------------------------------------------------------------
 # Step 2: Check image resolution
-# NOTE: Commented out — assumes preprocessing was already completed.
+# Skipped: the Zenodo demo bundle ships pixel-size-raw.txt per sample.
+# For new samples: if you know the H&E resolution, write it (in µm/px) into
+# pixel-size-raw.txt in each sample folder. If you DO NOT know it and your
+# image is a TIF with embedded resolution metadata, uncomment the following
+# code to auto-detect.
 # ---------------------------------------------------------------------------
 # echo "[Step 2] Resolution check"
 # meowcat check-resolution --config "$CFG"
@@ -88,5 +92,5 @@ echo "[Step 7] Slide wrap"
 meowcat slide --config "$CFG"
 
 echo "============================================"
-echo " Done. Outputs: /project/KidneyHE/01_meowcat_test/wrapped_data/02_xenium_only/output/"
+echo " Done. Outputs: <DEMO_DATA_ROOT>/02_xenium_only/output/"
 echo "============================================"

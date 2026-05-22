@@ -1,13 +1,12 @@
 # Example 4a: Train on multiple Visium samples (no Xenium)
 #             Multi-patient with CDAN cross-patient domain adaptation
-# Input:  /project/KidneyHE/01_meowcat_test/04_multi_visium/input/
-#           P*/   (Visium samples, symlinked from 7_new_sc_data via setup_data.sh)
-# Output: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/
+# Input:  <DEMO_DATA_ROOT>/04_multi_visium/input/
+# Output: <DEMO_DATA_ROOT>/04_multi_visium/output/
 
 project:
   name: ex04_multi_visium
-  data_root: /project/KidneyHE/01_meowcat_test/04_multi_visium/input
-  out_root:  /project/KidneyHE/01_meowcat_test/04_multi_visium/output
+  data_root: <DEMO_DATA_ROOT>/04_multi_visium/input
+  out_root: <DEMO_DATA_ROOT>/04_multi_visium/output
 
 visium:
   sample_pattern: "P*"
@@ -16,7 +15,7 @@ visium:
   seed: 0
 
 rctd:
-  reference_rds: /project/CATCH/liran/he_anno/data_lung/single_cell/snRNA_all_in_one.to_Mingyao_Group.rds
+  reference_rds: <USER_PATH_TO_RCTD_REFERENCE_RDS>
   cell_type_column: MainType
   group_column: Group_ID
   groups: [LUAD]
@@ -29,11 +28,11 @@ preprocess:
   target_mpp: 0.5
   pixel_size_raw: null   # null = auto-detect; set a float (e.g. 0.5) if metadata missing
   pad: 224
-  uni_weights: /project/KidneyHE/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_weights: <USER_PATH_TO_UNI_WEIGHTS>
   fusion_mode: single
 
 batches:
-  out_dir: /project/KidneyHE/01_meowcat_test/04_multi_visium/output/batches
+  out_dir: <DEMO_DATA_ROOT>/04_multi_visium/output/batches
 
 # No xenium section needed — defaults are fine since no Xenium steps run.
 
