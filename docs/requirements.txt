@@ -1,4 +1,4 @@
-sphinx==8.2.3
+sphinx<9.0
 sphinx-rtd-theme
 sphinx-autodoc-typehints
-sphinx-argparse
+sphinx-argparse==0.4.0
