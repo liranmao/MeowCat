@@ -4,7 +4,8 @@
 
 A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered omics data as training supervision. Accept any omics and any spatial resolution. 
 
-<img width="1093" height="816" alt="image" src="https://github.com/user-attachments/assets/26cfd660-0370-47be-9122-6a354894c6b9" />
+<img width="689" height="527" alt="image" src="https://github.com/user-attachments/assets/00a77284-9163-459d-af00-7c6560f0e738" />
+
 
 ## Table of Contents
 1. [Examples](#examples)
