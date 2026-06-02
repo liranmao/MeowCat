@@ -2,10 +2,11 @@
 
 ## MeowCat
 
-A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered omics data as training supervision. Accept any omics and any spatial resolution. 
+A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered omics data as training supervision. Accept any omics and any spatial resolution.
 
 <img width="689" height="527" alt="image" src="https://github.com/user-attachments/assets/00a77284-9163-459d-af00-7c6560f0e738" />
 
+  For detailed usage instructions and various applications of MeowCat, you can also check [MeowCat Documentation](https://meowcat.readthedocs.io/)
 
 ## Table of Contents
 1. [Examples](#examples)
