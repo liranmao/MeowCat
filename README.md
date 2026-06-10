@@ -8,7 +8,9 @@ A deep learning framework for cell-type annotation in histopathology H&E images,
 
 For detailed usage instructions and various applications of MeowCat, you can also check [MeowCat Documentation](https://meowcat.readthedocs.io/)
 
-Datasets for demo usage can be downloaded in: 10.5281/zenodo.20337757 and 10.5281/zenodo.20337288. 
+Datasets for demo usage can be downloaded in: 10.5281/zenodo.20337757
+        
+         and 10.5281/zenodo.20337288. 
 
 Trained weights for lung cancer, Kidney, GBM and atherosclerosis can be downloaded in: https://huggingface.co/liranmao/MeowCat-Models. 
 
@@ -46,6 +48,17 @@ Create the conda env from the YAML file in `env/`:
 
 ```bash
 conda env create -f env/MeowCat_env.yml
+```
+
+If conda cannot solve the env from the whole package list, please do the following:
+
+```bash
+export PYTHONNOUSERSITE=1
+conda env create -f env/he_anno_minimal.yml
+# after it finishes:
+conda activate he_anno
+pip install --upgrade pip
+pip install --only-binary=:all: -r env/he_anno_requirements.txt
 ```
 
 ### Installing the MeowCat CLI
