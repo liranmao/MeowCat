@@ -8,13 +8,7 @@ A deep learning framework for cell-type annotation in histopathology H&E images,
 
 For detailed usage instructions and various applications of MeowCat, you can also check [MeowCat Documentation](https://meowcat.readthedocs.io/)
 
-Datasets for demo usage can be downloaded in: 10.5281/zenodo.20337757
-        
-        
-        
-         and 10.5281/zenodo.20337288
-        
-        . 
+Datasets for demo usage can be downloaded in: 10.5281/zenodo.20337757 and 10.5281/zenodo.20337288.
 
 Trained weights for lung cancer, Kidney, GBM and atherosclerosis can be downloaded in: https://huggingface.co/liranmao/MeowCat-Models. 
 
