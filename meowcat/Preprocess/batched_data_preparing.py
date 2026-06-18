@@ -159,9 +159,20 @@ def get_data(prefix):
     gene_names = read_lines(f'{prefix}anno-names.txt')
     cnts = get_gene_counts(prefix)
     cnts = cnts[gene_names]
-    embs = load_pickle(f'{prefix}embeddings-hist.pickle')
+    embs = _load_embeddings_hist(prefix)
     locs = get_locs(prefix, target_shape=embs.shape[:2])
     return embs, cnts, locs
+
+def _load_embeddings_hist(prefix):
+    """Prefer memory-mapped .npy, fall back to .pickle."""
+    npy_path = f'{prefix}embeddings-hist.npy'
+    pkl_path = f'{prefix}embeddings-hist.pickle'
+    if os.path.exists(npy_path):
+        return np.load(npy_path, mmap_mode='r')
+    if os.path.exists(pkl_path):
+        return load_pickle(pkl_path)
+    raise FileNotFoundError(
+        f"Neither embeddings-hist.npy nor .pickle found in {prefix}")
 
 def get_patches_tokens(img, locs, mask):
     """Per-spot tokenization: img [H,W,C], mask [2r,2r] boolean -> [N,T,C]"""

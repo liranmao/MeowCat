@@ -839,9 +839,20 @@ def get_data(prefix):
     cnts = get_gene_counts(prefix)                      # proportions per spot (DF, N_spots × K)
     cnts = cnts[gene_names]                             # keep correct column order
 
-    embs = load_pickle(f'{prefix}embeddings-hist.pickle')  # [H,W,C]
+    embs = _load_embeddings_hist(prefix)                   # [H,W,C]
     locs = get_locs(prefix, target_shape=embs.shape[:2])   # [N_spots, 2] with "spot" as index or column
     return embs, cnts, locs
+
+def _load_embeddings_hist(prefix):
+    """Prefer memory-mapped .npy, fall back to .pickle."""
+    npy_path = f'{prefix}embeddings-hist.npy'
+    pkl_path = f'{prefix}embeddings-hist.pickle'
+    if os.path.exists(npy_path):
+        return np.load(npy_path, mmap_mode='r')
+    if os.path.exists(pkl_path):
+        return load_pickle(pkl_path)
+    raise FileNotFoundError(
+        f"Neither embeddings-hist.npy nor .pickle found in {prefix}")
 
 def filter_and_save_shared_spots(prefix, overwrite=True, make_backup=True):
     """
@@ -926,14 +937,15 @@ def check_sample_complete(sample_dir, canonical_radius=None):
     # 1) cheap file presence checks for common paths used by get_data()
     req_paths = [
         os.path.join(sample_dir, 'anno-names.txt'),
-        os.path.join(sample_dir, 'embeddings-hist.pickle'),
-        # get_locs/get_gene_counts do their own path logic; we still sanity check common names:
         os.path.join(sample_dir, 'locs.tsv'),
         os.path.join(sample_dir, 'anno_matrix.tsv'),
     ]
     for p in req_paths:
         if not os.path.exists(p):
             return False, f"missing {os.path.basename(p)}"
+    if not (os.path.exists(os.path.join(sample_dir, 'embeddings-hist.npy'))
+            or os.path.exists(os.path.join(sample_dir, 'embeddings-hist.pickle'))):
+        return False, "missing embeddings-hist.npy/.pickle"
 
     # 2) radius check (and canonical enforcement)
     r = _read_radius(sample_dir)
