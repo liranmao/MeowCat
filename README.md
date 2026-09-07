@@ -1,4 +1,4 @@
-
+<img width="468" height="51" alt="image" src="https://github.com/user-attachments/assets/323c6962-8d36-4f71-bf5c-510b93b0ccb3" />
 
 ## MeowCat
 
@@ -12,7 +12,8 @@ For detailed usage instructions and various applications of MeowCat, you can als
 
 Datasets for demo usage can be downloaded in: [10.5281/zenodo.20337757](https://zenodo.org/records/20337757) and [10.5281/zenodo.20337288](https://zenodo.org/records/20337288).
 
-Trained weights for lung cancer, Kidney, GBM and atherosclerosis can be downloaded in: https://huggingface.co/liranmao/MeowCat-Models. 
+Trained weights for lung cancer, Kidney, GBM and atherosclerosis can be downloaded in: https://huggingface.co/liranmao/MeowCat-Models. MeowCat predicted single-cell-resolution spatial cell type predictions for the TCGA LUAD and CPTAC LUAD are available at https://huggingface.co/datasets/liranmao/meowcat-predictions. 
+
 
 One line demo run after you have set up the environment:
 ```bash
