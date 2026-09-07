@@ -1,5 +1,3 @@
-<img width="468" height="51" alt="image" src="https://github.com/user-attachments/assets/323c6962-8d36-4f71-bf5c-510b93b0ccb3" />
-
 ## MeowCat
 
 A deep learning framework for cell-type annotation in histopathology H&E images, using spatially-registered omics data as training supervision. Accept any omics and any spatial resolution.
