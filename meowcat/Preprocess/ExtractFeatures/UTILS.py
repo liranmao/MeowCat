@@ -206,18 +206,22 @@ def crop_image(img, extent, mode='edge', constant_values=None):
 
 
 def adjust_margins(img, pad, pad_value=None):
-    extent = np.stack([[0, 0], img.shape[:2]]).T
-    # make size divisible by pad without changing coords
-    remainder = (extent[:, 1] - extent[:, 0]) % pad
-    complement = (pad - remainder) % pad
-    extent[:, 1] += complement
+    if pad <= 0:
+        raise ValueError("pad must be positive")
+
+    # Pad only the bottom and right, preserving the existing coordinate system.
+    # The old crop_image path copied the complete image once per spatial axis.
+    pad_h = (-img.shape[0]) % pad
+    pad_w = (-img.shape[1]) % pad
+    if pad_h == 0 and pad_w == 0:
+        return img
+
+    pad_width = [(0, pad_h), (0, pad_w)]
+    pad_width.extend([(0, 0)] * (img.ndim - 2))
     if pad_value is None:
-        mode = 'edge'
-    else:
-        mode = 'constant'
-    img = crop_image(
-            img, extent, mode=mode, constant_values=pad_value)
-    return img
+        return np.pad(img, pad_width, mode='edge')
+    return np.pad(
+            img, pad_width, mode='constant', constant_values=pad_value)
 
 
 def smart_save_image(img, prefix, base_name="base", size_threshold=60000):
@@ -230,7 +234,7 @@ def smart_save_image(img, prefix, base_name="base", size_threshold=60000):
     if h < size_threshold and w < size_threshold:
         # Save as JPG
         path = f"{prefix}{base_name}.jpg"
-        Image.fromarray(img.astype(np.uint8)).save(path, quality=90)
+        Image.fromarray(img.astype(np.uint8, copy=False)).save(path, quality=90)
         print(f"✅ Saved as JPG: {path}")
     else:
         # Save as TIFF
@@ -252,8 +256,11 @@ def rescale_image(img, scale):
 def rescale_image_cv2(img, scale):
     h,w = img.shape[:2]
     new_size = (int(w*scale), int(h*scale))
-    img_rescaled = cv2.resize(img, new_size, interpolation=cv2.INTER_LINEAR)
-    return img_rescaled        
+    if min(new_size) < 1:
+        raise ValueError(f"Invalid resized dimensions: {new_size}")
+    if new_size == (w, h):
+        return img
+    return cv2.resize(img, new_size, interpolation=cv2.INTER_LINEAR)
         
     
 def get_image_filename(prefix):

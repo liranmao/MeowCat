@@ -41,13 +41,14 @@ def main():
         
     img = load_image(args.image_path)
     print(f"image_raw.shape ={img.shape}")
-         
-    img = img.astype(np.float32)
+
+    # Keep the full-resolution WSI in uint8. Converting this array to float32
+    # requires four times its size in RAM, while cv2.resize accepts uint8.
     print(f'Rescaling image (scale: {args.scale_value:.3f})...')
     t0 = time()
     img = rescale_image_cv2(img, args.scale_value)
     print(int(time() - t0), 'sec')
-    img = img.astype(np.uint8)
+    img = img.astype(np.uint8, copy=False)
     print(img.shape)
     img = adjust_margins(img, pad=args.pad, pad_value=255)
     
