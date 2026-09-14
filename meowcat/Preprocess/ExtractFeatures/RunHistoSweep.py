@@ -1,5 +1,12 @@
-import sys 
-sys.path.append("/project/KidneyHE/xiaokang_result/UNI_V7.1/ExtractFeatures/HistoSweep-main/HistoSweep/")
+import sys
+from pathlib import Path
+
+
+# HistoSweep is vendored with MeowCat, so resolve it relative to this script
+# instead of relying on a machine-specific absolute path.
+HISTOSWEEP_DIR = Path(__file__).resolve().parent / "HistoSweep-main" / "HistoSweep"
+sys.path.insert(0, str(HISTOSWEEP_DIR))
+
 import shutil
 import argparse
 import pandas as pd
